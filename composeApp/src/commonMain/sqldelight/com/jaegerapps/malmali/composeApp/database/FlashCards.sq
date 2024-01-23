@@ -1,0 +1,65 @@
+CREATE TABLE flashcards(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    word TEXT NOT NULL,
+    meaning TEXT NOT NULL,
+    memorization_level INTEGER DEFAULT 0,
+    linked_set INTEGER NOT NULL
+);
+
+insertFlashCard:
+INSERT OR REPLACE INTO flashcards(id, word, meaning, memorization_level, linked_set)
+VALUES(?, ?, ?, ?, ? );
+
+selectSetCards:
+SELECT * FROM flashcards
+WHERE linked_set=:setId;
+
+updateCard:
+UPDATE flashcards
+SET word=:word, meaning=:meaning, memorization_level=:newLevel
+WHERE id=:id;
+
+deleteSingleCard:
+DELETE FROM flashcards
+WHERE id=:id;
+
+deleteSetCards:
+DELETE FROM flashcards
+WHERE linked_set=:setId;
+
+CREATE TABLE flashcardSets (
+    set_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    set_title TEXT NOT NULL,
+    set_size INTEGER NOT NULL,
+    tags TEXT,
+    date_created INTEGER NOT NULL,
+    is_public INTEGER NOT NULL
+);
+insertSet:
+INSERT OR REPLACE INTO flashcardSets(set_id, set_title,set_size, tags, date_created, is_public)
+VALUES (?, ?, ?, ?, ?, ?);
+
+UPDATE flashcardSets
+SET set_title=:setTitle, set_size=:size, tags=:tags
+WHERE set_id = :id;
+selectAllSets:
+SELECT * FROM flashcardSets;
+
+selectOneSet:
+SELECT *
+FROM flashcardSets
+WHERE set_title=:title AND date_created=:dateCreated;
+
+deleteSet:
+DELETE FROM flashcardSets
+WHERE set_id=:setId;
+
+updateSet:
+UPDATE flashcardSets
+SET set_title=:setTitle, set_size=:size, tags=:tags, is_public=:isPrivate
+WHERE set_id = :id;
+
+
+
+
+

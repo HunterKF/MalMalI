@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="hello">안영하세요, 여러분</string>
+    <string name="hello_x">안녕, %s</string>
+    <string name="prompt_select_icon">이미지를 선택하세요 </string>
+    <string name="prompt_add_card">카드 추가</string>
+    <string name="prompt_save">저장</string>
+
+    <string name="desc_practice">연습으로 이동</string>
+
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="hello">Hello, everyone</string>
+    <string name="hello_x">Hello, %s</string>
+    <string name="prompt_select_icon">Select an icon: </string>
+
+    <string name="prompt_add_card">Add card</string>
+    <string name="prompt_save">Save</string>
+    <string name="prompt_delete">Delete</string>
+    <string name="prompt_edit">Edit</string>
+    <string name="prompt_share">Share</string>
+    <string name="prompt_cancel">Cancel</string>
+    <string name="prompt_repeat">Repeat</string>
+    <string name="prompt_back">Back</string>
+
+
+    <string name="popup_confirm_save_title">Save?</string>
+    <string name="popup_confirm_save_content">You can edit this later.</string>
+     <string name="popup_confirm_delete_title">Delete?</string>
+    <string name="popup_confirm_delete_content">This cannot be undone.</string>
+    <string name="popup_set_complete_title">All done!</string>
+    <string name="popup_set_complete_cards_reviewed">Cards reviewed: %s</string>
+    <string name="popup_set_complete_exp_gained">Experience gained: %s</string>
+
+
+
+    <string name="title_home">Home</string>
+    <string name="title_practice">Practice</string>
+    <string name="title_chat">Chat</string>
+    <string name="title_grammar">Grammar</string>
+    <string name="title_vocabulary">Vocabulary</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_about">About</string>
+
+
+    <string name="desc_home">Go to home screen</string>
+    <string name="desc_practice">Go to practice screen</string>
+    <string name="desc_chat">Go to chat screen</string>
+    <string name="desc_grammar">Go to grammar screen</string>
+    <string name="desc_vocabulary">Go to vocabulary screen</string>
+    <string name="desc_profile">Go to profile screen</string>
+    <string name="desc_about">Go to about section screen</string>
+    <string name="desc_previous_card">Go to previous card</string>
+    <string name="desc_next_card">Go to next card</string>
+    <string name="desc_flip_card">Flip card</string>
+</resources>
