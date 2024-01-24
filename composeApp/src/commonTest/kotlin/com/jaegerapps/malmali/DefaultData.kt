@@ -1,5 +1,7 @@
 package com.jaegerapps.malmali
 
+import com.jaegerapps.malmali.grammar.domain.GrammarLevel
+import com.jaegerapps.malmali.grammar.domain.GrammarPoint
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
 import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
 import com.jaegerapps.malmali.vocabulary.domain.VocabSet
@@ -178,3 +180,48 @@ val exampleUiFlashcardListWithUiId = (exampleUiFlashcardList.indices).map {
         uiId = it.toLong()
     )
 }
+
+val exampleGrammarPoint = GrammarPoint(
+    grammarTitle = "Title 2",
+    grammarDef1 = "Definition 2-1",
+    grammarDef2 = "Definition 2-2",
+    exampleEn1 = "English Example 2-1",
+    exampleEn2 = "English Example 2-2",
+    exampleKo1 = "Korean Example 2-1",
+    exampleKo2 = "Korean Example 2-2"
+)
+
+val exampleGrammarPointList = (1..10).map {
+    GrammarPoint(
+        grammarTitle = "Point $it",
+        grammarDef1 = "Definition $it-1",
+        grammarDef2 = "Definition $it-2",
+        exampleEn1 = "English Example $it-1",
+        exampleEn2 = "English Example $it-2",
+        exampleKo1 = "Korean Example $it-1",
+        exampleKo2 = "Korean Example $it-2"
+    )
+}
+
+val exampleGrammarLevel = GrammarLevel(
+    title = "Level 1",
+    isUnlocked = false,
+    exampleGrammarPointList
+)
+val exampleGrammarLevelList = listOf(
+    GrammarLevel(
+        title = "Level 1",
+        isUnlocked = false,
+        exampleGrammarPointList
+    ),
+    GrammarLevel(
+        title = "Level 2",
+        isUnlocked = false,
+        exampleGrammarPointList
+    ),
+    GrammarLevel(
+        title = "Level 3",
+        isUnlocked = false,
+        exampleGrammarPointList
+    ),
+)

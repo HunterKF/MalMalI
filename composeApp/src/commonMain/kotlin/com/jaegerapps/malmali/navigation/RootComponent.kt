@@ -9,8 +9,15 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popTo
 import com.arkivanov.decompose.router.stack.pushNew
 import com.jaegerapps.malmali.components.Routes
+import com.jaegerapps.malmali.grammar.GrammarScreenComponent
+import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
+import com.jaegerapps.malmali.grammar.domain.GrammarRepo
+import com.jaegerapps.malmali.home.HomeScreenComponent
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetComponent
+import com.jaegerapps.malmali.vocabulary.folders.FlashcardHomeComponent
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsComponent
+import core.data.SupabaseClientFactory
+import core.domain.User
 import kotlinx.serialization.Serializable
 
 class RootComponent(
@@ -20,10 +27,12 @@ class RootComponent(
 
     private val navigation = StackNavigation<Configuration>()
 
+    private val client = SupabaseClientFactory().createBase()
+    val repo = GrammarRepoImpl(client)
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
-        initialConfiguration = Configuration.ScreenA,
+        initialConfiguration = Configuration.HomeScreen,
         handleBackButton = true,
         childFactory = ::createChild
     )
@@ -90,7 +99,14 @@ class RootComponent(
                             navigation.pop()
                         },
                         onNavigateToCreateScreen = {
-                            navigation.pushNew(Configuration.CreateSetScreen(vocabFunctions, null, null, null))
+                            navigation.pushNew(
+                                Configuration.CreateSetScreen(
+                                    vocabFunctions,
+                                    null,
+                                    null,
+                                    null
+                                )
+                            )
                         },
                         onNavigateToStudyCard = { setId, title, date ->
                             navigation.pushNew(
@@ -104,7 +120,14 @@ class RootComponent(
 
                         },
                         onNavigateToEdit = { title, setId, date ->
-                            navigation.pushNew(Configuration.CreateSetScreen(vocabFunctions, title, setId, date))
+                            navigation.pushNew(
+                                Configuration.CreateSetScreen(
+                                    vocabFunctions,
+                                    title,
+                                    setId,
+                                    date
+                                )
+                            )
                         },
                         onModalNavigate = {
                             modalNavigate(it)
@@ -125,9 +148,48 @@ class RootComponent(
                             modalNavigate(route)
                         },
                         onCompleteNavigate = { navigation.pop() },
-                        onEditNavigate = {title, id, date ->
-                            navigation.pushNew(Configuration.CreateSetScreen(vocabFunctions, title, id, date))
+                        onEditNavigate = { title, id, date ->
+                            navigation.pushNew(
+                                Configuration.CreateSetScreen(
+                                    vocabFunctions,
+                                    title,
+                                    id,
+                                    date
+                                )
+                            )
                         }
+                    )
+                )
+            }
+
+            is Configuration.HomeScreen -> {
+                Child.HomeScreen(
+                    HomeScreenComponent(
+                        componentContext = context,
+                        user = User(
+                            nickname = "HunterK",
+                            email = "hunter.krez@gmail.com",
+                            authentication = "yes",
+                            experience = 200,
+                            currentLevel = 1,
+                            achievements = listOf("Beginner"),
+                            icon = 1
+                        ),
+                        onNavigate = { route ->
+                            modalNavigate(route)
+                        }
+                    )
+                )
+            }
+
+            is Configuration.GrammarScreen -> {
+                Child.GrammarScreen(
+                    GrammarScreenComponent(
+                        componentContext = context,
+                        onNavigate = {
+
+                        },
+                         repo = repo
                     )
                 )
             }
@@ -140,6 +202,8 @@ class RootComponent(
         data class CreateSetScreen(val component: CreateSetComponent) : Child()
         data class FlashcardHomeScreen(val component: FlashcardHomeComponent) : Child()
         data class StudyFlashcardsScreen(val component: StudyFlashcardsComponent) : Child()
+        data class HomeScreen(val component: HomeScreenComponent) : Child()
+        data class GrammarScreen(val component: GrammarScreenComponent): Child()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -147,6 +211,7 @@ class RootComponent(
         when (route) {
             Routes.HOME -> navigation.popTo(0)
             Routes.VOCABULARY -> navigation.pushNew(Configuration.FlashcardHomeScreen(vocabFunctions))
+            Routes.GRAMMAR -> navigation.pushNew(Configuration.GrammarScreen)
             else -> {
                 navigation.popTo(0)
             }
@@ -168,7 +233,7 @@ class RootComponent(
             val vocabFunctions: VocabularySetSourceFunctions,
             val title: String?,
             val id: Long?,
-            val date: Long?
+            val date: Long?,
         ) : Configuration()
 
         @Serializable
@@ -180,7 +245,13 @@ class RootComponent(
             val vocabFunctions: VocabularySetSourceFunctions,
             val setId: Long,
             val title: String,
-            val date: Long
+            val date: Long,
         ) : Configuration()
+
+        @Serializable
+        data object HomeScreen : Configuration()
+
+        @Serializable
+        data object GrammarScreen: Configuration()
     }
 }

@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.navigation
+package com.jaegerapps.malmali.vocabulary.folders
 
 import VocabularySetSourceFunctions
 import com.arkivanov.decompose.ComponentContext

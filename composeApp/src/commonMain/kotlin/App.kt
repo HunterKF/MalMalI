@@ -7,6 +7,8 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import com.jaegerapps.malmali.grammar.presentation.GrammarScreen
+import com.jaegerapps.malmali.home.HomeScreen
 import com.jaegerapps.malmali.navigation.RootComponent
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetScreen
 import com.jaegerapps.malmali.screen_roots.ScreenA
@@ -40,36 +42,10 @@ fun App(
                 is RootComponent.Child.CreateSetScreen -> CreateSetScreen(component = instance.component)
                 is RootComponent.Child.FlashcardHomeScreen -> FolderScreen(component = instance.component)
                 is RootComponent.Child.StudyFlashcardsScreen -> StudyFlashcardsScreen(component = instance.component)
+                is RootComponent.Child.HomeScreen -> HomeScreen(component = instance.component)
+                is RootComponent.Child.GrammarScreen -> GrammarScreen(component = instance.component)
             }
 
         }
-//        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-//            Button(onClick = { showContent = !showContent }) {
-//                Text("Click me!")
-//            }
-//            Button(onClick = { viewModel.onEvent(HomeUiEvent.CreateUser("HunterK300")) }) {
-//                Text("Create name")
-//            }
-//            Button(onClick = { viewModel.onEvent(HomeUiEvent.GetUserInfo)}) {
-//                Text("Get name")
-//            }
-//            Button(onClick = { database.insertPlayer()}) {
-//                Text("Insert player")
-//            }
-//            Button(onClick = { database.getAllPlayers()}) {
-//                Text("Get all players")
-//            }
-//
-//            Text(stringResource(MR.strings.hello))
-//            AnimatedVisibility(showContent) {
-//                Column(
-//                    Modifier.fillMaxWidth(),
-//                    horizontalAlignment = Alignment.CenterHorizontally
-//                ) {
-//                    Image(painterResource("compose-multiplatform.xml"), null)
-//                    Text("Compose: $greeting")
-//                }
-//            }
-//        }
     }
 }

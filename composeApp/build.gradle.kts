@@ -1,5 +1,7 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import java.util.Properties
+
 buildscript {
     repositories {
         mavenCentral()
@@ -16,6 +18,8 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     id("dev.icerock.mobile.multiplatform-resources")
     id("app.cash.sqldelight") version "2.0.1"
+    id("com.codingfeline.buildkonfig") version "+"
+
 
 }
 val coroutinesVersion = "1.7.3"
@@ -183,5 +187,22 @@ sqldelight {
         create(name = "MalMalIDatabase") {
             packageName.set("com.jaegerapps.malmali.composeApp.database")
         }
+    }
+}
+
+buildkonfig {
+    packageName = "com.jaegerapps.malmali"
+
+    defaultConfigs {
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localPropertiesFile.inputStream().use {
+                localProperties.load(it)
+            }
+        }
+        val apiKey = localProperties.getProperty("API_KEY") ?: "default_value"
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            "API_KEY", apiKey)
     }
 }

@@ -1,14 +1,24 @@
 package com.jaegerapps.malmali.vocabulary.folders.presentation
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,21 +32,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.components.CustomNavigationDrawer
 import com.jaegerapps.malmali.components.SettingsAndModal
 import com.jaegerapps.malmali.components.TopBarLogo
-import com.jaegerapps.malmali.navigation.FlashcardHomeComponent
-import com.jaegerapps.malmali.vocabulary.domain.VocabSet
+import com.jaegerapps.malmali.vocabulary.folders.FlashcardHomeComponent
 import com.jaegerapps.malmali.vocabulary.components.MultiFloatingActionButtons
 import com.jaegerapps.malmali.vocabulary.components.FolderContainer
-import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsUiEvent
 import dev.icerock.moko.resources.compose.painterResource
 import kotlinx.coroutines.launch
 
 @Composable
 fun FolderScreen(
     component: FlashcardHomeComponent,
+    backgroundColor: Color = MaterialTheme.colorScheme.outline,
+    foregroundColor: Color = MaterialTheme.colorScheme.onPrimary,
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -56,12 +68,49 @@ fun FolderScreen(
             floatingActionButton = {
                 MultiFloatingActionButtons(
                     isExpanded = floatingButtonExpand,
-                    onAddClick = {
-                                 component.onEvent(FolderUiEvent.OnNavigateToCreateClick)
-                    },
-                    onSearchClick = {},
                     onExpandClick = {
                         floatingButtonExpand = !floatingButtonExpand
+                    },
+                    buttonContent = {
+                        Column {
+
+                            IconButton(
+                                modifier = Modifier.size(48.dp).clip(
+                                    CircleShape
+                                ),
+                                colors = IconButtonDefaults.filledIconButtonColors(
+                                    containerColor = backgroundColor,
+                                    contentColor = foregroundColor
+                                ),
+                                onClick = {
+                                    component.onEvent(FolderUiEvent.OnNavigateToCreateClick)
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Rounded.Add,
+                                    null
+                                )
+                            }
+                            Spacer(Modifier.height(12.dp))
+
+                            IconButton(
+                                modifier = Modifier.size(48.dp).clip(
+                                    CircleShape
+                                ),
+                                colors = IconButtonDefaults.filledIconButtonColors(
+                                    containerColor = backgroundColor,
+                                    contentColor = foregroundColor
+                                ),
+                                onClick = {
+
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Rounded.Search,
+                                    null
+                                )
+                            }
+                        }
                     }
                 )
             },

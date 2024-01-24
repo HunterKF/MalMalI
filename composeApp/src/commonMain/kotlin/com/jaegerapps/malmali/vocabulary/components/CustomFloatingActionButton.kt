@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.animation.core.animateOffsetAsState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -40,29 +41,14 @@ fun MultiFloatingActionButtons(
     backgroundColor: Color = MaterialTheme.colorScheme.outline,
     foregroundColor: Color = MaterialTheme.colorScheme.onPrimary,
     isExpanded: Boolean,
-    onSearchClick: () -> Unit,
+    buttonContent: @Composable () -> Unit,
     onExpandClick: () -> Unit,
-    onAddClick: () -> Unit
 ) {
     val animateRotation by animateFloatAsState(
         if (isExpanded) {
             270f
         } else {
             90f
-        }
-    )
-    val animatedSizeAction by animateDpAsState(
-        if (isExpanded) {
-            48.dp
-        } else {
-            36.dp
-        }
-    )
-    val animatedSizeFloat by animateDpAsState(
-        if (!isExpanded) {
-            48.dp
-        } else {
-            36.dp
         }
     )
     val animatedOffset by animateDpAsState(
@@ -76,38 +62,13 @@ fun MultiFloatingActionButtons(
         modifier = modifier,
         horizontalAlignment = Alignment.End
     ) {
-        IconButton(
-            modifier = Modifier.offset(x = animatedOffset, 0.dp).size(48.dp).clip(CircleShape),
-            colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = backgroundColor,
-                contentColor = foregroundColor
-            ),
-            onClick = {
-                onAddClick()
-            }
+        Box(
+            Modifier.offset(x = animatedOffset, 0.dp)
         ) {
-            Icon(
-                Icons.Rounded.Add,
-                null
-            )
-        }
-        Spacer(Modifier.height(12.dp))
+            buttonContent()
 
-        IconButton(
-            modifier = Modifier.offset(x = animatedOffset, 0.dp).size(48.dp).clip(CircleShape),
-            colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = backgroundColor,
-                contentColor = foregroundColor
-            ),
-            onClick = {
-                onSearchClick()
-            }
-        ) {
-            Icon(
-                Icons.Rounded.Search,
-                null
-            )
         }
+
         Spacer(Modifier.height(12.dp))
 
         IconButton(
@@ -126,8 +87,6 @@ fun MultiFloatingActionButtons(
                 modifier = Modifier.rotate(animateRotation)
             )
         }
-
-
     }
 
 }
