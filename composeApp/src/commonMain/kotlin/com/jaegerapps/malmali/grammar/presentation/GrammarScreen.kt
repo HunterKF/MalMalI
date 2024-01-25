@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
@@ -81,11 +82,11 @@ fun GrammarScreen(
                                 contentColor = foregroundColor
                             ),
                             onClick = {
-//                                component.onEvent(FolderUiEvent.OnNavigateToCreateClick)
+                                component.onEvent(GrammarUiEvent.ToggleEditMode)
                             }
                         ) {
                             Icon(
-                                Icons.Rounded.EditNote,
+                                Icons.Rounded.Edit,
                                 null
                             )
                         }
@@ -117,7 +118,7 @@ fun GrammarScreen(
                 )
                 Spacer(Modifier.height(18.dp))
                 GrammarListContainer(
-                    isEditingMode = false,
+                    isEditingMode = state.isEditing,
                     levels = state.levels
                 )
 

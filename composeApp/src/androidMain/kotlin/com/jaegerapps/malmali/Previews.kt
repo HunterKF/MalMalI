@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,6 +44,10 @@ import com.jaegerapps.malmali.grammar.domain.GrammarPoint
 import com.jaegerapps.malmali.home.components.CardButton
 import com.jaegerapps.malmali.home.components.LevelBar
 import com.jaegerapps.malmali.home.components.UserIcon
+import com.jaegerapps.malmali.onboarding.welcome.WelcomeScreen
+import com.jaegerapps.malmali.onboarding.welcome.components.OnboardingContainer
+import com.jaegerapps.malmali.onboarding.welcome.components.PagerIndicator
+import com.jaegerapps.malmali.onboarding.welcome.components.SkipAndNextButton
 import com.jaegerapps.malmali.vocabulary.domain.VocabSet
 import com.jaegerapps.malmali.vocabulary.components.AddCardButton
 import com.jaegerapps.malmali.vocabulary.components.EditVocabContainer
@@ -58,6 +63,53 @@ import core.presentation.MalMalITheme
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
+
+private val exampleGrammarPoint = GrammarPoint(
+    grammarCategory = 1,
+    grammarTitle = "Title 2",
+    grammarDef1 = "Definition 2-1",
+    grammarDef2 = "Definition 2-2",
+    exampleEn1 = "English Example 2-1",
+    exampleEn2 = "English Example 2-2",
+    exampleKo1 = "Korean Example 2-1",
+    exampleKo2 = "Korean Example 2-2"
+)
+
+private val exampleGrammarPointList = (1..10).map {
+    GrammarPoint(
+        grammarCategory = 1,
+        grammarTitle = "Point $it",
+        grammarDef1 = "Definition $it-1",
+        grammarDef2 = "Definition $it-2",
+        exampleEn1 = "English Example $it-1",
+        exampleEn2 = "English Example $it-2",
+        exampleKo1 = "Korean Example $it-1",
+        exampleKo2 = "Korean Example $it-2"
+    )
+}
+
+private val exampleGrammarLevel = GrammarLevel(
+    title = "Level 1",
+    isUnlocked = false,
+    exampleGrammarPointList
+)
+private val exampleGrammarLevelList = listOf(
+    GrammarLevel(
+        title = "Level 1",
+        isUnlocked = true,
+        exampleGrammarPointList
+    ),
+    GrammarLevel(
+        title = "Level 2",
+        isUnlocked = false,
+        exampleGrammarPointList
+    ),
+    GrammarLevel(
+        title = "Level 3",
+        isUnlocked = false,
+        exampleGrammarPointList
+    ),
+)
 
 @Preview
 @Composable
@@ -921,49 +973,64 @@ fun Preview_GrammarListContainer() {
     }
 }
 
-private val exampleGrammarPoint = GrammarPoint(
-    grammarCategory = 1,
-    grammarTitle = "Title 2",
-    grammarDef1 = "Definition 2-1",
-    grammarDef2 = "Definition 2-2",
-    exampleEn1 = "English Example 2-1",
-    exampleEn2 = "English Example 2-2",
-    exampleKo1 = "Korean Example 2-1",
-    exampleKo2 = "Korean Example 2-2"
-)
+@Preview
+@Composable
+fun Preview_OnboardingContainer() {
+    MalMalITheme(false) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(12.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            OnboardingContainer(
+                modifier = Modifier.weight(1f),
+                icon = MR.images.cat_icon,
+                title = "Welcome to MalMalI",
+                text = "MalMalI is here to help you level up your Korean skills. Whether it is vocab memorization, grammar practice, or chatting, MalMalI is here to help."
+            )
 
-private val exampleGrammarPointList = (1..10).map {
-    GrammarPoint(
-        grammarCategory = 1,
-        grammarTitle = "Point $it",
-        grammarDef1 = "Definition $it-1",
-        grammarDef2 = "Definition $it-2",
-        exampleEn1 = "English Example $it-1",
-        exampleEn2 = "English Example $it-2",
-        exampleKo1 = "Korean Example $it-1",
-        exampleKo2 = "Korean Example $it-2"
-    )
+        }
+    }
+}
+@Preview
+@Composable
+fun Preview_PagerIndicator() {
+    MalMalITheme(false) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(12.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            var state by remember {
+                mutableIntStateOf(1)
+            }
+            PagerIndicator(
+                modifier = Modifier,
+                currentPage = state,
+                numberOfPages = 4
+            )
+            Spacer(Modifier.height(36.dp))
+            SkipAndNextButton(
+                onNext = {
+                    if (state < 4) {
+                        state ++
+                    } else {
+                        state = 1
+                    }
+                },
+                onSkip =  {
+
+                }
+            )
+
+        }
+    }
 }
 
-private val exampleGrammarLevel = GrammarLevel(
-    title = "Level 1",
-    isUnlocked = false,
-    exampleGrammarPointList
-)
-private val exampleGrammarLevelList = listOf(
-    GrammarLevel(
-        title = "Level 1",
-        isUnlocked = true,
-        exampleGrammarPointList
-    ),
-    GrammarLevel(
-        title = "Level 2",
-        isUnlocked = false,
-        exampleGrammarPointList
-    ),
-    GrammarLevel(
-        title = "Level 3",
-        isUnlocked = false,
-        exampleGrammarPointList
-    ),
-)
+@Preview
+@Composable
+fun Preview_OnboardingScreen() {
+    MalMalITheme(false) {
+        WelcomeScreen()
+
+    }
+}

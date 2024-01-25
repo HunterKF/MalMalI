@@ -13,6 +13,8 @@ import com.jaegerapps.malmali.grammar.GrammarScreenComponent
 import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
 import com.jaegerapps.malmali.grammar.domain.GrammarRepo
 import com.jaegerapps.malmali.home.HomeScreenComponent
+import com.jaegerapps.malmali.onboarding.welcome.WelcomeScreen
+import com.jaegerapps.malmali.onboarding.welcome.WelcomeScreenComponent
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetComponent
 import com.jaegerapps.malmali.vocabulary.folders.FlashcardHomeComponent
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsComponent
@@ -186,10 +188,20 @@ class RootComponent(
                 Child.GrammarScreen(
                     GrammarScreenComponent(
                         componentContext = context,
-                        onNavigate = {
-
+                        onNavigate = { route ->
+                            modalNavigate(route)
                         },
                          repo = repo
+                    )
+                )
+            }
+            is Configuration.WelcomeScreen -> {
+                Child.WelcomeScreen(
+                    WelcomeScreenComponent(
+                        componentContext = context,
+                        onNavigate = {
+
+                        }
                     )
                 )
             }
@@ -204,6 +216,7 @@ class RootComponent(
         data class StudyFlashcardsScreen(val component: StudyFlashcardsComponent) : Child()
         data class HomeScreen(val component: HomeScreenComponent) : Child()
         data class GrammarScreen(val component: GrammarScreenComponent): Child()
+        data class WelcomeScreen(val component: WelcomeScreenComponent): Child()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -253,5 +266,7 @@ class RootComponent(
 
         @Serializable
         data object GrammarScreen: Configuration()
+        @Serializable
+        data object WelcomeScreen: Configuration()
     }
 }

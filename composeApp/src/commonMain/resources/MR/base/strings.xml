@@ -12,6 +12,17 @@
     <string name="prompt_cancel">Cancel</string>
     <string name="prompt_repeat">Repeat</string>
     <string name="prompt_back">Back</string>
+    <string name="prompt_skip">Skip</string>
+
+    <string name="onboarding_welcome_title">Welcome to MalMalI!</string>
+    <string name="onboarding_welcome_content">MalMalI is here to help you level up your Korean skills. Whether it is vocab memorization, grammar practice, or chatting, MalMalI is here to help. </string>
+    <string name="onboarding_grammar_title">Practice Grammar</string>
+    <string name="onboarding_grammar_content">Learn new grammar points, practice ones you already know, or add your own flashcards to customize your learning experience.</string>
+    <string name="onboarding_chat_title">Practice Speaking</string>
+    <string name="onboarding_chat_content">Chat with MalMalI to get some output for your Korean.</string>
+    <string name="onboarding_on_the_go_title">On the go</string>
+    <string name="onboarding_on_the_go_content">Wherever, whenever, you can practice the language you love so much.</string>
+
 
 
     <string name="popup_confirm_save_title">Save?</string>

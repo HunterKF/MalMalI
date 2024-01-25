@@ -8,7 +8,7 @@ fun GrammarPointDTO.toGrammarPoint(): GrammarPoint {
     return GrammarPoint(
         grammarCategory = grammar_level,
         grammarTitle = grammar_point,
-        grammarDef1 =grammar_explanation_1 ,
+        grammarDef1 = grammar_explanation_1,
         grammarDef2 = grammar_explanation_2,
         exampleEn1 = explain_1_ex_en,
         exampleEn2 = explain_2_ex_en,
@@ -19,12 +19,16 @@ fun GrammarPointDTO.toGrammarPoint(): GrammarPoint {
 
 fun List<GrammarPoint>.toGrammarLevels(): List<GrammarLevel> {
     return (1..6).map { number ->
+        val list = if (number == 1) {
+            this.filter { it.grammarCategory == 1 }.map { it.copy(selected = true) }
+        } else {
+            this.filter { it.grammarCategory == number }
+        }
         GrammarLevel(
             title = "Level $number",
             isUnlocked = number == 1,
-            grammarList = this.filter {
-                it.grammarCategory == number
-            }
+            grammarList = list
         )
     }
 }
+

@@ -8,5 +8,6 @@ data class GrammarPoint(
     val exampleEn1: String,
     val exampleEn2: String,
     val exampleKo1: String,
-    val exampleKo2: String
+    val exampleKo2: String,
+    val selected: Boolean = false
 )

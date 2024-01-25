@@ -114,7 +114,7 @@ kotlin {
         val iosMain by creating {
             dependencies {
                 implementation ("app.cash.sqldelight:native-driver:2.0.1")
-//                implementation(libs.ktor.ktor.client.ios)
+                implementation(libs.ktor.ktor.client.ios)
             }
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)

@@ -38,12 +38,19 @@ class GrammarScreenComponent(
             is GrammarUiEvent.DeselectAllFromLevel -> TODO()
             is GrammarUiEvent.DeselectGrammarPoint -> TODO()
             is GrammarUiEvent.OnNavigate -> {
-
+                onNavigate(event.route)
             }
             is GrammarUiEvent.SelectAllFromLevel -> TODO()
             is GrammarUiEvent.SelectGrammarPoint -> TODO()
             is GrammarUiEvent.ToggleLevelExpansion -> TODO()
             is GrammarUiEvent.TogglePointExpansion -> TODO()
+            GrammarUiEvent.ToggleEditMode -> {
+                _state.update {
+                    it.copy(
+                        isEditing = !it.isEditing
+                    )
+                }
+            }
         }
     }
 
