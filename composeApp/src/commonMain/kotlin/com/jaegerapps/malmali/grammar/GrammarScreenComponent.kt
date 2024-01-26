@@ -4,8 +4,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.grammar.domain.GrammarRepo
 import com.jaegerapps.malmali.grammar.presentation.GrammarUiEvent
 import com.jaegerapps.malmali.grammar.presentation.GrammarUiState
-import com.jaegerapps.malmali.home.HomeUiState
-import core.domain.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

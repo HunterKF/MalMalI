@@ -1026,11 +1026,4 @@ fun Preview_PagerIndicator() {
     }
 }
 
-@Preview
-@Composable
-fun Preview_OnboardingScreen() {
-    MalMalITheme(false) {
-        WelcomeScreen()
 
-    }
-}

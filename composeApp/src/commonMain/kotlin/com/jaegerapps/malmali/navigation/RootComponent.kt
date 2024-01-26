@@ -11,15 +11,16 @@ import com.arkivanov.decompose.router.stack.pushNew
 import com.jaegerapps.malmali.components.Routes
 import com.jaegerapps.malmali.grammar.GrammarScreenComponent
 import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
-import com.jaegerapps.malmali.grammar.domain.GrammarRepo
 import com.jaegerapps.malmali.home.HomeScreenComponent
-import com.jaegerapps.malmali.onboarding.welcome.WelcomeScreen
+import com.jaegerapps.malmali.login.data.SignInImpl
+import com.jaegerapps.malmali.login.presentation.SignInComponent
 import com.jaegerapps.malmali.onboarding.welcome.WelcomeScreenComponent
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetComponent
 import com.jaegerapps.malmali.vocabulary.folders.FlashcardHomeComponent
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsComponent
+import com.russhwolf.settings.Settings
 import core.data.SupabaseClientFactory
-import core.domain.User
+import com.jaegerapps.malmali.login.data.UserDTO
 import kotlinx.serialization.Serializable
 
 class RootComponent(
@@ -28,13 +29,13 @@ class RootComponent(
 ) : ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
-
-    private val client = SupabaseClientFactory().createBase()
+    private val settings = Settings()
+    val client = SupabaseClientFactory().createBase()
     val repo = GrammarRepoImpl(client)
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
-        initialConfiguration = Configuration.HomeScreen,
+        initialConfiguration = Configuration.SignInScreen,
         handleBackButton = true,
         childFactory = ::createChild
     )
@@ -168,14 +169,13 @@ class RootComponent(
                 Child.HomeScreen(
                     HomeScreenComponent(
                         componentContext = context,
-                        user = User(
-                            nickname = "HunterK",
-                            email = "hunter.krez@gmail.com",
-                            authentication = "yes",
-                            experience = 200,
-                            currentLevel = 1,
-                            achievements = listOf("Beginner"),
-                            icon = 1
+                        userDTO = UserDTO(
+                            user_nickname = "HunterK",
+                            user_email = "hunter.krez@gmail.com",
+                            user_id = "yes",
+                            user_experience = 200,
+                            user_achievements = arrayOf("Beginner"),
+                            user_icon = 1,
                         ),
                         onNavigate = { route ->
                             modalNavigate(route)
@@ -205,6 +205,17 @@ class RootComponent(
                     )
                 )
             }
+            is Configuration.SignInScreen -> {
+                Child.SignInScreen(
+                    SignInComponent(
+                        componentContext = context,
+                        onNavigate = {
+
+                        },
+                        signIn = SignInImpl(settings = settings, client)
+                    )
+                )
+            }
         }
     }
 
@@ -217,6 +228,7 @@ class RootComponent(
         data class HomeScreen(val component: HomeScreenComponent) : Child()
         data class GrammarScreen(val component: GrammarScreenComponent): Child()
         data class WelcomeScreen(val component: WelcomeScreenComponent): Child()
+        data class SignInScreen(val component: SignInComponent): Child()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -268,5 +280,7 @@ class RootComponent(
         data object GrammarScreen: Configuration()
         @Serializable
         data object WelcomeScreen: Configuration()
+        @Serializable
+        data object SignInScreen: Configuration()
     }
 }

@@ -9,7 +9,9 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stac
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.jaegerapps.malmali.grammar.presentation.GrammarScreen
 import com.jaegerapps.malmali.home.HomeScreen
+import com.jaegerapps.malmali.login.presentation.SignInScreen
 import com.jaegerapps.malmali.navigation.RootComponent
+import com.jaegerapps.malmali.onboarding.welcome.WelcomeScreen
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetScreen
 import com.jaegerapps.malmali.screen_roots.ScreenA
 import com.jaegerapps.malmali.screen_roots.ScreenB
@@ -44,6 +46,8 @@ fun App(
                 is RootComponent.Child.StudyFlashcardsScreen -> StudyFlashcardsScreen(component = instance.component)
                 is RootComponent.Child.HomeScreen -> HomeScreen(component = instance.component)
                 is RootComponent.Child.GrammarScreen -> GrammarScreen(component = instance.component)
+                is RootComponent.Child.SignInScreen -> SignInScreen(component = instance.component, client = root.client)
+                is RootComponent.Child.WelcomeScreen -> WelcomeScreen(component = instance.component)
             }
 
         }

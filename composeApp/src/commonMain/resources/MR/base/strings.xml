@@ -24,6 +24,26 @@
     <string name="onboarding_on_the_go_content">Wherever, whenever, you can practice the language you love so much.</string>
 
 
+    <string name="create_account_already_have">Already have an account? Log in</string>
+    <string name="create_account_dont_have">Don\'t have an account? Make one now</string>
+    <string name="create_account_title">Create account</string>
+    <string name="sign_in_placeholder_or">or</string>
+    <string name="sign_in_placeholder_email">email</string>
+    <string name="sign_in_placeholder_password">password</string>
+    <string name="sign_in_placeholder_re_password">Re-type password</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_in_with_apple">Sign in with Apple</string>
+    <string name="sign_in_privacy_policy">By signing in, you agree to the privacy policy and terms of use.</string>
+    <string name="sign_in_error_password_incorrect">Passwords do not match. Please check passwords.</string>
+    <string name="sign_in_error_password_blank">Password cannot be blank.</string>
+    <string name="sign_in_error_password_too_short">Password must contain at least 6 characters.</string>
+    <string name="sign_in_error_email_blank">Please enter in an email.</string>
+    <string name="sign_in_error_email_validation">Email is not valid, please check it.</string>
+    <string name="sign_in_error_network_error">A network error occurred. Please connect to the network and try again later.</string>
+    <string name="sign_in_prompt_sign_in">Sign in</string>
+    <string name="sign_in_prompt_create_account">Create account</string>
+    <string name="sign_in_content_desc_hide_password">Hide password</string>
+    <string name="sign_in_content_desc_show_password">Show password</string>
 
     <string name="popup_confirm_save_title">Save?</string>
     <string name="popup_confirm_save_content">You can edit this later.</string>

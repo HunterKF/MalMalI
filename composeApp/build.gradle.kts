@@ -65,6 +65,9 @@ kotlin {
 
                 implementation(platform("io.github.jan-tennert.supabase:bom:2.0.4"))
                 implementation("io.github.jan-tennert.supabase:postgrest-kt")
+                implementation("io.github.jan-tennert.supabase:compose-auth:2.0.4")
+                implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.4"
+                )
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
