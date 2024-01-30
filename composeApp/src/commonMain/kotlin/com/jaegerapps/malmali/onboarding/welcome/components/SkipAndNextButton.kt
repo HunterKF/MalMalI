@@ -42,8 +42,6 @@ fun SkipAndNextButton(
                 text = stringResource(MR.strings.prompt_skip),
                 color = MaterialTheme.colorScheme.outline
             )
-
-
         }
         Box(
             modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.outline).padding(6.dp).clickable { onNext() },

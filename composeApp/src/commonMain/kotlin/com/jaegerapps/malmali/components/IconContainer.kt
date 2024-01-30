@@ -30,6 +30,7 @@ fun IconContainer(
     modifier: Modifier = Modifier,
     size: Dp = 35.dp,
     backgroundColor: Color = MaterialTheme.colorScheme.secondary,
+    contentDesc: String? = null,
     icon: Painter
 ) {
     Box(
@@ -39,7 +40,7 @@ fun IconContainer(
         Image(
             modifier = Modifier.padding(4.dp).size(size),
             painter = icon,
-            contentDescription = null,
+            contentDescription = contentDesc,
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.background)
         )

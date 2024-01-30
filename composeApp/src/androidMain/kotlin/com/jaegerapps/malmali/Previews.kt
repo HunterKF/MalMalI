@@ -44,6 +44,7 @@ import com.jaegerapps.malmali.grammar.domain.GrammarPoint
 import com.jaegerapps.malmali.home.components.CardButton
 import com.jaegerapps.malmali.home.components.LevelBar
 import com.jaegerapps.malmali.home.components.UserIcon
+import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
 import com.jaegerapps.malmali.onboarding.welcome.WelcomeScreen
 import com.jaegerapps.malmali.onboarding.welcome.components.OnboardingContainer
 import com.jaegerapps.malmali.onboarding.welcome.components.PagerIndicator
@@ -1025,5 +1026,3 @@ fun Preview_PagerIndicator() {
         }
     }
 }
-
-

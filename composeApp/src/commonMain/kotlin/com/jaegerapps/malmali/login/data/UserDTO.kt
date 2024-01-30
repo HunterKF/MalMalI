@@ -9,7 +9,7 @@ data class UserDTO(
     val user_email: String,
     val user_id: String,
     val user_experience: Int,
-    val user_icon: Int,
+    val user_icon: String,
     val user_achievements: Array<String>
 )
 

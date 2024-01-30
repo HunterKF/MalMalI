@@ -21,6 +21,7 @@ import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsCompone
 import com.russhwolf.settings.Settings
 import core.data.SupabaseClientFactory
 import com.jaegerapps.malmali.login.data.UserDTO
+import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
 import kotlinx.serialization.Serializable
 
 class RootComponent(
@@ -175,7 +176,7 @@ class RootComponent(
                             user_id = "yes",
                             user_experience = 200,
                             user_achievements = arrayOf("Beginner"),
-                            user_icon = 1,
+                            user_icon = "cat",
                         ),
                         onNavigate = { route ->
                             modalNavigate(route)
@@ -191,10 +192,11 @@ class RootComponent(
                         onNavigate = { route ->
                             modalNavigate(route)
                         },
-                         repo = repo
+                        repo = repo
                     )
                 )
             }
+
             is Configuration.WelcomeScreen -> {
                 Child.WelcomeScreen(
                     WelcomeScreenComponent(
@@ -205,6 +207,7 @@ class RootComponent(
                     )
                 )
             }
+
             is Configuration.SignInScreen -> {
                 Child.SignInScreen(
                     SignInComponent(
@@ -216,6 +219,13 @@ class RootComponent(
                     )
                 )
             }
+
+            Configuration.PersonalizationScreen -> {
+                Child.PersonalizationScreen(
+                    PersonalizationComponent(componentContext = context)
+                )
+            }
+
         }
     }
 
@@ -226,9 +236,10 @@ class RootComponent(
         data class FlashcardHomeScreen(val component: FlashcardHomeComponent) : Child()
         data class StudyFlashcardsScreen(val component: StudyFlashcardsComponent) : Child()
         data class HomeScreen(val component: HomeScreenComponent) : Child()
-        data class GrammarScreen(val component: GrammarScreenComponent): Child()
-        data class WelcomeScreen(val component: WelcomeScreenComponent): Child()
-        data class SignInScreen(val component: SignInComponent): Child()
+        data class GrammarScreen(val component: GrammarScreenComponent) : Child()
+        data class WelcomeScreen(val component: WelcomeScreenComponent) : Child()
+        data class SignInScreen(val component: SignInComponent) : Child()
+        data class PersonalizationScreen(val component: PersonalizationComponent) : Child()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -277,10 +288,15 @@ class RootComponent(
         data object HomeScreen : Configuration()
 
         @Serializable
-        data object GrammarScreen: Configuration()
+        data object GrammarScreen : Configuration()
+
         @Serializable
-        data object WelcomeScreen: Configuration()
+        data object WelcomeScreen : Configuration()
+
         @Serializable
-        data object SignInScreen: Configuration()
+        data object SignInScreen : Configuration()
+
+        @Serializable
+        data object PersonalizationScreen : Configuration()
     }
 }

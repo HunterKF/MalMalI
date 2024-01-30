@@ -1,5 +1,6 @@
 package com.jaegerapps.malmali.login.data
 
+import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.login.domain.SignIn
 import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.login.domain.UserEntity
@@ -35,7 +36,7 @@ class SignInImpl(
             user_id = userId,
             user_experience = 1,
             user_achievements = emptyArray(),
-            user_icon = 1
+            user_icon = "cat"
         )
 
         return try {
@@ -64,7 +65,7 @@ class SignInImpl(
     override suspend fun createUserWithEmailExternally(
         email: String,
         password: String,
-    ): Resource<Boolean> {
+    ): Resource<UserData> {
         try {
             client.auth.signUpWith(Email) {
                 this.email = email
@@ -74,46 +75,46 @@ class SignInImpl(
             return Resource.Error(e)
         }
 
-        client.auth.sessionStatus.collect {
-            when (it) {
-                is SessionStatus.Authenticated -> {
-                    println(it.session.user?.id)
-                    it.session.user?.let { user ->
-                        val userDTO = UserDTO(
-                            user_nickname = "",
-                            user_email = "",
-                            user_id = user.id,
-                            user_experience = 1,
-                            user_achievements = emptyArray(),
-                            user_icon = 1
-                        )
-                        val oldUser =
-                            client.from("users").select(columns = Columns.list("user_id")) {
-                                filter {
-                                    eq("user_id", user.id)
-                                }
-                            }
-                        if (oldUser.data.isEmpty() || oldUser.data == "[]") {
-                            try {
-                                client.from("users").insert(userDTO) {
-                                    select()
-                                }.decodeSingle<UserEntity>()
-                            } catch (e: Exception) {
-                                return Resource.Error(e)
-                            }
-
-                        } else {
-                            println("User already existed :D ")
-                        }
-                    }
-
-                }
-
-                SessionStatus.LoadingFromStorage -> println("Loading from storage")
-                SessionStatus.NetworkError -> println("Network error")
-                SessionStatus.NotAuthenticated -> println("Not authenticated")
-            }
-        }
+//        client.auth.sessionStatus.collect {
+//            when (it) {
+//                is SessionStatus.Authenticated -> {
+//                    println(it.session.user?.id)
+//                    it.session.user?.let { user ->
+//                        val userDTO = UserDTO(
+//                            user_nickname = "",
+//                            user_email = "",
+//                            user_id = user.id,
+//                            user_experience = 1,
+//                            user_achievements = emptyArray(),
+//                            user_icon = "cat"
+//                        )
+//                        val oldUser =
+//                            client.from("users").select(columns = Columns.list("user_id")) {
+//                                filter {
+//                                    eq("user_id", user.id)
+//                                }
+//                            }
+//                        if (oldUser.data.isEmpty() || oldUser.data == "[]") {
+//                            try {
+//                                client.from("users").insert(userDTO) {
+//                                    select()
+//                                }.decodeSingle<UserEntity>()
+//                            } catch (e: Exception) {
+//                                return Resource.Error(e)
+//                            }
+//
+//                        } else {
+//                            println("User already existed :D ")
+//                        }
+//                    }
+//
+//                }
+//
+//                SessionStatus.LoadingFromStorage -> println("Loading from storage")
+//                SessionStatus.NetworkError -> println("Network error")
+//                SessionStatus.NotAuthenticated -> println("Not authenticated")
+//            }
+//        }
 //        val oldUser = client.from("users").select(columns = Columns.list("user_id")) {
 //            filter {
 //                eq("user_email", email)
@@ -126,7 +127,17 @@ class SignInImpl(
 //        } else {
 //            println("User already existed :D ")
 //        }
+        return Resource.Success(UserData(
+            nickname = "test",
+            email = email,
+            id = "12",
+            experience = 1,
+            currentLevel = 1,
+            icon = IconResource.resourceFromTag("cat"),
+            achievements = emptyList(),
+            selectedLevels = emptyList(),
 
+        ) )
     }
 
 }

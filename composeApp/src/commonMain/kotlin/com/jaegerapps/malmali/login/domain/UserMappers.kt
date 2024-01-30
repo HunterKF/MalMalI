@@ -1,6 +1,7 @@
 package com.jaegerapps.malmali.login.domain
 
 import com.jaegerapps.malmali.MR
+import com.jaegerapps.malmali.components.models.IconResource
 
 fun UserEntity.toUserData(): UserData {
     return UserData(
@@ -9,7 +10,7 @@ fun UserEntity.toUserData(): UserData {
         id = user_id,
         experience = user_experience,
         currentLevel = 1,
-        icon = MR.images.cat_icon,
+        icon = IconResource.resourceFromTag(this.user_icon),
         achievements = user_achievements.toList(),
     )
 }
