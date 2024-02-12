@@ -100,8 +100,6 @@ fun SignInScreen(
                             id = sessionsId
                         )
                     )
-
-
                 }
             }
         }
@@ -176,6 +174,7 @@ private fun CreateAccountContent(
     Text(stringResource(MR.strings.create_account_title))
     OutlinedTextField(
         modifier = Modifier.blackBorder(),
+        shape = RoundedCornerShape(25.dp),
         value = email,
         onValueChange = { newValue ->
             onUiEvent(SignInUiEvent.ChangeEmailValue(newValue))
@@ -183,6 +182,8 @@ private fun CreateAccountContent(
         placeholder = {
             Text(stringResource(MR.strings.sign_in_placeholder_email))
         },
+        singleLine = true,
+
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Email
         ),
@@ -200,6 +201,8 @@ private fun CreateAccountContent(
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Password
         ),
+        singleLine = true,
+
         trailingIcon = {
             /*https://stackoverflow.com/questions/65304229/toggle-password-field-jetpack-compose*/
             val image = if (passwordVisible)
@@ -229,6 +232,8 @@ private fun CreateAccountContent(
             Text(text = stringResource(MR.strings.sign_in_placeholder_re_password))
         },
         isError = retypePassword != password,
+        singleLine = true,
+
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Password
         ),
@@ -282,6 +287,8 @@ private fun SignInContent(
         onValueChange = { newValue ->
             onUiEvent(SignInUiEvent.ChangeEmailValue(newValue))
         },
+        singleLine = true,
+
         placeholder = {
             Text(stringResource(MR.strings.sign_in_placeholder_email))
         },
@@ -299,6 +306,7 @@ private fun SignInContent(
         placeholder = {
             Text(text = stringResource(MR.strings.sign_in_placeholder_password))
         },
+        singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Password
         ),

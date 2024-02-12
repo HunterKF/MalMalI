@@ -21,6 +21,7 @@ plugins {
     id("com.codingfeline.buildkonfig") version "+"
 
 
+
 }
 val coroutinesVersion = "1.7.3"
 val ktorVersion = "2.3.5"
@@ -66,8 +67,7 @@ kotlin {
                 implementation(platform("io.github.jan-tennert.supabase:bom:2.0.4"))
                 implementation("io.github.jan-tennert.supabase:postgrest-kt")
                 implementation("io.github.jan-tennert.supabase:compose-auth:2.0.4")
-                implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.4"
-                )
+                implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
@@ -90,6 +90,8 @@ kotlin {
                 implementation(libs.kotlin.test)
                 implementation(libs.ktor.ktor.client.mock)
                 implementation(libs.turbine)
+                implementation(libs.multiplatform.settings.test)
+                implementation(libs.mockative)
             }
         }
         val androidMain by getting {
@@ -97,7 +99,8 @@ kotlin {
 
             dependencies {
                 implementation("io.ktor:ktor-client-android:$ktorVersion")
-                implementation ("app.cash.sqldelight:android-driver:2.0.1")
+                implementation(libs.sql.android.driver)
+//                implementation ("app.cash.sqldelight:android-driver:2.0.1")
                 implementation("androidx.appcompat:appcompat:1.6.1")
                 implementation("androidx.activity:activity-compose:1.7.2")
                 implementation(libs.decompose)
@@ -115,15 +118,17 @@ kotlin {
             resources.srcDirs("build/generated/moko/iosSimulatorArm64Main/src")
         }
         val iosMain by creating {
+            dependsOn(commonMain)
             dependencies {
-                implementation ("app.cash.sqldelight:native-driver:2.0.1")
+                implementation(libs.sql.native.driver)
+//                implementation ("app.cash.sqldelight:native-driver:2.0.1")
                 implementation(libs.ktor.ktor.client.ios)
             }
-            dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
         }
+
         val iosX64Test by getting
         val iosArm64Test by getting
         val iosSimulatorArm64Test by getting
@@ -177,6 +182,14 @@ dependencies {
     commonMainApi("dev.icerock.moko:mvvm-flow:0.16.1")
     commonMainApi("dev.icerock.moko:mvvm-flow-compose:0.16.1")
     commonMainApi("dev.icerock.moko:resources-compose:0.23.0")
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.9.21-1.0.15")
+
+    configurations
+        .filter { it.name.startsWith("ksp") && it.name.contains("Test") }
+        .forEach {
+
+            add(it.name, "io.mockative:mockative-processor:2.0.1")
+        }
 //    implementation(libs.sqlite.driver)
 }
 

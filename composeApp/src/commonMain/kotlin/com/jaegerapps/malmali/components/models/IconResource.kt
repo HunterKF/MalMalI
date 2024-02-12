@@ -31,6 +31,11 @@ sealed class IconResource(
         tag = "bear 4"
     )
 
+    data object Bear_Five : IconResource(
+        resource = MR.images.user_icon_bear_5,
+        tag = "bear 4"
+    )
+
     data object Bear_Six : IconResource(
         resource = MR.images.user_icon_bear_6,
         tag = "bear 6"
@@ -76,10 +81,6 @@ sealed class IconResource(
         tag = "bear 14"
     )
 
-    data object Bear_Fifteen : IconResource(
-        resource = MR.images.user_icon_bear_15,
-        tag = "bear 15"
-    )
 
     companion object {
         fun resourceFromTag(tag: String): IconResource {
@@ -88,6 +89,7 @@ sealed class IconResource(
                 "bear 2" -> Bear_Two
                 "bear 3" -> Bear_Three
                 "bear 4" -> Bear_Four
+                "bear 5" -> Bear_Five
                 "bear 6" -> Bear_Six
                 "bear 7" -> Bear_Seven
                 "bear 8" -> Bear_Eight
@@ -101,11 +103,31 @@ sealed class IconResource(
             }
         }
 
+        fun tagFromResource(resource: IconResource): String {
+            return when (resource) {
+                Bear_One -> "bear 1"
+                Bear_Two -> "bear 2"
+                Bear_Three -> "bear 3"
+                Bear_Four -> "bear 4"
+                Bear_Five -> "bear 5"
+                Bear_Six -> "bear 6"
+                Bear_Seven -> "bear 7"
+                Bear_Eight -> "bear 8"
+                Bear_Nine -> "bear 9"
+                Bear_Ten -> "bear 10"
+                Bear_Eleven -> "bear 11"
+                Bear_Twelve -> "bear 12"
+                Bear_Thirteen -> "bear 13"
+                Bear_Fourteen -> "bear 14"
+            }
+        }
+
         val userIconList = listOf(
             Bear_One,
             Bear_Two,
             Bear_Three,
             Bear_Four,
+            Bear_Five,
             Bear_Six,
             Bear_Seven,
             Bear_Eight,
@@ -115,7 +137,6 @@ sealed class IconResource(
             Bear_Twelve,
             Bear_Thirteen,
             Bear_Fourteen,
-            Bear_Fifteen
         )
     }
 }

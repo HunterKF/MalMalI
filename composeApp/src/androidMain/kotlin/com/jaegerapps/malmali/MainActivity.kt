@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val database = MalMalIDatabase(DatabaseDriverFactory(LocalContext.current).createDriver())
+
             val vocabFunctions = VocabularySetSourceFunctionsImpl(database)
             val root = retainedComponent {
                 RootComponent(it, vocabFunctions)

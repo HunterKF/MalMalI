@@ -1,7 +1,8 @@
 package com.jaegerapps.malmali.login.presentation
 
 import com.arkivanov.decompose.ComponentContext
-import com.jaegerapps.malmali.login.domain.SignIn
+import com.jaegerapps.malmali.login.domain.SignInRepo
+import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -11,9 +12,8 @@ import kotlinx.coroutines.launch
 
 class SignInComponent(
     componentContext: ComponentContext,
-    private val signIn: SignIn,
-
-    onNavigate: () -> Unit
+    private val signIn: SignInRepo,
+    private val onNavigate: () -> Unit,
 ) {
     private val _state = MutableStateFlow(SignInState())
     val state = _state
@@ -29,15 +29,29 @@ class SignInComponent(
                     )
                 }
             }
+
             is SignInUiEvent.SignInWithGmailSuccess -> {
-                if (event.id != null && event.email != null ) {
+                if (event.id != null && event.email != null) {
                     scope.launch {
-                        signIn.createUserLocally(userId = event.id, email = event.email)
-                        signIn.createUserWithGmailExternally(event.id)
-                        _state.update {
-                            it.copy(
-                                success = true
-                            )
+                        when (val result = signIn.createUserWithGmailExternally(event.id)) {
+                            is Resource.Error -> {
+                                _state.update {
+                                    it.copy(
+                                        error = SignInError.UNKNOWN_ERROR
+                                    )
+                                }
+
+                                println("An error occurred! ${result.throwable}")
+                            }
+
+                            is Resource.Success -> {
+                                _state.update {
+                                    it.copy(
+                                        loginSuccess = true
+                                    )
+                                }
+                                onNavigate()
+                            }
                         }
                     }
                 } else {
@@ -47,9 +61,8 @@ class SignInComponent(
                         )
                     }
                 }
-
-
             }
+
             SignInUiEvent.ClearError -> {
                 _state.update {
                     it.copy(
@@ -58,78 +71,37 @@ class SignInComponent(
                 }
             }
 
-            SignInUiEvent.CreateAccountWithEmail ->{
-                when {
-                    _state.value.password != _state.value.retypePassword -> {
-                        _state.update {
-                            it.copy(
-                                error = SignInError.PASSWORD_NOT_SAME
-                            )
-                        }
-                        return
-                    }
-                    _state.value.email.isBlank() -> {
-                        _state.update {
-                            it.copy(
-                                error = SignInError.EMAIL_BLANK
-                            )
-                        }
-                        return
-
-                    }
-                    _state.value.password.isBlank()  || _state.value.retypePassword.isBlank()-> {
-                        _state.update {
-                            it.copy(
-                                error = SignInError.PASSWORD_BLANK
-                            )
-                        }
-                        return
-
-                    }
-                    _state.value.password.length < 6 -> {
-                        _state.update {
-                            it.copy(
-                                error = SignInError.PASSWORD_TOO_SHORT
-                            )
-                        }
-                        return
-                    }
-                    !isValidEmail(_state.value.email) -> {
-                        _state.update {
-                            it.copy(
-                                error = SignInError.EMAIL_VALIDATION
-                            )
-                        }
-                        return
-                    }
-                    else -> {
-                        _state.update {
-                            it.copy(
-                                isLoading = true
-                            )
-                        }
-                        scope.launch {
-                            signIn.createUserWithEmailExternally(_state.value.email, _state.value.password)
-                        }
-                    }
-                }
-                if (_state.value.password != _state.value.retypePassword) {
-                    _state.update {
-                        it.copy(
-                            error = SignInError.PASSWORD_NOT_SAME
-                        )
-                    }
-                } else {
+            SignInUiEvent.CreateAccountWithEmail -> {
+                if (fieldsValidated()) {
                     _state.update {
                         it.copy(
                             isLoading = true
                         )
                     }
                     scope.launch {
-                        signIn.createUserWithEmailExternally(_state.value.email, _state.value.password)
+                        when (val result = signIn.createUserWithEmailExternally(
+                            _state.value.email,
+                            _state.value.password
+                        )) {
+                            is Resource.Error -> {
+                                _state.update {
+                                    it.copy(
+                                        error = result.throwable?.message?.let { it1 ->
+                                            SignInError.valueOf(
+                                                it1
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+
+                            is Resource.Success -> {
+                                onNavigate()
+                            }
+                        }
+
                     }
                 }
-
             }
 
             is SignInUiEvent.ChangeEmailValue -> {
@@ -139,6 +111,7 @@ class SignInComponent(
                     )
                 }
             }
+
             is SignInUiEvent.ChangePasswordValue -> {
                 _state.update {
                     it.copy(
@@ -146,6 +119,7 @@ class SignInComponent(
                     )
                 }
             }
+
             is SignInUiEvent.ChangeRetypePasswordValue -> {
                 _state.update {
                     it.copy(
@@ -153,7 +127,6 @@ class SignInComponent(
                     )
                 }
             }
-
             SignInUiEvent.ToggleMode -> {
                 _state.update {
                     it.copy(
@@ -168,6 +141,61 @@ class SignInComponent(
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$"
 
         return email.matches(emailRegex.toRegex())
+    }
+
+    private fun fieldsValidated(): Boolean {
+        return when {
+            _state.value.password != _state.value.retypePassword && state.value.mode == SignInMode.ACCOUNT_CREATE -> {
+                _state.update {
+                    it.copy(
+                        error = SignInError.PASSWORD_NOT_SAME
+                    )
+                }
+                false
+            }
+
+            _state.value.email.isBlank() -> {
+                _state.update {
+                    it.copy(
+                        error = SignInError.EMAIL_BLANK
+                    )
+                }
+                false
+
+            }
+
+            _state.value.password.isBlank() || _state.value.retypePassword.isBlank() && state.value.mode == SignInMode.ACCOUNT_CREATE -> {
+                _state.update {
+                    it.copy(
+                        error = SignInError.PASSWORD_BLANK
+                    )
+                }
+                false
+
+            }
+
+            _state.value.password.length < 6 -> {
+                _state.update {
+                    it.copy(
+                        error = SignInError.PASSWORD_TOO_SHORT
+                    )
+                }
+                false
+            }
+
+            !isValidEmail(_state.value.email) -> {
+                _state.update {
+                    it.copy(
+                        error = SignInError.EMAIL_VALIDATION
+                    )
+                }
+                false
+            }
+
+            else -> {
+                true
+            }
+        }
     }
 }
 

@@ -16,6 +16,8 @@ compose-plugin = "1.5.11"
 junit = "4.13.2"
 kotlin = "1.9.21"
 ktorClientCore = "2.3.5"
+mockative = "2.0.1"
+multiplatformSettingsTest = "1.1.1"
 sqlVersion = "2.0.1"
 decompose = "2.2.0-alpha03"
 kotlinxSerializationJson = "1.6.1"
@@ -48,6 +50,8 @@ ktor-ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-n
 ktor-ktor-client-ios = { module = "io.ktor:ktor-client-ios", version.ref = "ktorClientCore" }
 ktor-ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorClientCore" }
 ktor-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCore" }
+mockative = { module = "io.mockative:mockative", version.ref = "mockative" }
+multiplatform-settings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettingsTest" }
 sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlVersion" }
 sql-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlVersion" }
 sql-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlVersion" }

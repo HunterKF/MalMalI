@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +38,7 @@ import com.jaegerapps.malmali.components.CustomTextFieldWithBlackBorder
 import com.jaegerapps.malmali.components.IconContainer
 import com.jaegerapps.malmali.components.SettingsAndModal
 import com.jaegerapps.malmali.components.CustomNavigationDrawer
+import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarLevelContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarListContainer
@@ -44,11 +48,9 @@ import com.jaegerapps.malmali.grammar.domain.GrammarPoint
 import com.jaegerapps.malmali.home.components.CardButton
 import com.jaegerapps.malmali.home.components.LevelBar
 import com.jaegerapps.malmali.home.components.UserIcon
-import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
-import com.jaegerapps.malmali.onboarding.welcome.WelcomeScreen
-import com.jaegerapps.malmali.onboarding.welcome.components.OnboardingContainer
-import com.jaegerapps.malmali.onboarding.welcome.components.PagerIndicator
-import com.jaegerapps.malmali.onboarding.welcome.components.SkipAndNextButton
+import com.jaegerapps.malmali.onboarding.intro.components.OnboardingContainer
+import com.jaegerapps.malmali.onboarding.intro.components.PagerIndicator
+import com.jaegerapps.malmali.onboarding.intro.components.SkipAndNextButton
 import com.jaegerapps.malmali.vocabulary.domain.VocabSet
 import com.jaegerapps.malmali.vocabulary.components.AddCardButton
 import com.jaegerapps.malmali.vocabulary.components.EditVocabContainer
@@ -136,9 +138,55 @@ private fun Preview_TopBarLogo() {
 @Composable
 private fun Preview_IconContainer() {
     MalMalITheme(false) {
-        IconContainer(
-            icon = dev.icerock.moko.resources.compose.painterResource(MR.images.cat_icon)
-        )
+        Column(
+            modifier = Modifier.fillMaxSize().padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(Modifier.height(24.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+
+            ) {
+                Column {
+                    IconContainer(
+                        icon = painterResource(MR.images.user_icon_bear_1)
+                    )
+                    Text("1")
+                }
+                Column {
+                    IconContainer(
+                        icon = painterResource(MR.images.user_icon_bear_2),
+                        backgroundColor = MaterialTheme.colorScheme.primary
+                    )
+                    Text(" 2")
+                }
+                Column {
+                    IconContainer(
+                        icon = painterResource(MR.images.user_icon_bear_3)
+                    )
+                    Text("3")
+                }
+            }
+            Spacer(Modifier.height(24.dp))
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(count = 4),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(10) {
+                    val bear = IconResource.resourceFromTag("bear $it").resource
+                    IconContainer(
+                        modifier = Modifier.aspectRatio(1f),
+                        icon = painterResource(bear)
+                    )
+                }
+
+
+            }
+        }
+
     }
 }
 
@@ -992,6 +1040,7 @@ fun Preview_OnboardingContainer() {
         }
     }
 }
+
 @Preview
 @Composable
 fun Preview_PagerIndicator() {
@@ -1013,12 +1062,12 @@ fun Preview_PagerIndicator() {
             SkipAndNextButton(
                 onNext = {
                     if (state < 4) {
-                        state ++
+                        state++
                     } else {
                         state = 1
                     }
                 },
-                onSkip =  {
+                onSkip = {
 
                 }
             )

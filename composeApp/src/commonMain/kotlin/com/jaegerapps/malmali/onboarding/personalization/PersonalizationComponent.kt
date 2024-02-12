@@ -1,20 +1,30 @@
 package com.jaegerapps.malmali.onboarding.personalization
 
 import com.arkivanov.decompose.ComponentContext
+import com.jaegerapps.malmali.components.models.IconResource
+import core.data.SettingFunctionsImpl
+import core.data.SupabaseUserFunctionsImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PersonalizationComponent(
     componentContext: ComponentContext,
+    private val onNavigate: () -> Unit,
+    private val handleUser: SupabaseUserFunctionsImpl,
+    private val settings: SettingFunctionsImpl
 ) : ComponentContext by componentContext {
 
 
     private val _state = MutableStateFlow(PersonalizationUiState())
-    val scope = CoroutineScope(Dispatchers.Main)
+    val scope = CoroutineScope(Dispatchers.IO)
     val state = _state.stateIn(
         scope,
         SharingStarted.Lazily,
@@ -32,14 +42,46 @@ class PersonalizationComponent(
             }
             is PersonalizationUiEvents.OnIconChange -> _state.update {
                 it.copy(
-                    selectedIcon = event.iconResource
+                    selectedIcon = event.iconResource,
+                    selectIconPopUp = false
                 )
             }
-            PersonalizationUiEvents.OnNavigate -> TODO()
+            PersonalizationUiEvents.OnNavigate -> {
+                if (state.value.nickname.isBlank()) {
+                    _state.update {
+                        it.copy(
+                            error = "Please check your username."
+                        )
+                    }
+                } else {
+                    try {
+                        scope.launch {
+                            async {
+                                handleUser.updateUserName(_state.value.nickname)
+                                handleUser.updateUserIcon(_state.value.selectedIcon.tag)
+                                settings.updateUserName(_state.value.nickname)
+                                settings.updateUserIcon(_state.value.selectedIcon.tag)
+                            }.await()
+
+                            onNavigate()
+                        }
+                    } catch (e: Exception) {
+                        println("An error occurred: $e")
+                    }
+                }
+            }
             is PersonalizationUiEvents.OnNicknameChange -> _state.update {
                 it.copy(
                     nickname = event.value
                 )
+            }
+
+            PersonalizationUiEvents.ToggleIconSelection -> {
+                _state.update {
+                    it.copy(
+                        selectIconPopUp = !it.selectIconPopUp
+                    )
+                }
             }
         }
     }

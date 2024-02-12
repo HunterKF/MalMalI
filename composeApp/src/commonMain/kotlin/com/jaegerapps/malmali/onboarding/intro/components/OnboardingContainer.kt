@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.onboarding.welcome.components
+package com.jaegerapps.malmali.onboarding.intro.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

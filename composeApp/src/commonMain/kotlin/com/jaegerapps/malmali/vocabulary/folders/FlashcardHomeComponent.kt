@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 
 class FlashcardHomeComponent(
     componentContext: ComponentContext,
-    private val database: VocabularySetSourceFunctions,
+    database: VocabularySetSourceFunctions,
     private val onNavigateBack: () -> Unit,
     private val onNavigateToCreateScreen: () -> Unit,
     private val onNavigateToStudyCard: (Long, String, Long) -> Unit,

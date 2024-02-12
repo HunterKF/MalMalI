@@ -1,5 +1,6 @@
-package com.jaegerapps.malmali
+package com.jaegerapps.malmali.vocabulary
 
+import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.grammar.domain.GrammarLevel
 import com.jaegerapps.malmali.grammar.domain.GrammarPoint
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
@@ -188,7 +189,8 @@ val exampleGrammarPoint = GrammarPoint(
     exampleEn1 = "English Example 2-1",
     exampleEn2 = "English Example 2-2",
     exampleKo1 = "Korean Example 2-1",
-    exampleKo2 = "Korean Example 2-2"
+    exampleKo2 = "Korean Example 2-2",
+    grammarCategory = 1
 )
 
 val exampleGrammarPointList = (1..10).map {
@@ -199,7 +201,8 @@ val exampleGrammarPointList = (1..10).map {
         exampleEn1 = "English Example $it-1",
         exampleEn2 = "English Example $it-2",
         exampleKo1 = "Korean Example $it-1",
-        exampleKo2 = "Korean Example $it-2"
+        exampleKo2 = "Korean Example $it-2",
+        grammarCategory = 1
     )
 }
 

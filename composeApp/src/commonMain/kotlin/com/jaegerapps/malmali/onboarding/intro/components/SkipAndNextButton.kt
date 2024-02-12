@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.onboarding.welcome.components
+package com.jaegerapps.malmali.onboarding.intro.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,16 +33,16 @@ fun SkipAndNextButton(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        TextButton(
-            onClick = {
-                onSkip()
-            }
-        ) {
-            Text(
-                text = stringResource(MR.strings.prompt_skip),
-                color = MaterialTheme.colorScheme.outline
-            )
-        }
+//        TextButton(
+//            onClick = {
+//                onSkip()
+//            }
+//        ) {
+//            Text(
+//                text = stringResource(MR.strings.prompt_skip),
+//                color = MaterialTheme.colorScheme.outline
+//            )
+//        }
         Box(
             modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.outline).padding(6.dp).clickable { onNext() },
             contentAlignment = Alignment.Center

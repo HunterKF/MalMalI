@@ -1,6 +1,7 @@
-package com.jaegerapps.malmali
+package com.jaegerapps.malmali.vocabulary
 
 import VocabularySetSourceFunctions
+import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
 import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
 import com.jaegerapps.malmali.vocabulary.domain.VocabSet

@@ -8,20 +8,25 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popTo
 import com.arkivanov.decompose.router.stack.pushNew
+import com.arkivanov.decompose.router.stack.replaceAll
 import com.jaegerapps.malmali.components.Routes
 import com.jaegerapps.malmali.grammar.GrammarScreenComponent
 import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
 import com.jaegerapps.malmali.home.HomeScreenComponent
-import com.jaegerapps.malmali.login.data.SignInImpl
+import com.jaegerapps.malmali.login.data.SignInRepoImpl
 import com.jaegerapps.malmali.login.presentation.SignInComponent
-import com.jaegerapps.malmali.onboarding.welcome.WelcomeScreenComponent
+import com.jaegerapps.malmali.onboarding.intro.IntroComponent
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetComponent
 import com.jaegerapps.malmali.vocabulary.folders.FlashcardHomeComponent
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsComponent
 import com.russhwolf.settings.Settings
 import core.data.SupabaseClientFactory
 import com.jaegerapps.malmali.login.data.UserDTO
+import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
+import core.data.SettingFunctionsImpl
+import core.data.SupabaseSignInFunctionsImpl
+import core.data.SupabaseUserFunctionsImpl
 import kotlinx.serialization.Serializable
 
 class RootComponent(
@@ -33,19 +38,22 @@ class RootComponent(
     private val settings = Settings()
     val client = SupabaseClientFactory().createBase()
     val repo = GrammarRepoImpl(client)
+    val showSplash = settings.getBoolean("showsplash", true)
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
-        initialConfiguration = Configuration.SignInScreen,
+        initialConfiguration = if (showSplash) Configuration.IntroScreen else Configuration.HomeScreen,
         handleBackButton = true,
         childFactory = ::createChild
     )
+
 
     @OptIn(ExperimentalDecomposeApi::class)
     private fun createChild(
         config: Configuration,
         context: ComponentContext,
     ): Child {
+
         return when (config) {
             Configuration.ScreenA -> Child.ScreenA(
                 ScreenAComponent(
@@ -168,6 +176,7 @@ class RootComponent(
 
             is Configuration.HomeScreen -> {
                 Child.HomeScreen(
+                    /*TODO - actually pass or get real info...*/
                     HomeScreenComponent(
                         componentContext = context,
                         userDTO = UserDTO(
@@ -177,6 +186,7 @@ class RootComponent(
                             user_experience = 200,
                             user_achievements = arrayOf("Beginner"),
                             user_icon = "cat",
+                            user_sets = arrayOf()
                         ),
                         onNavigate = { route ->
                             modalNavigate(route)
@@ -197,12 +207,12 @@ class RootComponent(
                 )
             }
 
-            is Configuration.WelcomeScreen -> {
+            is Configuration.IntroScreen -> {
                 Child.WelcomeScreen(
-                    WelcomeScreenComponent(
+                    IntroComponent(
                         componentContext = context,
                         onNavigate = {
-
+                            navigation.pushNew(Configuration.SignInScreen)
                         }
                     )
                 )
@@ -213,16 +223,37 @@ class RootComponent(
                     SignInComponent(
                         componentContext = context,
                         onNavigate = {
-
+                            navigation.pushNew(Configuration.PersonalizationScreen)
                         },
-                        signIn = SignInImpl(settings = settings, client)
+                        signIn = SignInRepoImpl(
+                            settings = SettingFunctionsImpl(settings),
+                            supabase = SupabaseSignInFunctionsImpl(client)
+                        )
                     )
                 )
             }
 
             Configuration.PersonalizationScreen -> {
                 Child.PersonalizationScreen(
-                    PersonalizationComponent(componentContext = context)
+                    PersonalizationComponent(
+                        componentContext = context,
+                        settings = SettingFunctionsImpl(settings),
+                        handleUser = SupabaseUserFunctionsImpl(client),
+                        onNavigate = {
+                            navigation.pushNew(Configuration.CompletionScreen)
+                            settings.putBoolean("showsplash", false)
+                        })
+                )
+            }
+
+            Configuration.CompletionScreen -> {
+                Child.CompletionScreen(
+                    CompletionComponent(
+                        componentContext = context,
+                        onNavigate = {
+                            navigation.replaceAll(Configuration.HomeScreen)
+                        }
+                    )
                 )
             }
 
@@ -237,9 +268,10 @@ class RootComponent(
         data class StudyFlashcardsScreen(val component: StudyFlashcardsComponent) : Child()
         data class HomeScreen(val component: HomeScreenComponent) : Child()
         data class GrammarScreen(val component: GrammarScreenComponent) : Child()
-        data class WelcomeScreen(val component: WelcomeScreenComponent) : Child()
+        data class WelcomeScreen(val component: IntroComponent) : Child()
         data class SignInScreen(val component: SignInComponent) : Child()
         data class PersonalizationScreen(val component: PersonalizationComponent) : Child()
+        data class CompletionScreen(val component: CompletionComponent) : Child()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -291,12 +323,15 @@ class RootComponent(
         data object GrammarScreen : Configuration()
 
         @Serializable
-        data object WelcomeScreen : Configuration()
+        data object IntroScreen : Configuration()
 
         @Serializable
         data object SignInScreen : Configuration()
 
         @Serializable
         data object PersonalizationScreen : Configuration()
+
+        @Serializable
+        data object CompletionScreen : Configuration()
     }
 }

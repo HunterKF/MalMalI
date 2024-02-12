@@ -11,8 +11,9 @@ import com.jaegerapps.malmali.grammar.presentation.GrammarScreen
 import com.jaegerapps.malmali.home.HomeScreen
 import com.jaegerapps.malmali.login.presentation.SignInScreen
 import com.jaegerapps.malmali.navigation.RootComponent
+import com.jaegerapps.malmali.onboarding.completion.CompletionScreen
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
-import com.jaegerapps.malmali.onboarding.welcome.WelcomeScreen
+import com.jaegerapps.malmali.onboarding.intro.IntroScreen
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetScreen
 import com.jaegerapps.malmali.screen_roots.ScreenA
 import com.jaegerapps.malmali.screen_roots.ScreenB
@@ -30,8 +31,6 @@ fun App(
     MalMalITheme(
         darkTheme
     ) {
-        var showContent by remember { mutableStateOf(false) }
-        val greeting = remember { Greeting().greet() }
 
         val childStack by root.childStack.subscribeAsState()
 
@@ -48,8 +47,9 @@ fun App(
                 is RootComponent.Child.HomeScreen -> HomeScreen(component = instance.component)
                 is RootComponent.Child.GrammarScreen -> GrammarScreen(component = instance.component)
                 is RootComponent.Child.SignInScreen -> SignInScreen(component = instance.component, client = root.client)
-                is RootComponent.Child.WelcomeScreen -> WelcomeScreen(component = instance.component)
+                is RootComponent.Child.WelcomeScreen -> IntroScreen(component = instance.component)
                 is RootComponent.Child.PersonalizationScreen -> PersonalizationScreen(component = instance.component)
+                is RootComponent.Child.CompletionScreen -> CompletionScreen(component = instance.component)
             }
 
         }

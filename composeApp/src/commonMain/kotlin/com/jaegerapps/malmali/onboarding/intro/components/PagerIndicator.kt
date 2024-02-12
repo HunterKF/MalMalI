@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.onboarding.welcome.components
+package com.jaegerapps.malmali.onboarding.intro.components
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background

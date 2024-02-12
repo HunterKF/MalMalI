@@ -28,17 +28,18 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun IconContainer(
     modifier: Modifier = Modifier,
-    size: Dp = 35.dp,
+    size: Dp = 65.dp,
     backgroundColor: Color = MaterialTheme.colorScheme.secondary,
     contentDesc: String? = null,
     icon: Painter
 ) {
     Box(
-        modifier = modifier.clip(CircleShape).background(backgroundColor).border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
+        modifier = modifier.size(size).clip(CircleShape).background(backgroundColor)
+            .border(1.dp, MaterialTheme.colorScheme.outline, CircleShape),
         contentAlignment = Alignment.Center
     ) {
         Image(
-            modifier = Modifier.padding(4.dp).size(size),
+            modifier = Modifier.padding(12.dp),
             painter = icon,
             contentDescription = contentDesc,
             contentScale = ContentScale.Fit,

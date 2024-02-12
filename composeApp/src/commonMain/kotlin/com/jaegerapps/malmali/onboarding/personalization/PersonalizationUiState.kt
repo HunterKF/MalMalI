@@ -5,7 +5,7 @@ import com.jaegerapps.malmali.components.models.IconResource
 data class PersonalizationUiState(
     val error: String? = null,
     val nickname: String = "",
-    val selectedIcon: IconResource? = null,
+    val selectedIcon: IconResource = IconResource.Bear_One,
     val selectIconPopUp: Boolean = false,
 )
 

@@ -6,7 +6,7 @@ data class SignInState(
     val retypePassword: String = "",
     val isLoading: Boolean = false,
     val error: SignInError? = null,
-    val success: Boolean = false,
+    val loginSuccess: Boolean = false,
     val mode: SignInMode = SignInMode.ACCOUNT_CREATE
 )
 

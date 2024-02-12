@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali
+package com.jaegerapps.malmali.vocabulary
 
 import app.cash.turbine.test
 import com.arkivanov.decompose.DefaultComponentContext
