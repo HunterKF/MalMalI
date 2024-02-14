@@ -5,10 +5,11 @@ import com.jaegerapps.malmali.login.domain.UserData
 import core.domain.SettingFunctions
 import core.domain.SupabaseSignInFunctions
 import core.util.Resource
+import io.github.jan.supabase.exceptions.RestException
 
 class SignInRepoImpl(
     private val settings: SettingFunctions,
-    private val supabase: SupabaseSignInFunctions,
+    private val signInFunctions: SupabaseSignInFunctions,
 ) : SignInRepo {
     override suspend fun createUserLocally(email: String, userId: String): Resource<Boolean> {
         return try {
@@ -30,7 +31,7 @@ class SignInRepoImpl(
             user_sets = arrayOf(""),
         )
         return try {
-            supabase.createUserGoogle(newUser)
+            signInFunctions.createUserGoogle(newUser)
         } catch (e: Exception) {
             println(e.message)
             Resource.Error(e)
@@ -42,10 +43,14 @@ class SignInRepoImpl(
         password: String,
     ): Resource<UserData> {
         return try {
-            supabase.createUserEmail(email, password)
-        } catch (e: Exception) {
+            signInFunctions.createUserEmail(email, password)
+        } catch (e: RestException) {
             Resource.Error(e)
         }
+    }
+
+    override suspend fun signInWithEmail(email: String, password: String): Resource<UserData> {
+        return signInFunctions.signInUserEmail(email, password)
     }
 
 }

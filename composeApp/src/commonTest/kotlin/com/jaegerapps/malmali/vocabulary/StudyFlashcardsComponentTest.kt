@@ -4,11 +4,14 @@ import app.cash.turbine.test
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
+import com.jaegerapps.malmali.data.FakeVocabularySetSourceFunctions
+import com.jaegerapps.malmali.di.FakeAppModule
 import com.jaegerapps.malmali.navigation.RootComponent
 import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyError
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsComponent
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsUiEvent
+import com.russhwolf.settings.MapSettings
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -531,7 +534,7 @@ class StudyFlashcardsComponentTest {
         val lifecycle = LifecycleRegistry()
         val root = RootComponent(
             componentContext = DefaultComponentContext(lifecycle = lifecycle),
-            vocabFunctions = FakeVocabularySetSourceFunctions()
+            appModule = FakeAppModule()
         )
         component = StudyFlashcardsComponent(
             componentContext = root,

@@ -1,7 +1,7 @@
 package com.jaegerapps.malmali
 
 import App
-import VocabularySetSourceFunctions
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,9 +10,14 @@ import androidx.compose.ui.platform.LocalContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.retainedComponent
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
+import com.jaegerapps.malmali.di.AppModule
+import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
 import com.jaegerapps.malmali.navigation.RootComponent
 import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.SharedPreferencesSettings
 import core.data.DatabaseDriverFactory
+import core.data.SupabaseClientFactory
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalDecomposeApi::class)
@@ -20,11 +25,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val database = MalMalIDatabase(DatabaseDriverFactory(LocalContext.current).createDriver())
-
+            val database =
+                MalMalIDatabase(DatabaseDriverFactory(LocalContext.current).createDriver())
             val vocabFunctions = VocabularySetSourceFunctionsImpl(database)
-            val root = retainedComponent {
-                RootComponent(it, vocabFunctions)
+            val sharedPreference = getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE)
+            val settings: Settings = SharedPreferencesSettings(sharedPreference)
+            val appModule = AppModule(
+                context = LocalContext.current.applicationContext,
+                sharedPreferences = sharedPreference
+            )
+            val root = retainedComponent { componentContext ->
+                RootComponent(componentContext, appModule = appModule)
             }
             App(darkTheme = isSystemInDarkTheme(), root)
         }

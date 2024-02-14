@@ -7,6 +7,7 @@ import core.util.Resource
 interface SupabaseSignInFunctions {
     suspend fun createUserGoogle(newUser: UserDTO): Resource<UserData>
     suspend fun createUserEmail(email: String, password: String): Resource<UserData>
+    suspend fun signInUserEmail(email: String, password: String): Resource<UserData>
     suspend fun updateUser(user: UserDTO): Resource<UserData>
     suspend fun logOutUser(): Resource<String>
 }

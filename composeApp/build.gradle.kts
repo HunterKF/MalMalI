@@ -16,6 +16,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.kotlinSerialization)
+    id("com.google.devtools.ksp") version "1.9.21-1.0.15"
     id("dev.icerock.mobile.multiplatform-resources")
     id("app.cash.sqldelight") version "2.0.1"
     id("com.codingfeline.buildkonfig") version "+"
@@ -77,7 +78,9 @@ kotlin {
                 implementation(libs.ktor.ktor.client.content.negotiation)
                 implementation(libs.ktor.ktor.serialization.kotlinx.json)
                 implementation(libs.sql.coroutines.extensions)
+
                 implementation("com.russhwolf:multiplatform-settings:1.1.1")
+                implementation("com.russhwolf:multiplatform-settings-no-arg:1.1.1")
 
                 implementation(libs.decompose)
                 implementation(libs.decompose.jetbrains)

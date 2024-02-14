@@ -1,8 +1,5 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
@@ -22,7 +19,6 @@ import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsScreen
 import core.presentation.MalMalITheme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App(
     darkTheme: Boolean,
@@ -46,8 +42,8 @@ fun App(
                 is RootComponent.Child.StudyFlashcardsScreen -> StudyFlashcardsScreen(component = instance.component)
                 is RootComponent.Child.HomeScreen -> HomeScreen(component = instance.component)
                 is RootComponent.Child.GrammarScreen -> GrammarScreen(component = instance.component)
-                is RootComponent.Child.SignInScreen -> SignInScreen(component = instance.component, client = root.client)
-                is RootComponent.Child.WelcomeScreen -> IntroScreen(component = instance.component)
+                is RootComponent.Child.SignInScreen -> SignInScreen(component = instance.component)
+                is RootComponent.Child.IntroScreen -> IntroScreen(component = instance.component)
                 is RootComponent.Child.PersonalizationScreen -> PersonalizationScreen(component = instance.component)
                 is RootComponent.Child.CompletionScreen -> CompletionScreen(component = instance.component)
             }

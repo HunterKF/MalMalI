@@ -4,25 +4,22 @@ import com.jaegerapps.malmali.login.data.UserDTO
 import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.login.domain.UserEntity
 import com.jaegerapps.malmali.login.domain.toUserData
-import com.jaegerapps.malmali.login.domain.toUserDto
 import core.domain.SupabaseSignInFunctions
 import core.util.Resource
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.postgrest.query.Columns
 
 class SupabaseSignInFunctionsImpl(private val client: SupabaseClient) : SupabaseSignInFunctions {
     override suspend fun createUserGoogle(newUser: UserDTO): Resource<UserData> {
-
-
         return try {
             val user = client.from("users").insert(newUser) {
                 select()
             }.decodeSingle<UserEntity>()
             Resource.Success(user.toUserData())
-        } catch (e: Exception) {
+        } catch (e: RestException) {
             val userCheck =
                 client.from("users").select { filter { eq("user_id", newUser.user_id) } }
                     .decodeSingleOrNull<UserEntity>()
@@ -56,8 +53,15 @@ class SupabaseSignInFunctionsImpl(private val client: SupabaseClient) : Supabase
                 select()
             }.decodeSingle<UserEntity>()
             Resource.Success(user.toUserData())
-        } catch (e: Exception) {
-            return Resource.Error(e)
+        } catch (e: RestException) {
+            val userCheck =
+                client.from("users").select { filter { eq("user_email", email) } }
+                    .decodeSingleOrNull<UserEntity>()
+            if (userCheck == null) {
+                Resource.Error(e)
+            } else {
+                Resource.Success(userCheck.toUserData())
+            }
         }
     }
 
@@ -67,7 +71,7 @@ class SupabaseSignInFunctionsImpl(private val client: SupabaseClient) : Supabase
                 select()
             }.decodeSingle<UserEntity>()
             Resource.Success(updatedUser.toUserData())
-        } catch (e: Exception) {
+        } catch (e: RestException) {
             Resource.Error(e)
         }
     }
@@ -76,7 +80,28 @@ class SupabaseSignInFunctionsImpl(private val client: SupabaseClient) : Supabase
         return try {
             client.auth.signOut()
             Resource.Success("Logged out")
-        } catch (e: Exception) {
+        } catch (e: RestException) {
+            Resource.Error(e)
+        }
+
+    }
+
+    override suspend fun signInUserEmail(email: String, password: String): Resource<UserData> {
+        return try {
+            client.auth.signInWith(Email) {
+                this.email = email
+                this.password = password
+            }
+            val userCheck =
+                client.from("users").select { filter { eq("user_email", email) } }
+                    .decodeSingleOrNull<UserEntity>()
+            if (userCheck != null) {
+                Resource.Success(userCheck.toUserData())
+            } else {
+                Resource.Error(Throwable(message = "Didn't work"))
+            }
+        } catch (e: RestException) {
+
             Resource.Error(e)
         }
 

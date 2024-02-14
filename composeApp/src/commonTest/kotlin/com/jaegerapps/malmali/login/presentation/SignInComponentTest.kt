@@ -1,52 +1,69 @@
 package com.jaegerapps.malmali.login.presentation
 
+import app.cash.turbine.test
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
-import com.jaegerapps.malmali.login.data.SignInRepoImpl
+import com.jaegerapps.malmali.core.FakeSignInImpl
 import com.jaegerapps.malmali.login.domain.SignInRepo
 import com.jaegerapps.malmali.navigation.RootComponent
-import com.jaegerapps.malmali.vocabulary.FakeVocabularySetSourceFunctions
+import com.jaegerapps.malmali.data.FakeVocabularySetSourceFunctions
+import com.jaegerapps.malmali.di.FakeAppModule
 import com.russhwolf.settings.MapSettings
-import io.github.jan.supabase.SupabaseClient
+import core.util.Resource
+import io.mockative.Mock
 import io.mockative.classOf
+import io.mockative.coEvery
 import io.mockative.mock
 import kotlinx.coroutines.runBlocking
-import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class SignInComponentTest {
     private lateinit var component: SignInComponent
     private val activeChild get() = component
-    private lateinit var signIn: SignInRepo
 
-    @BeforeTest
-    fun setup() {
-        signIn = SignInRepoImpl(
-            settings = MapSettings.Factory().create(),
-            supabase = mock(classOf<SupabaseClient>())
-        )
-    }
+    @Mock
+    private val signInRepo = mock(classOf<SignInRepo>())
+
+
 
     @Test
     fun test() = runBlocking {
+
         createComponent()
-        signIn.createUserLocally("hunter.krez@gmail.com", userId = "HunterK300")
+        activeChild.state.test {
+            val initialState = awaitItem()
+            coEvery { signInRepo.signInWithEmail("", "") }.returns(Resource.Error(Throwable()))
+            assertEquals("", initialState.email)
+            component.onEvent(SignInUiEvent.ChangeEmailValue("testing@gmail.com"))
+            val emailState = awaitItem()
+            assertEquals("testing@gmail.com", emailState.email)
+            component.onEvent(SignInUiEvent.ChangePasswordValue("password123"))
+            val passwordState = awaitItem()
+            assertEquals("password123", passwordState.password)
+
+
+            component.onEvent(SignInUiEvent.SignInWithEmail)
+            val signInState = awaitItem()
+            assertEquals("password123", signInState.password)
+            val signInState2 = awaitItem()
+            assertEquals("password123", signInState2.password)
+        }
     }
-
-
-    private fun createComponent() {
+    private fun createComponent(
+    ) {
         val lifecycle = LifecycleRegistry()
         val root = RootComponent(
             componentContext = DefaultComponentContext(lifecycle = lifecycle),
-            vocabFunctions = FakeVocabularySetSourceFunctions()
+            appModule = FakeAppModule()
         )
         component = SignInComponent(
             componentContext = root,
-            signIn = signIn,
+            signIn = FakeSignInImpl(),
             onNavigate = {
 
-            }
+            },
         )
 
 

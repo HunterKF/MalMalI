@@ -17,4 +17,7 @@ interface SettingFunctions {
     suspend fun logoutUser()
     suspend fun createUser(email: String, id: String)
     fun getUser(): UserData
+    fun getOnboardingBoolean(): Boolean
+    suspend fun changeOnboardingBoolean()
+
 }

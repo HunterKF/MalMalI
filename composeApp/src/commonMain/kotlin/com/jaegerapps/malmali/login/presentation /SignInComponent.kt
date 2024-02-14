@@ -3,6 +3,12 @@ package com.jaegerapps.malmali.login.presentation
 import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.login.domain.SignInRepo
 import core.util.Resource
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.exceptions.BadRequestRestException
+import io.github.jan.supabase.exceptions.NotFoundRestException
+import io.github.jan.supabase.exceptions.RestException
+import io.github.jan.supabase.exceptions.UnauthorizedRestException
+import io.github.jan.supabase.exceptions.UnknownRestException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -14,7 +20,7 @@ class SignInComponent(
     componentContext: ComponentContext,
     private val signIn: SignInRepo,
     private val onNavigate: () -> Unit,
-) {
+): ComponentContext by componentContext {
     private val _state = MutableStateFlow(SignInState())
     val state = _state
 
@@ -37,11 +43,9 @@ class SignInComponent(
                             is Resource.Error -> {
                                 _state.update {
                                     it.copy(
-                                        error = SignInError.UNKNOWN_ERROR
+                                        error = restError(result.throwable as RestException)
                                     )
                                 }
-
-                                println("An error occurred! ${result.throwable}")
                             }
 
                             is Resource.Success -> {
@@ -52,6 +56,7 @@ class SignInComponent(
                                 }
                                 onNavigate()
                             }
+
                         }
                     }
                 } else {
@@ -86,11 +91,7 @@ class SignInComponent(
                             is Resource.Error -> {
                                 _state.update {
                                     it.copy(
-                                        error = result.throwable?.message?.let { it1 ->
-                                            SignInError.valueOf(
-                                                it1
-                                            )
-                                        }
+                                        error = restError(result.throwable as RestException)
                                     )
                                 }
                             }
@@ -100,6 +101,41 @@ class SignInComponent(
                             }
                         }
 
+                    }
+                }
+            }
+
+            SignInUiEvent.SignInWithEmail -> {
+                _state.update {
+                    it.copy(
+                        isLoading = true
+                    )
+                }
+                scope.launch {
+                    try {
+                        when (val result = signIn.signInWithEmail(_state.value.email, _state.value.password)) {
+                            is Resource.Error -> _state.update {
+                                it.copy(
+                                    error = restError(result.throwable as RestException),
+                                    isLoading = false
+                                )
+                            }
+                            is Resource.Success -> {
+                                _state.update {
+                                    it.copy(
+                                        isLoading = false
+                                    )
+                                }
+                                onNavigate()
+                            }
+                        }
+                    } catch(e: RestException) {
+                        _state.update {
+                            it.copy(
+                                error = restError(e),
+                                isLoading = true
+                            )
+                        }
                     }
                 }
             }
@@ -127,6 +163,7 @@ class SignInComponent(
                     )
                 }
             }
+
             SignInUiEvent.ToggleMode -> {
                 _state.update {
                     it.copy(
@@ -195,6 +232,15 @@ class SignInComponent(
             else -> {
                 true
             }
+        }
+    }
+
+    private fun restError(e: RestException): SignInError {
+        return when (e) {
+            is BadRequestRestException -> SignInError.PASSWORD_EMAIL_INVALID
+            is NotFoundRestException ->  SignInError.EMAIL_NOT_FOUND
+            is UnauthorizedRestException -> SignInError.UNKNOWN_ERROR
+            is UnknownRestException -> SignInError.UNKNOWN_ERROR
         }
     }
 }

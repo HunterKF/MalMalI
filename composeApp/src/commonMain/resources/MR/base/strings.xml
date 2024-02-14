@@ -40,6 +40,9 @@
     <string name="sign_in_error_email_blank">Please enter in an email.</string>
     <string name="sign_in_error_email_validation">Email is not valid, please check it.</string>
     <string name="sign_in_error_network_error">A network error occurred. Please connect to the network and try again later.</string>
+    <string name="sign_in_error_email_already_registered">This email has already been registered. Please sign in.</string>
+    <string name="sign_in_error_password_email_invalid">Please check your email or password to make sure it is correct.</string>
+    <string name="sign_in_error_email_not_found">Could not find email. Please create account.</string>
     <string name="sign_in_prompt_sign_in">Sign in</string>
     <string name="sign_in_prompt_create_account">Create account</string>
     <string name="sign_in_content_desc_hide_password">Hide password</string>

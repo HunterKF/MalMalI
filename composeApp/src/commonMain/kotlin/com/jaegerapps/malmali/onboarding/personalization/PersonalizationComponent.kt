@@ -1,25 +1,24 @@
 package com.jaegerapps.malmali.onboarding.personalization
 
 import com.arkivanov.decompose.ComponentContext
-import com.jaegerapps.malmali.components.models.IconResource
-import core.data.SettingFunctionsImpl
-import core.data.SupabaseUserFunctionsImpl
+import core.domain.SettingFunctions
+import core.domain.SupabaseUserFunctions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PersonalizationComponent(
     componentContext: ComponentContext,
     private val onNavigate: () -> Unit,
-    private val handleUser: SupabaseUserFunctionsImpl,
-    private val settings: SettingFunctionsImpl
+    private val handleUser: SupabaseUserFunctions,
+    private val settings: SettingFunctions,
 ) : ComponentContext by componentContext {
 
 
@@ -61,6 +60,7 @@ class PersonalizationComponent(
                                 handleUser.updateUserIcon(_state.value.selectedIcon.tag)
                                 settings.updateUserName(_state.value.nickname)
                                 settings.updateUserIcon(_state.value.selectedIcon.tag)
+                                settings.changeOnboardingBoolean()
                             }.await()
 
                             onNavigate()

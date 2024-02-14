@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.components.blackBorder
+import core.data.SupabaseClientFactory
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.compose.stringResource
 import io.github.jan.supabase.SupabaseClient
@@ -49,7 +50,6 @@ import io.github.jan.supabase.gotrue.auth
 @Composable
 fun SignInScreen(
     component: SignInComponent,
-    client: SupabaseClient,
 ) {
     val state = component.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -65,6 +65,9 @@ fun SignInScreen(
             SignInError.NETWORK_ERROR -> MR.strings.sign_in_error_network_error
             SignInError.UNKNOWN_ERROR -> MR.strings.sign_in_error_network_error
             SignInError.PASSWORD_TOO_SHORT -> MR.strings.sign_in_error_password_too_short
+            SignInError.ALREADY_REGISTERED -> MR.strings.sign_in_error_email_already_registered
+            SignInError.PASSWORD_EMAIL_INVALID -> MR.strings.sign_in_error_password_email_invalid
+            SignInError.EMAIL_NOT_FOUND -> MR.strings.sign_in_error_email_not_found
             null -> null
         }
         errorString.value?.let {
@@ -74,39 +77,9 @@ fun SignInScreen(
     }
 
 
-    val authState = client.composeAuth.rememberSignInWithGoogle(
-        onResult = {
-            when (it) { //handle errors
-                NativeSignInResult.ClosedByUser -> {
-                }
 
-                is NativeSignInResult.Error -> {
-                    println("Error")
-                    println(it)
-                }
-
-                is NativeSignInResult.NetworkError -> {
-
-                    println("NetworkError")
-                    println(it)
-                }
-
-                NativeSignInResult.Success -> {
-                    val sessionsId = client.auth.currentSessionOrNull()?.user?.id
-                    val sessionsEmail = client.auth.currentSessionOrNull()?.user?.email
-                    component.onEvent(
-                        SignInUiEvent.SignInWithGmailSuccess(
-                            email = sessionsEmail,
-                            id = sessionsId
-                        )
-                    )
-                }
-            }
-        }
-    )
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(12.dp),
@@ -124,7 +97,6 @@ fun SignInScreen(
                         email = state.value.email,
                         password = state.value.password,
                         passwordVisible = passwordVisible,
-                        authState = authState,
                         onUiEvent = { component.onEvent(it) }
                     ) {
                         passwordVisible = !passwordVisible
@@ -136,7 +108,6 @@ fun SignInScreen(
                             password = state.value.password,
                             retypePassword = state.value.retypePassword,
                             passwordVisible = passwordVisible,
-                            authState = authState,
                             onUiEvent = { component.onEvent(it) }
 
                         ) {
@@ -166,7 +137,6 @@ private fun CreateAccountContent(
     password: String,
     retypePassword: String,
     passwordVisible: Boolean,
-    authState: NativeSignInState,
     onUiEvent: (SignInUiEvent) -> Unit,
     onVisibilityToggle: () -> Unit,
 
@@ -210,9 +180,10 @@ private fun CreateAccountContent(
             else Icons.Filled.VisibilityOff
 
             // Please provide localized description for accessibility services
-            val description = if (passwordVisible) stringResource(MR.strings.sign_in_content_desc_hide_password) else stringResource(
-                MR.strings.sign_in_content_desc_show_password
-            )
+            val description =
+                if (passwordVisible) stringResource(MR.strings.sign_in_content_desc_hide_password) else stringResource(
+                    MR.strings.sign_in_content_desc_show_password
+                )
 
             IconButton(onClick = { onVisibilityToggle() }) {
                 Icon(imageVector = image, description)
@@ -251,14 +222,8 @@ private fun CreateAccountContent(
     }
     OrDivider()
 
-    TextButton(
-        onClick = {
-            authState.startFlow()
-        }
-    ) {
-        Text(
-            text = stringResource(MR.strings.sign_in_with_google)
-        )
+    GoogleSignInButton {
+        onUiEvent(it)
     }
     TextButton(
         onClick = {
@@ -276,7 +241,6 @@ private fun SignInContent(
     email: String,
     password: String,
     passwordVisible: Boolean,
-    authState: NativeSignInState,
     onUiEvent: (SignInUiEvent) -> Unit,
     onVisibilityToggle: () -> Unit,
 ) {
@@ -332,7 +296,7 @@ private fun SignInContent(
     Text(stringResource(MR.strings.sign_in_privacy_policy))
     TextButton(
         onClick = {
-            onUiEvent(SignInUiEvent.CreateAccountWithEmail)
+            onUiEvent(SignInUiEvent.SignInWithEmail)
         }
     ) {
         Text(
@@ -341,15 +305,12 @@ private fun SignInContent(
     }
     OrDivider()
 
-    TextButton(
-        onClick = {
-            authState.startFlow()
+
+    GoogleSignInButton(
+        onUiEvent = {
+            onUiEvent(it)
         }
-    ) {
-        Text(
-            text = stringResource(MR.strings.sign_in_with_google)
-        )
-    }
+    )
     TextButton(
         onClick = {
 
@@ -357,6 +318,50 @@ private fun SignInContent(
     ) {
         Text(
             text = stringResource(MR.strings.sign_in_with_apple)
+        )
+    }
+}
+
+@Composable
+fun GoogleSignInButton(
+    onUiEvent: (SignInUiEvent) -> Unit,
+) {
+    val client = SupabaseClientFactory().createBase()
+    val authState = client.composeAuth.rememberSignInWithGoogle(
+        onResult = {
+            when (it) { //handle errors
+                NativeSignInResult.ClosedByUser -> {
+
+                }
+
+                is NativeSignInResult.Error -> {
+                    onUiEvent(SignInUiEvent.OnError(SignInError.UNKNOWN_ERROR))
+                }
+
+                is NativeSignInResult.NetworkError -> {
+                    onUiEvent(SignInUiEvent.OnError(SignInError.NETWORK_ERROR))
+                }
+
+                NativeSignInResult.Success -> {
+                    val sessionsId = client.auth.currentSessionOrNull()?.user?.id
+                    val sessionsEmail = client.auth.currentSessionOrNull()?.user?.email
+                    onUiEvent(
+                        SignInUiEvent.SignInWithGmailSuccess(
+                            email = sessionsEmail,
+                            id = sessionsId
+                        )
+                    )
+                }
+            }
+        }
+    )
+    TextButton(
+        onClick = {
+            authState.startFlow()
+        }
+    ) {
+        Text(
+            text = stringResource(MR.strings.sign_in_with_google)
         )
     }
 }

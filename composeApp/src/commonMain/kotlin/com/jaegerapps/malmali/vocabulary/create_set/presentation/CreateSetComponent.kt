@@ -1,8 +1,6 @@
 package com.jaegerapps.malmali.vocabulary.create_set.presentation
 
 import VocabularySetSourceFunctions
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
 import com.jaegerapps.malmali.vocabulary.domain.VocabSet
@@ -10,10 +8,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,7 +20,7 @@ class CreateSetComponent(
     val setTitle: String?,
     val date: Long?,
     val setId: Long?,
-    private val database: VocabularySetSourceFunctions,
+    private val vocabFunctions: VocabularySetSourceFunctions,
     private val onComplete: () -> Unit,
     private val onModalNavigate: (String) -> Unit,
 ) : ComponentContext by componentContext {
@@ -42,8 +38,8 @@ class CreateSetComponent(
             println("setId")
             println(setId)
             val combineFlow = combine(
-                database.getSetAsFlow(setTitle, date = date),
-                database.getAllSetCards(setId)
+                vocabFunctions.getSetAsFlow(setTitle, date = date),
+                vocabFunctions.getAllSetCards(setId)
             ) { set, cards ->
                 //We use a uiId for the cards in the ui. This is given because the id of the card is used for the database, not for the ui
                 val uiIdAddedCards = (cards.indices).map {
@@ -188,8 +184,8 @@ class CreateSetComponent(
                         scope.launch {
                             if (setId != null) {
                                 //If we have a set that was being edited, all will be erased. then we go to home screen
-                                database.deleteSet(setId)
-                                database.deleteAllCards(setId)
+                                vocabFunctions.deleteSet(setId)
+                                vocabFunctions.deleteAllCards(setId)
                                 onComplete()
                             } else {
                                 //There is no set, we go to home screen
@@ -212,12 +208,12 @@ class CreateSetComponent(
 
                             if (setId != null && setTitle != null && date != null) {
                                 //this means we are editing a set, so we just update it based on this
-                                database.updateSet(
+                                vocabFunctions.updateSet(
                                     set = vocabSet
                                 )
                             } else {
                                 //Adding a set
-                                database.addSet(
+                                vocabFunctions.addSet(
                                     id = null,
                                     title = vocabSet.title,
                                     size = _state.value.uiFlashcards.size.toLong(),
@@ -227,9 +223,9 @@ class CreateSetComponent(
                                 )
                             }
                             //In order to link the flashcards with the set, we need a reference to the setId.
-                            val setId = database.getSet(title = vocabSet.title, date = vocabSet.dateCreated).setId
+                            val setId = vocabFunctions.getSet(title = vocabSet.title, date = vocabSet.dateCreated).setId
                             if (setId != null) {
-                                database.insertCards(_state.value.uiFlashcards, setId)
+                                vocabFunctions.insertCards(_state.value.uiFlashcards, setId)
                             } else {
                                 /*TODO - Error handling*/
                             }
@@ -258,7 +254,7 @@ class CreateSetComponent(
                         //Maybe I should make it so you don't delete something until you confirm that you want to save it...
                         //TODO - Make a to delete list as part of the ui, and then delete the list from the db on save. Boo
                         scope.launch {
-                            database.deleteSingleCard(card)
+                            vocabFunctions.deleteSingleCard(card)
                         }
                     }
                 }
