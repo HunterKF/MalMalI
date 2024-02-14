@@ -5,6 +5,7 @@ import com.jaegerapps.malmali.login.domain.UserData
 import com.russhwolf.settings.Settings
 import core.domain.SupabaseUserFunctions
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.from
 
 class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUserFunctions {
@@ -89,6 +90,14 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
                 eq("user_id", id)
             }
         }
+    }
+
+    override suspend fun refreshAccessToken() {
+        client.auth.refreshCurrentSession()
+    }
+
+    override suspend fun retrieveAccessToken(): String? {
+        return client.auth.currentAccessTokenOrNull()
     }
 
 }

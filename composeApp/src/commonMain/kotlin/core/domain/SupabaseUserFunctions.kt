@@ -11,4 +11,6 @@ interface SupabaseUserFunctions {
     suspend fun updateUserIcon(icon: String)
     suspend fun updateUserAchievements(achievements: List<String>)
     suspend fun updateUserSets(sets: List<String>)
+    suspend fun refreshAccessToken()
+    suspend fun retrieveAccessToken(): String?
 }

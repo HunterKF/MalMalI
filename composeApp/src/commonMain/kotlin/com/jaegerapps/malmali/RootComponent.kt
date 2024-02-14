@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.navigation
+package com.jaegerapps.malmali
 
 import VocabularySetSourceFunctions
 import com.arkivanov.decompose.ComponentContext
@@ -9,8 +9,9 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popTo
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
+import com.arkivanov.essenty.lifecycle.doOnCreate
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.jaegerapps.malmali.components.Routes
-import com.jaegerapps.malmali.di.AppModule
 import com.jaegerapps.malmali.di.AppModuleInterface
 import com.jaegerapps.malmali.grammar.GrammarScreenComponent
 import com.jaegerapps.malmali.home.HomeScreenComponent
@@ -42,6 +43,18 @@ class RootComponent(
         childFactory = ::createChild
     )
 
+    init {
+        lifecycle.doOnResume {
+            scope.launch {
+                appModule.userFunctions.refreshAccessToken()
+            }
+        }
+        lifecycle.doOnCreate {
+            scope.launch {
+                appModule.userFunctions.refreshAccessToken()
+            }
+        }
+    }
 
     @OptIn(ExperimentalDecomposeApi::class)
     private fun createChild(
@@ -50,35 +63,6 @@ class RootComponent(
     ): Child {
 
         return when (config) {
-            Configuration.ScreenA -> Child.ScreenA(
-                ScreenAComponent(
-                    componentContext = context,
-                    onNavigateToScreenB = { text ->
-                        navigation.pushNew(Configuration.ScreenB(text))
-                    },
-                    onNavigateToCreateSetScreen = {
-                        modalNavigate(Routes.VOCABULARY)
-//                        navigation.pushNew(Configuration.CreateSetScreen(vocabFunctions, null))
-
-                    },
-                    onNavigateToFlashcardHome = {
-                        navigation.pushNew(Configuration.FlashcardHomeScreen(appModule.vocabFunctions))
-                    }
-                )
-            )
-
-            is Configuration.ScreenB -> {
-                Child.ScreenB(
-                    ScreenBComponent(
-                        text = config.text,
-                        componentContext = context,
-                        onGoBack = {
-                            navigation.pop()
-                        }
-                    )
-                )
-            }
-
             is Configuration.CreateSetScreen -> {
                 Child.CreateSetScreen(
                     CreateSetComponent(
@@ -243,8 +227,6 @@ class RootComponent(
     }
 
     sealed class Child {
-        data class ScreenA(val component: ScreenAComponent) : Child()
-        data class ScreenB(val component: ScreenBComponent) : Child()
         data class CreateSetScreen(val component: CreateSetComponent) : Child()
         data class FlashcardHomeScreen(val component: FlashcardHomeComponent) : Child()
         data class StudyFlashcardsScreen(val component: StudyFlashcardsComponent) : Child()
@@ -273,11 +255,6 @@ class RootComponent(
     @Serializable
     sealed class Configuration {
         //Configuration defines your screens in the app
-        @Serializable
-        data object ScreenA : Configuration()
-
-        @Serializable
-        data class ScreenB(val text: String) : Configuration()
 
         @Serializable
         data class CreateSetScreen(

@@ -37,35 +37,12 @@ class SignInComponent(
             }
 
             is SignInUiEvent.SignInWithGmailSuccess -> {
-                if (event.id != null && event.email != null) {
-                    scope.launch {
-                        when (val result = signIn.createUserWithGmailExternally(event.id)) {
-                            is Resource.Error -> {
-                                _state.update {
-                                    it.copy(
-                                        error = restError(result.throwable as RestException)
-                                    )
-                                }
-                            }
-
-                            is Resource.Success -> {
-                                _state.update {
-                                    it.copy(
-                                        loginSuccess = true
-                                    )
-                                }
-                                onNavigate()
-                            }
-
-                        }
-                    }
-                } else {
-                    _state.update {
-                        it.copy(
-                            error = SignInError.UNKNOWN_ERROR
-                        )
-                    }
+                _state.update {
+                    it.copy(
+                        loginSuccess = true
+                    )
                 }
+                onNavigate()
             }
 
             SignInUiEvent.ClearError -> {

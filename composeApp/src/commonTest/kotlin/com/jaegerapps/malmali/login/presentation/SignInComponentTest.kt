@@ -6,10 +6,8 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
 import com.jaegerapps.malmali.core.FakeSignInImpl
 import com.jaegerapps.malmali.login.domain.SignInRepo
-import com.jaegerapps.malmali.navigation.RootComponent
-import com.jaegerapps.malmali.data.FakeVocabularySetSourceFunctions
+import com.jaegerapps.malmali.RootComponent
 import com.jaegerapps.malmali.di.FakeAppModule
-import com.russhwolf.settings.MapSettings
 import core.util.Resource
 import io.mockative.Mock
 import io.mockative.classOf

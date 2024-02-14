@@ -11,13 +11,10 @@ import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.retainedComponent
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
 import com.jaegerapps.malmali.di.AppModule
-import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
-import com.jaegerapps.malmali.navigation.RootComponent
 import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
 import core.data.DatabaseDriverFactory
-import core.data.SupabaseClientFactory
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalDecomposeApi::class)

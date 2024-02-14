@@ -6,7 +6,7 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
 import com.jaegerapps.malmali.data.FakeVocabularySetSourceFunctions
 import com.jaegerapps.malmali.di.FakeAppModule
-import com.jaegerapps.malmali.navigation.RootComponent
+import com.jaegerapps.malmali.RootComponent
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetComponent
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetUiEvent
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.PopUpMode

@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,6 +47,7 @@ import io.github.jan.supabase.compose.auth.composable.NativeSignInState
 import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 import io.github.jan.supabase.compose.auth.composeAuth
 import io.github.jan.supabase.gotrue.auth
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen(
@@ -323,7 +325,7 @@ private fun SignInContent(
 }
 
 @Composable
-fun GoogleSignInButton(
+private fun GoogleSignInButton(
     onUiEvent: (SignInUiEvent) -> Unit,
 ) {
     val client = SupabaseClientFactory().createBase()
@@ -343,13 +345,8 @@ fun GoogleSignInButton(
                 }
 
                 NativeSignInResult.Success -> {
-                    val sessionsId = client.auth.currentSessionOrNull()?.user?.id
-                    val sessionsEmail = client.auth.currentSessionOrNull()?.user?.email
                     onUiEvent(
-                        SignInUiEvent.SignInWithGmailSuccess(
-                            email = sessionsEmail,
-                            id = sessionsId
-                        )
+                        SignInUiEvent.SignInWithGmailSuccess
                     )
                 }
             }
