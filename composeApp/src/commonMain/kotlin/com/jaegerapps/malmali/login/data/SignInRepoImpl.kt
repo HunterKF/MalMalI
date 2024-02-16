@@ -2,10 +2,12 @@ package com.jaegerapps.malmali.login.data
 
 import com.jaegerapps.malmali.login.domain.SignInRepo
 import com.jaegerapps.malmali.login.domain.UserData
+import core.data.SupabaseClientFactory
 import core.domain.SettingFunctions
 import core.domain.SupabaseSignInFunctions
 import core.util.Resource
 import io.github.jan.supabase.exceptions.RestException
+import io.github.jan.supabase.gotrue.auth
 
 class SignInRepoImpl(
     private val settings: SettingFunctions,
@@ -20,12 +22,13 @@ class SignInRepoImpl(
         }
     }
 
-    override suspend fun createUserWithGmailExternally(userId: String): Resource<UserData> {
+    override suspend fun createUserWithGmailExternally(email: String): Resource<UserData> {
+
         val newUser = UserDTO(
             user_nickname = "",
-            user_email = "",
-            user_id = userId,
-            user_experience = 0,
+            user_email = email,
+            user_experience = 1,
+            user_current_level = 0,
             user_icon = "",
             user_achievements = arrayOf(""),
             user_sets = arrayOf(""),

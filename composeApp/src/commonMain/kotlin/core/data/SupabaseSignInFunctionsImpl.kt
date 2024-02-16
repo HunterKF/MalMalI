@@ -20,14 +20,26 @@ class SupabaseSignInFunctionsImpl(private val client: SupabaseClient) : Supabase
             }.decodeSingle<UserEntity>()
             Resource.Success(user.toUserData())
         } catch (e: RestException) {
-            val userCheck =
-                client.from("users").select { filter { eq("user_id", newUser.user_id) } }
-                    .decodeSingleOrNull<UserEntity>()
-            if (userCheck == null) {
-                Resource.Error(e)
+            /*TODO - Find a new way to check */
+
+            val id = client.auth.currentUserOrNull()?.id
+            if (!id.isNullOrEmpty()) {
+                val userCheck =
+                    client.from("users").select { filter { eq("user_id", id) } }
+                        .decodeSingleOrNull<UserEntity>()
+                if (userCheck == null) {
+                    println("Error from createUserGoogle")
+                    println(e.message)
+                    println(e.error)
+                    println(e.description)
+                    Resource.Error(e)
+                } else {
+                    Resource.Success(userCheck.toUserData())
+                }
             } else {
-                Resource.Success(userCheck.toUserData())
+                Resource.Error(Throwable())
             }
+
         }
     }
 
@@ -43,7 +55,6 @@ class SupabaseSignInFunctionsImpl(private val client: SupabaseClient) : Supabase
             val newUser = UserDTO(
                 user_nickname = "",
                 user_email = "",
-                user_id = "",
                 user_experience = 0,
                 user_icon = "",
                 user_achievements = arrayOf(),

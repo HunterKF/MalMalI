@@ -11,7 +11,6 @@ class SettingFunctionsImpl(
     override suspend fun updateUser(user: UserData) {
         settings.putString(SettingKeys.USERNAME, user.nickname)
         settings.putString(SettingKeys.EMAIL, user.email)
-        settings.putString(SettingKeys.ID, user.id)
         settings.putInt(SettingKeys.EXPERIENCE, user.experience)
         settings.putInt(SettingKeys.CURRENT_LEVEL, user.currentLevel)
         settings.putString(SettingKeys.ICON, IconResource.tagFromResource(user.icon))
@@ -79,7 +78,6 @@ class SettingFunctionsImpl(
         return UserData(
             nickname = settings.getString(SettingKeys.USERNAME, ""),
             email = settings.getString(SettingKeys.EMAIL, ""),
-            id = settings.getString(SettingKeys.ID, ""),
             experience = settings.getInt(SettingKeys.EXPERIENCE, 0),
             currentLevel = settings.getInt(SettingKeys.CURRENT_LEVEL, 0),
             icon = IconResource.resourceFromTag(settings.getString(SettingKeys.ICON, "bear 1")),

@@ -11,7 +11,6 @@ class FakeSettingFunctions : SettingFunctions {
         UserData(
             nickname = "",
             email = "",
-            id = "",
             experience = 1,
             currentLevel = 1,
             icon = IconResource.resourceFromTag("bear 1")
@@ -36,7 +35,6 @@ class FakeSettingFunctions : SettingFunctions {
 
     override suspend fun updateUserId(id: String) {
         userState.value = userState.value.copy(
-            id = id
         )
     }
 
@@ -85,7 +83,6 @@ class FakeSettingFunctions : SettingFunctions {
     override suspend fun createUser(email: String, id: String) {
         userState.value = userState.value.copy(
             email = email,
-            id = id
         )
     }
 

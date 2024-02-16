@@ -24,9 +24,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val database =
                 MalMalIDatabase(DatabaseDriverFactory(LocalContext.current).createDriver())
-            val vocabFunctions = VocabularySetSourceFunctionsImpl(database)
             val sharedPreference = getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE)
-            val settings: Settings = SharedPreferencesSettings(sharedPreference)
             val appModule = AppModule(
                 context = LocalContext.current.applicationContext,
                 sharedPreferences = sharedPreference

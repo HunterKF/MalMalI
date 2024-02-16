@@ -7,7 +7,6 @@ import dev.icerock.moko.resources.ImageResource
 data class UserData(
     val nickname: String,
     val email: String,
-    val id: String,
     val experience: Int,
     val currentLevel: Int,
     val icon: IconResource,

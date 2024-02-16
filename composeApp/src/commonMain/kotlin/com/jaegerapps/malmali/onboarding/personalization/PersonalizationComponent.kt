@@ -62,9 +62,9 @@ class PersonalizationComponent(
                                 settings.updateUserIcon(_state.value.selectedIcon.tag)
                                 settings.changeOnboardingBoolean()
                             }.await()
-
-                            onNavigate()
                         }
+                        onNavigate()
+
                     } catch (e: Exception) {
                         println("An error occurred: $e")
                     }
@@ -83,6 +83,7 @@ class PersonalizationComponent(
                     )
                 }
             }
+
         }
     }
 }

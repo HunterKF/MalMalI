@@ -35,4 +35,12 @@ class FakeSupabaseUserFunctions: SupabaseUserFunctions {
     override suspend fun updateUserSets(sets: List<String>) {
         TODO("Not yet implemented")
     }
+
+    override suspend fun refreshAccessToken() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun retrieveAccessToken(): String? {
+        TODO("Not yet implemented")
+    }
 }

@@ -2,6 +2,7 @@ package com.jaegerapps.malmali.login.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.login.domain.SignInRepo
+import core.data.SupabaseClientFactory
 import core.util.Resource
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.BadRequestRestException
@@ -9,9 +10,11 @@ import io.github.jan.supabase.exceptions.NotFoundRestException
 import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.exceptions.UnauthorizedRestException
 import io.github.jan.supabase.exceptions.UnknownRestException
+import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,7 +23,7 @@ class SignInComponent(
     componentContext: ComponentContext,
     private val signIn: SignInRepo,
     private val onNavigate: () -> Unit,
-): ComponentContext by componentContext {
+) : ComponentContext by componentContext {
     private val _state = MutableStateFlow(SignInState())
     val state = _state
 
@@ -39,10 +42,32 @@ class SignInComponent(
             is SignInUiEvent.SignInWithGmailSuccess -> {
                 _state.update {
                     it.copy(
-                        loginSuccess = true
+                        isLoading = true
                     )
                 }
-                onNavigate()
+                val client = SupabaseClientFactory().createBase().auth
+                val email = client.currentUserOrNull()?.email
+                val job = scope.launch {
+                    async { signIn.createUserWithGmailExternally(email ?: "") }.await()
+                }
+                job.invokeOnCompletion { throwable ->
+                    if (throwable == null) {
+                        _state.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
+                        onNavigate()
+                    } else {
+                        _state.update {
+                            it.copy(
+                                error = SignInError.UNKNOWN_ERROR
+                            )
+                        }
+                    }
+                }
+
+
             }
 
             SignInUiEvent.ClearError -> {
@@ -90,13 +115,15 @@ class SignInComponent(
                 }
                 scope.launch {
                     try {
-                        when (val result = signIn.signInWithEmail(_state.value.email, _state.value.password)) {
+                        when (val result =
+                            signIn.signInWithEmail(_state.value.email, _state.value.password)) {
                             is Resource.Error -> _state.update {
                                 it.copy(
                                     error = restError(result.throwable as RestException),
                                     isLoading = false
                                 )
                             }
+
                             is Resource.Success -> {
                                 _state.update {
                                     it.copy(
@@ -106,7 +133,7 @@ class SignInComponent(
                                 onNavigate()
                             }
                         }
-                    } catch(e: RestException) {
+                    } catch (e: RestException) {
                         _state.update {
                             it.copy(
                                 error = restError(e),
@@ -215,7 +242,7 @@ class SignInComponent(
     private fun restError(e: RestException): SignInError {
         return when (e) {
             is BadRequestRestException -> SignInError.PASSWORD_EMAIL_INVALID
-            is NotFoundRestException ->  SignInError.EMAIL_NOT_FOUND
+            is NotFoundRestException -> SignInError.EMAIL_NOT_FOUND
             is UnauthorizedRestException -> SignInError.UNKNOWN_ERROR
             is UnknownRestException -> SignInError.UNKNOWN_ERROR
         }

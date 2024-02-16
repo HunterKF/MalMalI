@@ -8,7 +8,6 @@ fun UserEntity.toUserData(): UserData {
     return UserData(
         nickname = user_nickname,
         email = user_email,
-        id = user_id,
         experience = user_experience,
         currentLevel = 1,
         icon = IconResource.resourceFromTag(this.user_icon),
@@ -21,7 +20,6 @@ fun UserData.toUserDto(): UserDTO {
     return UserDTO(
         user_nickname = nickname,
         user_email = email,
-        user_id = id,
         user_experience = experience,
         user_icon = IconResource.tagFromResource(icon),
         user_achievements = achievements.toTypedArray(),

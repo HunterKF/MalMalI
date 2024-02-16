@@ -12,7 +12,6 @@ class FakeSignInImpl(): SignInRepo {
         UserData(
             nickname = "",
             email = "",
-            id = "",
             experience = 0,
             currentLevel = 1,
             icon = IconResource.resourceFromTag("bear 1"),
