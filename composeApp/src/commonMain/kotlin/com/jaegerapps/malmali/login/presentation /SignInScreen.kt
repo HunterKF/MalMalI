@@ -27,7 +27,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,16 +37,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.components.blackBorder
-import core.data.SupabaseClientFactory
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.compose.stringResource
-import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
-import io.github.jan.supabase.compose.auth.composable.NativeSignInState
 import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 import io.github.jan.supabase.compose.auth.composeAuth
-import io.github.jan.supabase.gotrue.auth
-import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen(
@@ -328,7 +322,7 @@ private fun SignInContent(
 private fun GoogleSignInButton(
     onUiEvent: (SignInUiEvent) -> Unit,
 ) {
-    val client = SupabaseClientFactory().createBase()
+    val client = core.data.SupabaseClient.client
     val authState = client.composeAuth.rememberSignInWithGoogle(
         onResult = {
             when (it) { //handle errors

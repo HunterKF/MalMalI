@@ -32,7 +32,11 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
             client.auth.currentUserOrNull()?.let {
                 client.from("users").update({
                     UserDTO::user_nickname setTo (name)
-                }) /*Took out the filter function here. Was that the right move?*/
+                }) {
+                    filter {
+                        eq("user_id", it.id)
+                    }
+                }
             }
         } catch (e: RestException) {
             println("Rest exception from user name update")
@@ -93,7 +97,7 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
                     UserDTO::user_icon setTo (icon)
                 }) {
                     filter {
-                        eq("user_id", it)
+                        eq("user_id", it.id)
                     }
                 }
             }
@@ -129,7 +133,7 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
     }
 
     override suspend fun refreshAccessToken() {
-//        client.auth.refreshCurrentSession()
+        client.auth.refreshCurrentSession()
     }
 
     override suspend fun retrieveAccessToken(): String? {

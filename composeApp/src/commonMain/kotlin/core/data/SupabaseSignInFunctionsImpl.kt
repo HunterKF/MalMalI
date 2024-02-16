@@ -56,6 +56,7 @@ class SupabaseSignInFunctionsImpl(private val client: SupabaseClient) : Supabase
                 user_nickname = "",
                 user_email = "",
                 user_experience = 0,
+                user_current_level = 1,
                 user_icon = "",
                 user_achievements = arrayOf(),
                 user_sets = arrayOf(),

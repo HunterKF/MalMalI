@@ -11,21 +11,19 @@ import com.jaegerapps.malmali.login.domain.SignInRepo
 import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
 import com.russhwolf.settings.SharedPreferencesSettings
 import core.data.DatabaseDriverFactory
-import core.data.SupabaseClientFactory
 import core.data.SupabaseSignInFunctionsImpl
 import core.data.SupabaseUserFunctionsImpl
 import core.data.settings.SettingFunctionsImpl
 import core.domain.SettingFunctions
 import core.domain.SupabaseSignInFunctions
 import core.domain.SupabaseUserFunctions
-import io.github.jan.supabase.SupabaseClient
 
 actual class AppModule(
     private val context: Context,
     private val sharedPreferences: SharedPreferences,
 ) : AppModuleInterface {
 
-    val client = SupabaseClientFactory().createBase()
+    private val client = core.data.SupabaseClient.client
     actual override val grammarRepo: GrammarRepo by lazy {
         GrammarRepoImpl(
             client = client

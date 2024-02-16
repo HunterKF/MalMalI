@@ -2,9 +2,7 @@ package com.jaegerapps.malmali.login.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.login.domain.SignInRepo
-import core.data.SupabaseClientFactory
 import core.util.Resource
-import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.BadRequestRestException
 import io.github.jan.supabase.exceptions.NotFoundRestException
 import io.github.jan.supabase.exceptions.RestException
@@ -45,7 +43,7 @@ class SignInComponent(
                         isLoading = true
                     )
                 }
-                val client = SupabaseClientFactory().createBase().auth
+                val client = core.data.SupabaseClient.client.auth
                 val email = client.currentUserOrNull()?.email
                 val job = scope.launch {
                     async { signIn.createUserWithGmailExternally(email ?: "") }.await()

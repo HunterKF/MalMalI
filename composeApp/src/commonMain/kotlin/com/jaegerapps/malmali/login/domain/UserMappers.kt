@@ -21,6 +21,7 @@ fun UserData.toUserDto(): UserDTO {
         user_nickname = nickname,
         user_email = email,
         user_experience = experience,
+        user_current_level = currentLevel,
         user_icon = IconResource.tagFromResource(icon),
         user_achievements = achievements.toTypedArray(),
         user_sets = sets.toTypedArray(),

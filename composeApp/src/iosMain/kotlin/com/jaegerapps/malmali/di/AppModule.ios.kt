@@ -10,7 +10,7 @@ import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.Settings
 import core.data.DatabaseDriverFactory
-import core.data.SupabaseClientFactory
+import core.data.SupabaseClient
 import core.data.SupabaseSignInFunctionsImpl
 import core.data.SupabaseUserFunctionsImpl
 import core.data.settings.SettingFunctionsImpl
@@ -21,7 +21,7 @@ import platform.Foundation.NSUserDefaults
 
 actual class AppModule: AppModuleInterface {
 
-    val client = SupabaseClientFactory().createBase()
+    val client = SupabaseClient.client
     private val delegate = NSUserDefaults()
     private val settings: Settings = NSUserDefaultsSettings(delegate)
     actual override val grammarRepo: GrammarRepo by lazy {
