@@ -16,8 +16,10 @@ interface SettingFunctions {
     suspend fun updateUserSets(sets: List<String>)
     suspend fun logoutUser()
     suspend fun createUser(email: String, id: String)
-    fun getUser(): UserData
+    suspend fun getUser(): UserData
     fun getOnboardingBoolean(): Boolean
     suspend fun changeOnboardingBoolean()
+    suspend fun saveToken()
+    fun getToken(): String?
 
 }

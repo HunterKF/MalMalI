@@ -1,6 +1,7 @@
 package com.jaegerapps.malmali
 
 import VocabularySetSourceFunctions
+import androidx.compose.runtime.mutableStateOf
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -15,6 +16,7 @@ import com.jaegerapps.malmali.components.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
 import com.jaegerapps.malmali.grammar.GrammarScreenComponent
 import com.jaegerapps.malmali.home.HomeScreenComponent
+import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.login.presentation.SignInComponent
 import com.jaegerapps.malmali.onboarding.intro.IntroComponent
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetComponent
@@ -33,12 +35,14 @@ class RootComponent(
     private val appModule: AppModuleInterface,
 ) : ComponentContext by componentContext {
     private val navigation = StackNavigation<Configuration>()
-    private val showSplash = appModule.settingFunctions.getOnboardingBoolean()
     private val scope = CoroutineScope(Dispatchers.IO)
+    private val initialScreen = mutableStateOf<Configuration>(Configuration.HomeScreen)
+
+    private val state = mutableStateOf(RootState())
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
-        initialConfiguration = if (showSplash) Configuration.SignInScreen else Configuration.SignInScreen,
+        initialConfiguration = initialScreen.value,
         handleBackButton = true,
         childFactory = ::createChild
     )
@@ -50,7 +54,23 @@ class RootComponent(
             }
         }
         lifecycle.doOnCreate {
+            when {
+                appModule.settingFunctions.getToken() == null -> {
+                    initialScreen.value = Configuration.SignInScreen
+                }
+
+                appModule.settingFunctions.getOnboardingBoolean() -> {
+                    initialScreen.value = Configuration.IntroScreen
+                }
+            }
             scope.launch {
+                /*Need a way to
+                * 1. Check if the access token exists.
+                * 2. If it exists, refresh the access token and save the new one
+                * 3. If it doesn't exist, then the user does not exist, so we should move the app into logged out state.
+                * What if we make the user a global state, inside the RootComponent. You won't have to track the user anywhere.
+                * Updating the user would be a pain though.
+                * Am I stupid...?*/
                 appModule.userFunctions.refreshAccessToken()
             }
         }
@@ -192,6 +212,12 @@ class RootComponent(
                 Child.SignInScreen(
                     SignInComponent(
                         componentContext = context,
+                        saveToken = {
+                            appModule.settingFunctions.saveToken()
+                        },
+                        createUserOnDb = {
+                            appModule.signInRepo.createUserWithGmailExternally()
+                        },
                         onNavigate = {
                             navigation.pushNew(Configuration.PersonalizationScreen)
                         },
@@ -295,3 +321,8 @@ class RootComponent(
         data object CompletionScreen : Configuration()
     }
 }
+
+data class RootState(
+    val user: UserData? = null,
+    val loggedIn: Boolean = false
+)

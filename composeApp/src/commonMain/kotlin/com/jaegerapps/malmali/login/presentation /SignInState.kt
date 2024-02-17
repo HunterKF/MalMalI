@@ -1,5 +1,11 @@
 package com.jaegerapps.malmali.login.presentation
 
+import io.github.jan.supabase.exceptions.BadRequestRestException
+import io.github.jan.supabase.exceptions.NotFoundRestException
+import io.github.jan.supabase.exceptions.RestException
+import io.github.jan.supabase.exceptions.UnauthorizedRestException
+import io.github.jan.supabase.exceptions.UnknownRestException
+
 data class SignInState(
     val email: String = "",
     val password: String = "",
@@ -26,4 +32,13 @@ enum class SignInError {
     ALREADY_REGISTERED,
     PASSWORD_EMAIL_INVALID,
     EMAIL_NOT_FOUND
+}
+
+fun RestException.toSignInError(): SignInError {
+    return when (this) {
+        is BadRequestRestException -> SignInError.PASSWORD_EMAIL_INVALID
+        is NotFoundRestException -> SignInError.EMAIL_NOT_FOUND
+        is UnauthorizedRestException -> SignInError.UNKNOWN_ERROR
+        is UnknownRestException -> SignInError.UNKNOWN_ERROR
+    }
 }

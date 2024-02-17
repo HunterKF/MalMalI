@@ -21,7 +21,7 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
                     }
                 }
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             println(e.message)
         }
 
@@ -48,24 +48,6 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
 
     }
 
-    override suspend fun updateUserEmail(email: String) {
-        try {
-            client.auth.currentUserOrNull()?.let {
-                client.from("users").update({
-                    UserDTO::user_email setTo(email)
-                }) {
-                    filter {
-                        eq("user_id", it)
-                    }
-                }
-            }
-        } catch(e: Exception) {
-            println(e.message)
-        }
-
-
-
-    }
 
     override suspend fun updateUserId(id: String) {
         /*TODO - delete this
@@ -80,7 +62,7 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
 
     override suspend fun updateUserExperience(experience: Int) {
         client.from("users").update({
-            UserDTO::user_experience setTo(experience)
+            UserDTO::user_experience setTo (experience)
         }) {
             filter {
                 eq("user_id", id)
@@ -112,7 +94,7 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
 
     override suspend fun updateUserAchievements(achievements: List<String>) {
         client.from("users").update({
-            UserDTO::user_achievements setTo(achievements.toTypedArray())
+            UserDTO::user_achievements setTo (achievements.toTypedArray())
         }) {
             filter {
                 eq("user_id", id)
@@ -121,10 +103,9 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
     }
 
 
-
     override suspend fun updateUserSets(sets: List<String>) {
         client.from("users").update({
-            UserDTO::user_sets setTo(sets.toTypedArray())
+            UserDTO::user_sets setTo (sets.toTypedArray())
         }) {
             filter {
                 eq("user_id", id)
@@ -133,7 +114,13 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
     }
 
     override suspend fun refreshAccessToken() {
-        client.auth.refreshCurrentSession()
+        try {
+            client.auth.currentAccessTokenOrNull()?.let {
+                client.auth.refreshCurrentSession()
+            }
+        } catch(e: RestException) {
+            println(e.message)
+        }
     }
 
     override suspend fun retrieveAccessToken(): String? {

@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class HomeScreenComponent(
     componentContext: ComponentContext,
-    getUser: () -> UserData,
+    getUser: suspend () -> UserData,
     private val onNavigate: (String) -> Unit,
 ) : ComponentContext by componentContext {
 

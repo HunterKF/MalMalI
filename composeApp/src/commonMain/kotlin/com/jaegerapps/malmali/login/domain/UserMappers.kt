@@ -19,7 +19,6 @@ fun UserEntity.toUserData(): UserData {
 fun UserData.toUserDto(): UserDTO {
     return UserDTO(
         user_nickname = nickname,
-        user_email = email,
         user_experience = experience,
         user_current_level = currentLevel,
         user_icon = IconResource.tagFromResource(icon),

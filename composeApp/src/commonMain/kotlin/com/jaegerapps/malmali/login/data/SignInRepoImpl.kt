@@ -20,11 +20,10 @@ class SignInRepoImpl(
         }
     }
 
-    override suspend fun createUserWithGmailExternally(email: String): Resource<UserData> {
+    override suspend fun createUserWithGmailExternally(): Resource<UserData> {
 
         val newUser = UserDTO(
             user_nickname = "",
-            user_email = email,
             user_experience = 1,
             user_current_level = 0,
             user_icon = "",

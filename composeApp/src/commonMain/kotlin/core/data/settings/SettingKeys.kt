@@ -11,4 +11,5 @@ object SettingKeys {
     const val LEVELS = "levels"
     const val SETS = "sets"
     const val ONBOARDING = "onboarding"
+    const val ACCESS_TOKEN = "access_token"
 }

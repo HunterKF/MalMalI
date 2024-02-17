@@ -3,7 +3,11 @@ package core.data.settings
 import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.login.domain.UserData
 import com.russhwolf.settings.Settings
+import com.russhwolf.settings.get
+import com.russhwolf.settings.nullableString
+import core.data.SupabaseClient
 import core.domain.SettingFunctions
+import io.github.jan.supabase.gotrue.auth
 
 class SettingFunctionsImpl(
     private val settings: Settings,
@@ -74,7 +78,7 @@ class SettingFunctionsImpl(
         settings.putString(SettingKeys.ID, id)
     }
 
-    override fun getUser(): UserData {
+    override suspend fun getUser(): UserData {
         return UserData(
             nickname = settings.getString(SettingKeys.USERNAME, ""),
             email = settings.getString(SettingKeys.EMAIL, ""),
@@ -89,12 +93,21 @@ class SettingFunctionsImpl(
         )
     }
 
-    override fun getOnboardingBoolean(): Boolean {
+    override  fun getOnboardingBoolean(): Boolean {
         return settings.getBoolean(SettingKeys.ONBOARDING, true)
     }
 
     override suspend fun changeOnboardingBoolean() {
         settings.putBoolean(SettingKeys.ONBOARDING, false)
+    }
+
+    override suspend fun saveToken() {
+        val accessToken = SupabaseClient.client.auth.currentAccessTokenOrNull()
+        accessToken?.let { settings.putString(SettingKeys.ACCESS_TOKEN, accessToken) }
+
+    }
+    override fun getToken(): String? {
+        return settings.getStringOrNull(SettingKeys.ACCESS_TOKEN)
     }
 
 

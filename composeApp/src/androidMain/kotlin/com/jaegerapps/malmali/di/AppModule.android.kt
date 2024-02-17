@@ -24,10 +24,9 @@ actual class AppModule(
 ) : AppModuleInterface {
 
     private val client = core.data.SupabaseClient.client
+
     actual override val grammarRepo: GrammarRepo by lazy {
-        GrammarRepoImpl(
-            client = client
-        )
+        GrammarRepoImpl(client = client)
     }
     actual override val signInRepo: SignInRepo by lazy {
         SignInRepoImpl(

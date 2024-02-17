@@ -5,7 +5,6 @@ import com.jaegerapps.malmali.login.domain.UserData
 interface SupabaseUserFunctions {
     suspend fun updateUser(user: UserData)
     suspend fun updateUserName(name: String)
-    suspend fun updateUserEmail(email: String)
     suspend fun updateUserId(id: String)
     suspend fun updateUserExperience(experience: Int)
     suspend fun updateUserIcon(icon: String)

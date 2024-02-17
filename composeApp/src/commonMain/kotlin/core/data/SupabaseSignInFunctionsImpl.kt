@@ -54,7 +54,6 @@ class SupabaseSignInFunctionsImpl(private val client: SupabaseClient) : Supabase
             }
             val newUser = UserDTO(
                 user_nickname = "",
-                user_email = "",
                 user_experience = 0,
                 user_current_level = 1,
                 user_icon = "",

@@ -20,6 +20,8 @@ import kotlinx.coroutines.launch
 class SignInComponent(
     componentContext: ComponentContext,
     private val signIn: SignInRepo,
+    private val saveToken: suspend (String) -> Unit,
+    private val createUserOnDb: suspend () -> Unit,
     private val onNavigate: () -> Unit,
 ) : ComponentContext by componentContext {
     private val _state = MutableStateFlow(SignInState())
@@ -43,27 +45,49 @@ class SignInComponent(
                         isLoading = true
                     )
                 }
-                val client = core.data.SupabaseClient.client.auth
-                val email = client.currentUserOrNull()?.email
-                val job = scope.launch {
-                    async { signIn.createUserWithGmailExternally(email ?: "") }.await()
-                }
-                job.invokeOnCompletion { throwable ->
-                    if (throwable == null) {
-                        _state.update {
-                            it.copy(
-                                isLoading = false
-                            )
+
+                //This is AFTER we are successfully signed in. The next step is to create a user on the table.
+                //Need to save the access token to the settings
+
+                try {
+                    //TODO - The issue with using this is I can't test it later. No way to separate the client OUT of the component. 어떡하지 어떡하지 ㅊㅊㅊ
+                    val client = core.data.SupabaseClient.client.auth
+                    //Here we save the access token to the settings.
+                    val token = client.currentSessionOrNull()?.accessToken
+                    //next we are going to create a user on the supabase db
+                    //Need the email so we can do some policy filtering later, hence why we are adding it now.
+                    val job = scope.launch {
+                        token?.let{
+                            saveToken(it)
                         }
-                        onNavigate()
-                    } else {
-                        _state.update {
-                            it.copy(
-                                error = SignInError.UNKNOWN_ERROR
-                            )
+                        async { createUserOnDb() }.await()
+                    }
+                    job.invokeOnCompletion { throwable ->
+                        if (throwable == null) {
+                            _state.update {
+                                it.copy(
+                                    isLoading = false
+                                )
+                            }
+                            onNavigate()
+                        } else {
+                            _state.update {
+                                it.copy(
+                                    error = SignInError.UNKNOWN_ERROR
+                                )
+                            }
                         }
                     }
+                } catch (e: RestException) {
+                    _state.update {
+                        it.copy(
+                            error = e.toSignInError(),
+                            isLoading = false
+                        )
+                    }
                 }
+
+
 
 
             }
@@ -91,7 +115,7 @@ class SignInComponent(
                             is Resource.Error -> {
                                 _state.update {
                                     it.copy(
-                                        error = restError(result.throwable as RestException)
+                                        error = (result.throwable as RestException).toSignInError()
                                     )
                                 }
                             }
@@ -117,7 +141,7 @@ class SignInComponent(
                             signIn.signInWithEmail(_state.value.email, _state.value.password)) {
                             is Resource.Error -> _state.update {
                                 it.copy(
-                                    error = restError(result.throwable as RestException),
+                                    error = (result.throwable as RestException).toSignInError(),
                                     isLoading = false
                                 )
                             }
@@ -134,7 +158,7 @@ class SignInComponent(
                     } catch (e: RestException) {
                         _state.update {
                             it.copy(
-                                error = restError(e),
+                                error = e.toSignInError(),
                                 isLoading = true
                             )
                         }
@@ -175,7 +199,6 @@ class SignInComponent(
             }
         }
     }
-
     private fun isValidEmail(email: String): Boolean {
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$"
 
@@ -237,13 +260,5 @@ class SignInComponent(
         }
     }
 
-    private fun restError(e: RestException): SignInError {
-        return when (e) {
-            is BadRequestRestException -> SignInError.PASSWORD_EMAIL_INVALID
-            is NotFoundRestException -> SignInError.EMAIL_NOT_FOUND
-            is UnauthorizedRestException -> SignInError.UNKNOWN_ERROR
-            is UnknownRestException -> SignInError.UNKNOWN_ERROR
-        }
-    }
 }
 

@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 //This is what is collected from the database
 @Serializable
 data class UserEntity(
+    val id: Int,
     val created_at: String,
     val user_nickname: String,
     val user_email: String,
