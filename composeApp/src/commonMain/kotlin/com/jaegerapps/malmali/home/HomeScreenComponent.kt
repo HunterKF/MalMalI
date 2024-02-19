@@ -1,21 +1,18 @@
 package com.jaegerapps.malmali.home
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.jaegerapps.malmali.login.domain.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class HomeScreenComponent(
     componentContext: ComponentContext,
-    getUser: suspend () -> UserData,
     private val onNavigate: (String) -> Unit,
+    user: UserData,
 ) : ComponentContext by componentContext {
 
     /*TODO - Eventually will have to make a loading thing so we can load information
@@ -26,24 +23,15 @@ class HomeScreenComponent(
 
     init {
         lifecycle.doOnCreate {
-            scope.launch {
-                _state.update {
-                    it.copy(
-                        loading = true
-                    )
-                }
-                val user = async { getUser() }.await()
-                _state.update {
-                    it.copy(
-                        userName = user.nickname,
-                        icon = user.icon,
-                        userExperience = user.experience.toLong(),
-                        currentLevel = user.currentLevel,
-                        loading = false
-                    )
-                }
+            _state.update {
+                it.copy(
+                    userName = user.nickname,
+                    icon = user.icon,
+                    userExperience = user.experience.toLong(),
+                    currentLevel = user.currentLevel,
+                    loading = false
+                )
             }
-
         }
     }
 

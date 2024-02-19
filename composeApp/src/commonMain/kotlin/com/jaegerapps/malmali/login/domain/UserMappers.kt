@@ -7,7 +7,6 @@ import com.jaegerapps.malmali.login.data.UserDTO
 fun UserEntity.toUserData(): UserData {
     return UserData(
         nickname = user_nickname,
-        email = user_email,
         experience = user_experience,
         currentLevel = 1,
         icon = IconResource.resourceFromTag(this.user_icon),

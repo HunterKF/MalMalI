@@ -20,11 +20,10 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalDecomposeApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sharedPreference = getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE)
 
         setContent {
-            val database =
-                MalMalIDatabase(DatabaseDriverFactory(LocalContext.current).createDriver())
-            val sharedPreference = getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE)
+
             val appModule = AppModule(
                 context = LocalContext.current.applicationContext,
                 sharedPreferences = sharedPreference

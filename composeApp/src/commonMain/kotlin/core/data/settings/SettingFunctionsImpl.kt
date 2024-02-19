@@ -14,7 +14,6 @@ class SettingFunctionsImpl(
 ) : SettingFunctions {
     override suspend fun updateUser(user: UserData) {
         settings.putString(SettingKeys.USERNAME, user.nickname)
-        settings.putString(SettingKeys.EMAIL, user.email)
         settings.putInt(SettingKeys.EXPERIENCE, user.experience)
         settings.putInt(SettingKeys.CURRENT_LEVEL, user.currentLevel)
         settings.putString(SettingKeys.ICON, IconResource.tagFromResource(user.icon))
@@ -81,7 +80,6 @@ class SettingFunctionsImpl(
     override suspend fun getUser(): UserData {
         return UserData(
             nickname = settings.getString(SettingKeys.USERNAME, ""),
-            email = settings.getString(SettingKeys.EMAIL, ""),
             experience = settings.getInt(SettingKeys.EXPERIENCE, 0),
             currentLevel = settings.getInt(SettingKeys.CURRENT_LEVEL, 0),
             icon = IconResource.resourceFromTag(settings.getString(SettingKeys.ICON, "bear 1")),
@@ -93,7 +91,7 @@ class SettingFunctionsImpl(
         )
     }
 
-    override  fun getOnboardingBoolean(): Boolean {
+    override suspend fun getOnboardingBoolean(): Boolean {
         return settings.getBoolean(SettingKeys.ONBOARDING, true)
     }
 
@@ -106,7 +104,7 @@ class SettingFunctionsImpl(
         accessToken?.let { settings.putString(SettingKeys.ACCESS_TOKEN, accessToken) }
 
     }
-    override fun getToken(): String? {
+    override suspend fun getToken(): String? {
         return settings.getStringOrNull(SettingKeys.ACCESS_TOKEN)
     }
 

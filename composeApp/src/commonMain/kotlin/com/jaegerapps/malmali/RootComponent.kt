@@ -16,6 +16,7 @@ import com.jaegerapps.malmali.components.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
 import com.jaegerapps.malmali.grammar.GrammarScreenComponent
 import com.jaegerapps.malmali.home.HomeScreenComponent
+import com.jaegerapps.malmali.loading.LoadingComponent
 import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.login.presentation.SignInComponent
 import com.jaegerapps.malmali.onboarding.intro.IntroComponent
@@ -27,6 +28,8 @@ import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -36,9 +39,10 @@ class RootComponent(
 ) : ComponentContext by componentContext {
     private val navigation = StackNavigation<Configuration>()
     private val scope = CoroutineScope(Dispatchers.IO)
-    private val initialScreen = mutableStateOf<Configuration>(Configuration.HomeScreen)
+    private val initialScreen = mutableStateOf<Configuration>(Configuration.LoadingScreen)
 
-    private val state = mutableStateOf(RootState())
+    private val _state = MutableStateFlow(RootState())
+    val state = _state
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
@@ -54,15 +58,35 @@ class RootComponent(
             }
         }
         lifecycle.doOnCreate {
-            when {
-                appModule.settingFunctions.getToken() == null -> {
-                    initialScreen.value = Configuration.SignInScreen
-                }
+            scope.launch {
+                when {
+                    appModule.settingFunctions.getToken() != null -> {
+                        appModule.userFunctions.refreshAccessToken()
+                        _state.update {
+                            it.copy(
+                                user = appModule.settingFunctions.getUser(),
+                                loggedIn = true
+                            )
+                        }
+                        initialScreen.value = Configuration.HomeScreen
+                    }
 
-                appModule.settingFunctions.getOnboardingBoolean() -> {
-                    initialScreen.value = Configuration.IntroScreen
+                    appModule.settingFunctions.getToken() == null -> {
+                        _state.update {
+                            it.copy(
+                                user = null,
+                                loggedIn = false
+                            )
+                        }
+                        initialScreen.value = Configuration.SignInScreen
+                    }
+
+                    appModule.settingFunctions.getOnboardingBoolean() -> {
+                        initialScreen.value = Configuration.IntroScreen
+                    }
                 }
             }
+
             scope.launch {
                 /*Need a way to
                 * 1. Check if the access token exists.
@@ -177,7 +201,7 @@ class RootComponent(
                 Child.HomeScreen(
                     HomeScreenComponent(
                         componentContext = context,
-                        getUser = { appModule.settingFunctions.getUser() },
+                        user = state.value.user!!,
                         onNavigate = { route ->
                             modalNavigate(route)
                         }
@@ -249,6 +273,11 @@ class RootComponent(
                 )
             }
 
+            Configuration.LoadingScreen -> {
+                Child.LoadingScreen(
+                    LoadingComponent(componentContext = context)
+                )
+            }
         }
     }
 
@@ -262,6 +291,7 @@ class RootComponent(
         data class SignInScreen(val component: SignInComponent) : Child()
         data class PersonalizationScreen(val component: PersonalizationComponent) : Child()
         data class CompletionScreen(val component: CompletionComponent) : Child()
+        data class LoadingScreen(val component: LoadingComponent) : Child()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -306,6 +336,9 @@ class RootComponent(
         data object HomeScreen : Configuration()
 
         @Serializable
+        data object LoadingScreen : Configuration()
+
+        @Serializable
         data object GrammarScreen : Configuration()
 
         @Serializable
@@ -324,5 +357,6 @@ class RootComponent(
 
 data class RootState(
     val user: UserData? = null,
-    val loggedIn: Boolean = false
+    val loggedIn: Boolean = false,
+    val loading: Boolean = false,
 )

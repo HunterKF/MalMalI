@@ -6,7 +6,6 @@ import dev.icerock.moko.resources.ImageResource
 //This is for the local ui and storage
 data class UserData(
     val nickname: String,
-    val email: String,
     val experience: Int,
     val currentLevel: Int,
     val icon: IconResource,

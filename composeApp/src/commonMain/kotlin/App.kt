@@ -8,6 +8,7 @@ import com.jaegerapps.malmali.grammar.presentation.GrammarScreen
 import com.jaegerapps.malmali.home.HomeScreen
 import com.jaegerapps.malmali.login.presentation.SignInScreen
 import com.jaegerapps.malmali.RootComponent
+import com.jaegerapps.malmali.loading.LoadingScreen
 import com.jaegerapps.malmali.onboarding.completion.CompletionScreen
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
 import com.jaegerapps.malmali.onboarding.intro.IntroScreen
@@ -41,6 +42,7 @@ fun App(
                 is RootComponent.Child.IntroScreen -> IntroScreen(component = instance.component)
                 is RootComponent.Child.PersonalizationScreen -> PersonalizationScreen(component = instance.component)
                 is RootComponent.Child.CompletionScreen -> CompletionScreen(component = instance.component)
+                is RootComponent.Child.LoadingScreen -> LoadingScreen(component = instance.component)
             }
 
         }
