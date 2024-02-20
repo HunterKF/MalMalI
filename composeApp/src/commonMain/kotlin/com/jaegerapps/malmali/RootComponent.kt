@@ -1,7 +1,6 @@
 package com.jaegerapps.malmali
 
 import VocabularySetSourceFunctions
-import androidx.compose.runtime.mutableStateOf
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -10,7 +9,6 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popTo
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
-import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.jaegerapps.malmali.components.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
@@ -25,12 +23,16 @@ import com.jaegerapps.malmali.vocabulary.folders.FlashcardHomeComponent
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsComponent
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
+import core.data.SupabaseClient
+import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
 class RootComponent(
@@ -39,14 +41,13 @@ class RootComponent(
 ) : ComponentContext by componentContext {
     private val navigation = StackNavigation<Configuration>()
     private val scope = CoroutineScope(Dispatchers.IO)
-    private val initialScreen = mutableStateOf<Configuration>(Configuration.LoadingScreen)
 
     private val _state = MutableStateFlow(RootState())
     val state = _state
     val childStack = childStack(
         source = navigation,
         serializer = Configuration.serializer(),
-        initialConfiguration = initialScreen.value,
+        initialConfiguration = Configuration.LoadingScreen,
         handleBackButton = true,
         childFactory = ::createChild
     )
@@ -54,21 +55,36 @@ class RootComponent(
     init {
         lifecycle.doOnResume {
             scope.launch {
-                appModule.userFunctions.refreshAccessToken()
-            }
-        }
-        lifecycle.doOnCreate {
-            scope.launch {
+                val result = async { appModule.userFunctions.retrieveAccessToken() }.await()
                 when {
+                    appModule.settingFunctions.getOnboardingBoolean() -> {
+                        navigation.replaceAll(Configuration.IntroScreen)
+                    }
                     appModule.settingFunctions.getToken() != null -> {
-                        appModule.userFunctions.refreshAccessToken()
-                        _state.update {
-                            it.copy(
-                                user = appModule.settingFunctions.getUser(),
-                                loggedIn = true
-                            )
+                        if (result != null) {
+                            withContext(Dispatchers.Main) {
+                                _state.update {
+                                    it.copy(
+                                        user = appModule.settingFunctions.getUser(),
+                                        loggedIn = true
+                                    )
+                                }
+                                navigation.replaceAll(Configuration.HomeScreen)
+
+                            }
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                _state.update {
+                                    it.copy(
+                                        user = null,
+                                        loggedIn = false
+                                    )
+                                }
+                                navigation.replaceAll(Configuration.SignInScreen)
+                            }
+
                         }
-                        initialScreen.value = Configuration.HomeScreen
+
                     }
 
                     appModule.settingFunctions.getToken() == null -> {
@@ -78,24 +94,9 @@ class RootComponent(
                                 loggedIn = false
                             )
                         }
-                        initialScreen.value = Configuration.SignInScreen
-                    }
-
-                    appModule.settingFunctions.getOnboardingBoolean() -> {
-                        initialScreen.value = Configuration.IntroScreen
+                        navigation.replaceAll(Configuration.SignInScreen)
                     }
                 }
-            }
-
-            scope.launch {
-                /*Need a way to
-                * 1. Check if the access token exists.
-                * 2. If it exists, refresh the access token and save the new one
-                * 3. If it doesn't exist, then the user does not exist, so we should move the app into logged out state.
-                * What if we make the user a global state, inside the RootComponent. You won't have to track the user anywhere.
-                * Updating the user would be a pain though.
-                * Am I stupid...?*/
-                appModule.userFunctions.refreshAccessToken()
             }
         }
     }
@@ -237,7 +238,7 @@ class RootComponent(
                     SignInComponent(
                         componentContext = context,
                         saveToken = {
-                            appModule.settingFunctions.saveToken()
+                            appModule.settingFunctions.saveToken(it)
                         },
                         createUserOnDb = {
                             appModule.signInRepo.createUserWithGmailExternally()
@@ -307,6 +308,9 @@ class RootComponent(
 
     }
 
+    fun onLogout() {
+        navigation.replaceAll(Configuration.SignInScreen)
+    }
 
     @Serializable
     sealed class Configuration {

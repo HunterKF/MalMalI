@@ -22,15 +22,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val sharedPreference = getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE)
 
+        val appModule = AppModule(
+            context = applicationContext,
+            sharedPreferences = sharedPreference
+        )
+        val root = retainedComponent { componentContext ->
+            RootComponent(componentContext, appModule = appModule)
+        }
         setContent {
 
-            val appModule = AppModule(
-                context = LocalContext.current.applicationContext,
-                sharedPreferences = sharedPreference
-            )
-            val root = retainedComponent { componentContext ->
-                RootComponent(componentContext, appModule = appModule)
-            }
             App(darkTheme = isSystemInDarkTheme(), root)
         }
     }

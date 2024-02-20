@@ -99,10 +99,8 @@ class SettingFunctionsImpl(
         settings.putBoolean(SettingKeys.ONBOARDING, false)
     }
 
-    override suspend fun saveToken() {
-        val accessToken = SupabaseClient.client.auth.currentAccessTokenOrNull()
-        accessToken?.let { settings.putString(SettingKeys.ACCESS_TOKEN, accessToken) }
-
+    override suspend fun saveToken(token: String) {
+        settings.putString(SettingKeys.ACCESS_TOKEN, token)
     }
     override suspend fun getToken(): String? {
         return settings.getStringOrNull(SettingKeys.ACCESS_TOKEN)

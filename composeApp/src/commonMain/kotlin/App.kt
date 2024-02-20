@@ -1,4 +1,6 @@
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
@@ -16,16 +18,21 @@ import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetScreen
 import com.jaegerapps.malmali.vocabulary.folders.presentation.FolderScreen
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsScreen
 import core.presentation.MalMalITheme
+import kotlinx.coroutines.flow.subscribe
 
 @Composable
 fun App(
     darkTheme: Boolean,
     root: RootComponent,
 ) {
+    val appState by root.state.collectAsState()
+    LaunchedEffect(appState.loggedIn) {
+        /*TODO - This won't work...*/
+        root.onLogout()
+    }
     MalMalITheme(
         darkTheme
     ) {
-
         val childStack by root.childStack.subscribeAsState()
 
         Children(

@@ -19,7 +19,7 @@ interface SettingFunctions {
     suspend fun getUser(): UserData
     suspend fun getOnboardingBoolean(): Boolean
     suspend fun changeOnboardingBoolean()
-    suspend fun saveToken()
+    suspend fun saveToken(token: String)
     suspend fun getToken(): String?
 
 }
