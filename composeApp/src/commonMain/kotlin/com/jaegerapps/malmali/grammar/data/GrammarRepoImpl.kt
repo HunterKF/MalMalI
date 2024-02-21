@@ -1,9 +1,10 @@
 package com.jaegerapps.malmali.grammar.data
 
-import com.jaegerapps.malmali.grammar.domain.GrammarLevel
 import com.jaegerapps.malmali.grammar.domain.GrammarRepo
-import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarLevels
-import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarPoint
+import com.jaegerapps.malmali.grammar.mapper.toGrammarLevels
+import com.jaegerapps.malmali.grammar.mapper.toGrammarPoint
+import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.grammar.models.GrammarPointDTO
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 

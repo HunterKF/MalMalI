@@ -43,8 +43,8 @@ import com.jaegerapps.malmali.grammar.presentation.components.GrammarContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarLevelContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarListContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarPointContainer
-import com.jaegerapps.malmali.grammar.domain.GrammarLevel
-import com.jaegerapps.malmali.grammar.domain.GrammarPoint
+import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.grammar.models.GrammarPoint
 import com.jaegerapps.malmali.home.components.CardButton
 import com.jaegerapps.malmali.home.components.LevelBar
 import com.jaegerapps.malmali.home.components.UserIcon

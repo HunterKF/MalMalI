@@ -2,6 +2,7 @@ package com.jaegerapps.malmali.login.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.login.domain.SignInRepo
+import core.data.SupabaseClient
 import core.util.Resource
 import io.github.jan.supabase.exceptions.BadRequestRestException
 import io.github.jan.supabase.exceptions.NotFoundRestException
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 class SignInComponent(
     componentContext: ComponentContext,
     private val signIn: SignInRepo,
-    private val saveToken: suspend (String) -> Unit,
+    private val saveToken: suspend () -> Unit,
     private val createUserOnDb: suspend () -> Unit,
     private val onNavigate: () -> Unit,
 ) : ComponentContext by componentContext {
@@ -51,25 +52,26 @@ class SignInComponent(
 
                 try {
                     //TODO - The issue with using this is I can't test it later. No way to separate the client OUT of the component. 어떡하지 어떡하지 ㅊㅊㅊ
-                    val client = core.data.SupabaseClient.client.auth
-                    //Here we save the access token to the settings.
-                    val token = client.currentSessionOrNull()?.accessToken
+
                     //next we are going to create a user on the supabase db
                     //Need the email so we can do some policy filtering later, hence why we are adding it now.
                     val job = scope.launch {
-                        token?.let{
-                            saveToken(it)
-                        }
-                        async { createUserOnDb() }.await()
+                        async {
+                            createUserOnDb()
+                            saveToken()
+                        }.await()
+                        println("Async function happening")
+
                     }
                     job.invokeOnCompletion { throwable ->
+                        println("Job has been invoked!")
                         if (throwable == null) {
                             _state.update {
                                 it.copy(
-                                    isLoading = false
+                                    isLoading = false,
+                                    loginSuccess = true
                                 )
                             }
-                            onNavigate()
                         } else {
                             _state.update {
                                 it.copy(
@@ -86,8 +88,6 @@ class SignInComponent(
                         )
                     }
                 }
-
-
 
 
             }
@@ -121,7 +121,11 @@ class SignInComponent(
                             }
 
                             is Resource.Success -> {
-                                onNavigate()
+                               _state.update {
+                                   it.copy(
+                                       loginSuccess = true
+                                   )
+                               }
                             }
                         }
 
@@ -149,10 +153,10 @@ class SignInComponent(
                             is Resource.Success -> {
                                 _state.update {
                                     it.copy(
-                                        isLoading = false
+                                        isLoading = false,
+                                        loginSuccess = true
                                     )
                                 }
-                                onNavigate()
                             }
                         }
                     } catch (e: RestException) {
@@ -197,8 +201,13 @@ class SignInComponent(
                     )
                 }
             }
+
+            SignInUiEvent.LoginSuccess -> {
+                onNavigate()
+            }
         }
     }
+
     private fun isValidEmail(email: String): Boolean {
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$"
 

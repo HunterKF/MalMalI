@@ -3,6 +3,7 @@ package com.jaegerapps.malmali.components.models
 import com.jaegerapps.malmali.MR
 import dev.icerock.moko.resources.ImageResource
 
+
 sealed class IconResource(
     val resource: ImageResource,
     val tag: String,

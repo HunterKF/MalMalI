@@ -6,15 +6,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.ui.platform.LocalContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.retainedComponent
-import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
 import com.jaegerapps.malmali.di.AppModule
-import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
-import com.russhwolf.settings.Settings
-import com.russhwolf.settings.SharedPreferencesSettings
-import core.data.DatabaseDriverFactory
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalDecomposeApi::class)
@@ -26,11 +20,11 @@ class MainActivity : ComponentActivity() {
             context = applicationContext,
             sharedPreferences = sharedPreference
         )
+
         val root = retainedComponent { componentContext ->
             RootComponent(componentContext, appModule = appModule)
         }
         setContent {
-
             App(darkTheme = isSystemInDarkTheme(), root)
         }
     }

@@ -17,8 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.components.ActionButton
-import com.jaegerapps.malmali.grammar.domain.GrammarLevel
-import com.jaegerapps.malmali.grammar.domain.GrammarPoint
+import com.jaegerapps.malmali.grammar.models.GrammarLevel
 
 @Composable
 fun GrammarContainer(

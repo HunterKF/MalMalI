@@ -1,6 +1,6 @@
 package com.jaegerapps.malmali.grammar.presentation
 
-import com.jaegerapps.malmali.grammar.domain.GrammarLevel
+import com.jaegerapps.malmali.grammar.models.GrammarLevel
 
 data class GrammarUiState(
     val levels: List<GrammarLevel> = emptyList(),

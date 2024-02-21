@@ -1,8 +1,8 @@
 package com.jaegerapps.malmali.vocabulary
 
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.grammar.domain.GrammarLevel
-import com.jaegerapps.malmali.grammar.domain.GrammarPoint
+import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.grammar.models.GrammarPoint
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
 import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
 import com.jaegerapps.malmali.vocabulary.domain.VocabSet

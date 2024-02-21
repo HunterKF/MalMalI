@@ -47,13 +47,13 @@ import io.github.jan.supabase.compose.auth.composeAuth
 fun SignInScreen(
     component: SignInComponent,
 ) {
-    val state = component.state.collectAsState()
+    val state by component.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var string: StringResource? by remember { mutableStateOf(null) }
     val errorString: MutableState<String?> = mutableStateOf(string?.let { stringResource(it) })
-    LaunchedEffect(key1 = state.value.error, key2 = errorString) {
-        string = when (state.value.error) {
+    LaunchedEffect(key1 = state.error, key2 = errorString) {
+        string = when (state.error) {
             SignInError.PASSWORD_NOT_SAME -> MR.strings.sign_in_error_password_incorrect
             SignInError.EMAIL_VALIDATION -> MR.strings.sign_in_error_email_validation
             SignInError.EMAIL_BLANK -> MR.strings.sign_in_error_email_blank
@@ -66,9 +66,16 @@ fun SignInScreen(
             SignInError.EMAIL_NOT_FOUND -> MR.strings.sign_in_error_email_not_found
             null -> null
         }
+
         errorString.value?.let {
-            snackbarHostState.showSnackbar(it)
+            snackbarHostState.showSnackbar(message = it)
             component.onEvent(SignInUiEvent.ClearError)
+        }
+    }
+
+    LaunchedEffect(state.loginSuccess) {
+        if (state.loginSuccess) {
+            component.onEvent(SignInUiEvent.LoginSuccess)
         }
     }
 
@@ -88,10 +95,10 @@ fun SignInScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                when (state.value.mode) {
+                when (state.mode) {
                     SignInMode.SIGN_IN -> SignInContent(
-                        email = state.value.email,
-                        password = state.value.password,
+                        email = state.email,
+                        password = state.password,
                         passwordVisible = passwordVisible,
                         onUiEvent = { component.onEvent(it) }
                     ) {
@@ -100,9 +107,9 @@ fun SignInScreen(
 
                     SignInMode.ACCOUNT_CREATE -> {
                         CreateAccountContent(
-                            email = state.value.email,
-                            password = state.value.password,
-                            retypePassword = state.value.retypePassword,
+                            email = state.email,
+                            password = state.password,
+                            retypePassword = state.retypePassword,
                             passwordVisible = passwordVisible,
                             onUiEvent = { component.onEvent(it) }
 
@@ -117,7 +124,7 @@ fun SignInScreen(
                 component.onEvent(SignInUiEvent.ToggleMode)
             }) {
                 Text(
-                    text = if (state.value.mode == SignInMode.SIGN_IN) stringResource(MR.strings.create_account_already_have) else stringResource(
+                    text = if (state.mode == SignInMode.SIGN_IN) stringResource(MR.strings.create_account_already_have) else stringResource(
                         MR.strings.create_account_dont_have
                     )
                 )

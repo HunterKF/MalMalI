@@ -3,6 +3,8 @@ package com.jaegerapps.malmali.di
 import VocabularySetSourceFunctions
 import android.content.Context
 import android.content.SharedPreferences
+import com.jaegerapps.malmali.chat.data.ChatRepoImpl
+import com.jaegerapps.malmali.chat.domain.ChatRepo
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
 import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
 import com.jaegerapps.malmali.grammar.domain.GrammarRepo
@@ -53,6 +55,12 @@ actual class AppModule(
     }
     actual override val supabaseSignInFunctions: SupabaseSignInFunctions by lazy {
         SupabaseSignInFunctionsImpl(
+            client = client
+        )
+    }
+
+    actual override val chatFunctions: ChatRepo by lazy {
+        ChatRepoImpl(
             client = client
         )
     }

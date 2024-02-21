@@ -1,7 +1,7 @@
 package com.jaegerapps.malmali.grammar.presentation
 
-import com.jaegerapps.malmali.grammar.domain.GrammarLevel
-import com.jaegerapps.malmali.grammar.domain.GrammarPoint
+import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.grammar.models.GrammarPoint
 
 sealed interface GrammarUiEvent {
     data class ToggleLevelExpansion(val toggleLevel: () -> Unit): GrammarUiEvent

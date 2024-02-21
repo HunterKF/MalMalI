@@ -9,7 +9,9 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popTo
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
+import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.arkivanov.essenty.lifecycle.doOnResume
+import com.jaegerapps.malmali.chat.presentation.ChatHomeComponent
 import com.jaegerapps.malmali.components.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
 import com.jaegerapps.malmali.grammar.GrammarScreenComponent
@@ -53,14 +55,17 @@ class RootComponent(
     )
 
     init {
-        lifecycle.doOnResume {
+        lifecycle.doOnCreate {
             scope.launch {
                 val result = async { appModule.userFunctions.retrieveAccessToken() }.await()
                 when {
                     appModule.settingFunctions.getOnboardingBoolean() -> {
+                        println("1. get on boarding is true")
+
                         navigation.replaceAll(Configuration.IntroScreen)
                     }
                     appModule.settingFunctions.getToken() != null -> {
+                        println("2. Token is null!")
                         if (result != null) {
                             withContext(Dispatchers.Main) {
                                 _state.update {
@@ -80,6 +85,8 @@ class RootComponent(
                                         loggedIn = false
                                     )
                                 }
+                                println("Result is also null!!")
+
                                 navigation.replaceAll(Configuration.SignInScreen)
                             }
 
@@ -88,12 +95,16 @@ class RootComponent(
                     }
 
                     appModule.settingFunctions.getToken() == null -> {
+                        println("3. appModule get token return null!")
+
                         _state.update {
                             it.copy(
                                 user = null,
                                 loggedIn = false
                             )
                         }
+                        println("appModule get token return null!")
+
                         navigation.replaceAll(Configuration.SignInScreen)
                     }
                 }
@@ -238,7 +249,10 @@ class RootComponent(
                     SignInComponent(
                         componentContext = context,
                         saveToken = {
-                            appModule.settingFunctions.saveToken(it)
+                            val token = appModule.userFunctions.retrieveAccessToken()
+                            token?.let {
+                                appModule.settingFunctions.saveToken(it)
+                            }
                         },
                         createUserOnDb = {
                             appModule.signInRepo.createUserWithGmailExternally()
@@ -279,6 +293,18 @@ class RootComponent(
                     LoadingComponent(componentContext = context)
                 )
             }
+
+            Configuration.ChatHomeScreen -> {
+                Child.ChatHomeScreen(
+                    ChatHomeComponent(
+                        onModalNavigate = { route ->
+                            modalNavigate(route)
+                        },
+                        chatRepo = appModule.chatFunctions,
+                        componentContext = context
+                    )
+                )
+            }
         }
     }
 
@@ -293,6 +319,7 @@ class RootComponent(
         data class PersonalizationScreen(val component: PersonalizationComponent) : Child()
         data class CompletionScreen(val component: CompletionComponent) : Child()
         data class LoadingScreen(val component: LoadingComponent) : Child()
+        data class ChatHomeScreen(val component: ChatHomeComponent) : Child()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -301,6 +328,7 @@ class RootComponent(
             Routes.HOME -> navigation.popTo(0)
             Routes.VOCABULARY -> navigation.pushNew(Configuration.FlashcardHomeScreen(appModule.vocabFunctions))
             Routes.GRAMMAR -> navigation.pushNew(Configuration.GrammarScreen)
+            Routes.CHAT -> navigation.pushNew(Configuration.ChatHomeScreen)
             else -> {
                 navigation.popTo(0)
             }
@@ -356,6 +384,8 @@ class RootComponent(
 
         @Serializable
         data object CompletionScreen : Configuration()
+        @Serializable
+        data object ChatHomeScreen : Configuration()
     }
 }
 

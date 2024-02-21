@@ -1,6 +1,7 @@
 package com.jaegerapps.malmali.di
 
 import VocabularySetSourceFunctions
+import com.jaegerapps.malmali.chat.domain.ChatRepo
 import com.jaegerapps.malmali.grammar.domain.GrammarRepo
 import com.jaegerapps.malmali.login.domain.SignInRepo
 import core.domain.SettingFunctions
@@ -22,6 +23,8 @@ expect class AppModule: AppModuleInterface {
     override  val userFunctions: SupabaseUserFunctions
     //Sign In Functions
     override  val supabaseSignInFunctions: SupabaseSignInFunctions
+    //Chat functions
+    override  val chatFunctions: ChatRepo
 }
 
 interface AppModuleInterface {
@@ -37,4 +40,7 @@ interface AppModuleInterface {
     val userFunctions: SupabaseUserFunctions
     //Sign In Functions
     val supabaseSignInFunctions: SupabaseSignInFunctions
+    //Chat functions
+    val chatFunctions: ChatRepo
+
 }

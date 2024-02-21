@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.grammar.data
+package com.jaegerapps.malmali.grammar.models
 
 import kotlinx.serialization.Serializable
 

@@ -124,11 +124,9 @@ class SupabaseUserFunctionsImpl(private val client: SupabaseClient) : SupabaseUs
     }
 
     override suspend fun retrieveAccessToken(): String? {
-        println("Why is this returning null?! ${client.auth.currentAccessTokenOrNull()}")
         return try {
             client.auth.sessionManager.loadSession()?.accessToken
         } catch (e: Exception) {
-            println("Error from retrieve access token: ${e.message}")
             null
         }
     }
