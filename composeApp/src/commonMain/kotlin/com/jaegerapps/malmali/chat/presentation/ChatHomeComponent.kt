@@ -27,6 +27,7 @@ class ChatHomeComponent(
             scope.launch {
                 when (val result = chatRepo.getTopics()) {
                     is Resource.Error -> {
+                        println("Error occurred in chat: ${result.throwable}")
                         withContext(Dispatchers.Main) {
                             result.throwable?.let { throwable ->
                                 _state.update {
@@ -35,7 +36,6 @@ class ChatHomeComponent(
                                     )
                                 }
                             }
-
                         }
                     }
 

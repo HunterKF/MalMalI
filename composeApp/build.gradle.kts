@@ -70,28 +70,32 @@ kotlin {
                 implementation("io.github.jan-tennert.supabase:compose-auth:2.0.4")
                 implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:$dateTimeVersion")
-                implementation(libs.ktor.client.core)
-                implementation(libs.ktor.ktor.client.content.negotiation)
-                implementation(libs.ktor.ktor.serialization.kotlinx.json)
-                implementation(libs.sql.coroutines.extensions)
+//                implementation("io.ktor:ktor-client-core:$ktorVersion")
+//                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+//                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-                implementation("com.russhwolf:multiplatform-settings:1.1.1")
-                implementation("com.russhwolf:multiplatform-settings-no-arg:1.1.1")
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.ktor.auth)
+
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.kotlinx.coroutines.core)
+
+                implementation(libs.sql.coroutines.extensions)
+                implementation(libs.multiplatform.settings)
+                implementation(libs.multiplatform.settings.no.arg)
 
                 implementation(libs.decompose)
                 implementation(libs.decompose.jetbrains)
-                implementation(libs.kotlinx.serialization.json)
             }
         }
 
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
-                implementation(libs.ktor.ktor.client.mock)
+                implementation(libs.ktor.client.mock)
                 implementation(libs.turbine)
                 implementation(libs.multiplatform.settings.test)
                 implementation(libs.mockative)
@@ -101,13 +105,13 @@ kotlin {
             dependsOn(commonMain)
 
             dependencies {
-                implementation("io.ktor:ktor-client-android:$ktorVersion")
+//                implementation("io.ktor:ktor-client-android:$ktorVersion")
                 implementation(libs.sql.android.driver)
-//                implementation ("app.cash.sqldelight:android-driver:2.0.1")
                 implementation("androidx.appcompat:appcompat:1.6.1")
                 implementation("androidx.activity:activity-compose:1.7.2")
                 implementation(libs.decompose)
-//                implementation(libs.ktor.ktor.client.android)
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.ktor.client.android)
             }
         }
         val androidUnitTest by getting
@@ -124,8 +128,8 @@ kotlin {
             dependsOn(commonMain)
             dependencies {
                 implementation(libs.sql.native.driver)
-//                implementation ("app.cash.sqldelight:native-driver:2.0.1")
-                implementation(libs.ktor.ktor.client.ios)
+                implementation(libs.ktor.client.ios)
+                implementation(libs.ktor.client.darwin)
             }
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)

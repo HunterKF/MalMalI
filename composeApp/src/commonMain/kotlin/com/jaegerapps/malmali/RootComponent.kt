@@ -3,6 +3,9 @@ package com.jaegerapps.malmali
 import VocabularySetSourceFunctions
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.scale
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
@@ -44,6 +47,7 @@ class RootComponent(
     private val navigation = StackNavigation<Configuration>()
     private val scope = CoroutineScope(Dispatchers.IO)
 
+
     private val _state = MutableStateFlow(RootState())
     val state = _state
     val childStack = childStack(
@@ -56,6 +60,7 @@ class RootComponent(
 
     init {
         lifecycle.doOnCreate {
+
             scope.launch {
                 val result = async { appModule.userFunctions.retrieveAccessToken() }.await()
                 when {
@@ -67,6 +72,8 @@ class RootComponent(
                     appModule.settingFunctions.getToken() != null -> {
                         println("2. Token is null!")
                         if (result != null) {
+                            println("2. Result is not null!")
+
                             withContext(Dispatchers.Main) {
                                 _state.update {
                                     it.copy(
@@ -249,13 +256,27 @@ class RootComponent(
                     SignInComponent(
                         componentContext = context,
                         saveToken = {
-                            val token = appModule.userFunctions.retrieveAccessToken()
-                            token?.let {
-                                appModule.settingFunctions.saveToken(it)
+                            scope.launch {
+                                val token = async { appModule.userFunctions.retrieveAccessToken() }.await()
+                                token?.let {
+                                    appModule.settingFunctions.saveToken(it)
+                                }
                             }
+
                         },
                         createUserOnDb = {
-                            appModule.signInRepo.createUserWithGmailExternally()
+                            try {
+                                appModule.signInRepo.createUserWithGmailExternally()
+                                _state.update {
+                                    it.copy(
+                                        user = appModule.settingFunctions.getUser(),
+                                        loggedIn = true
+                                    )
+                                }
+                            } catch(e: Exception) {
+                                println("An error occurred! ㅠㅠ")
+                            }
+
                         },
                         onNavigate = {
                             navigation.pushNew(Configuration.PersonalizationScreen)

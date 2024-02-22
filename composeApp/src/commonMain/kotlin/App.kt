@@ -3,6 +3,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
@@ -29,7 +30,9 @@ fun App(
     val appState by root.state.collectAsState()
     LaunchedEffect(appState.loggedIn) {
         /*TODO - This won't work...*/
-        root.onLogout()
+        if (!appState.loggedIn) {
+//            root.onLogout()
+        }
     }
     MalMalITheme(
         darkTheme
@@ -38,7 +41,7 @@ fun App(
 
         Children(
             stack = childStack,
-            animation = stackAnimation(slide())
+            animation = stackAnimation(fade())
         ) { child ->
             when (val instance = child.instance) {
                 is RootComponent.Child.CreateSetScreen -> CreateSetScreen(component = instance.component)

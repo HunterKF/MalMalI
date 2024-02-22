@@ -13,9 +13,10 @@ androidx-test-junit = "1.1.5"
 compose = "1.5.4"
 compose-compiler = "1.5.6"
 compose-plugin = "1.5.11"
+dateTimeVersion = "0.4.1"
 junit = "4.13.2"
 kotlin = "1.9.21"
-ktorClientCore = "2.3.5"
+ktorClientCore = "2.3.7"
 mockative = "2.0.1"
 multiplatformSettingsTest = "1.1.1"
 sqlVersion = "2.0.1"
@@ -23,6 +24,7 @@ decompose = "2.2.0-alpha03"
 kotlinxSerializationJson = "1.6.1"
 extensionsComposeJetbrains = "2.1.4-compose-experimental"
 turbine = "0.7.0"
+coroutines = "1.7.3"
 
 
 
@@ -45,19 +47,34 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
-ktor-ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientCore" }
-ktor-ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientCore" }
-ktor-ktor-client-ios = { module = "io.ktor:ktor-client-ios", version.ref = "ktorClientCore" }
-ktor-ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorClientCore" }
-ktor-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCore" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientCore" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientCore" }
+ktor-auth = { module = " io.ktor:ktor-client-auth", version.ref = "ktorClientCore" }
+ktor-client-ios = { module = "io.ktor:ktor-client-ios", version.ref = "ktorClientCore" }
+ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorClientCore" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCore" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientCore" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorClientCore" }
+
+
 mockative = { module = "io.mockative:mockative", version.ref = "mockative" }
+
+multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettingsTest" }
+multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettingsTest" }
 multiplatform-settings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettingsTest" }
+
 sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlVersion" }
 sql-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlVersion" }
 sql-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlVersion" }
 sql-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlVersion" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTimeVersion" }
+
+
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 
