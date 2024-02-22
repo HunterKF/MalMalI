@@ -11,7 +11,6 @@ class FakeSignInImpl(): SignInRepo {
     private val userDataMutableState = mutableStateOf(
         UserData(
             nickname = "",
-            email = "",
             experience = 0,
             currentLevel = 1,
             icon = IconResource.resourceFromTag("bear 1"),
@@ -26,12 +25,8 @@ class FakeSignInImpl(): SignInRepo {
         }
     }
 
-    override suspend fun createUserWithGmailExternally(userId: String): Resource<UserData> {
-        return if (error.value == null) {
-            Resource.Success(userDataMutableState.value)
-        } else {
-            Resource.Error(error.value!!)
-        }
+    override suspend fun createUserWithGmailExternally(): Resource<UserData> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun createUserWithEmailExternally(

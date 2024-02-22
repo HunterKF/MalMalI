@@ -16,8 +16,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val sharedPreference = getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE)
 
-        println("sharedPreference.all")
-        println(sharedPreference.all)
         val appModule = AppModule(
             context = applicationContext,
             sharedPreferences = sharedPreference

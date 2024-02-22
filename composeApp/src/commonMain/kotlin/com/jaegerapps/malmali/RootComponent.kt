@@ -14,6 +14,7 @@ import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.arkivanov.essenty.lifecycle.doOnResume
+import com.jaegerapps.malmali.chat.models.TopicPromptDTO
 import com.jaegerapps.malmali.chat.presentation.ChatHomeComponent
 import com.jaegerapps.malmali.components.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
@@ -65,22 +66,21 @@ class RootComponent(
                 val result = async { appModule.userFunctions.retrieveAccessToken() }.await()
                 when {
                     appModule.settingFunctions.getOnboardingBoolean() -> {
-                        println("1. get on boarding is true")
 
                         navigation.replaceAll(Configuration.IntroScreen)
                     }
                     appModule.settingFunctions.getToken() != null -> {
-                        println("2. Token is null!")
                         if (result != null) {
-                            println("2. Result is not null!")
-
+                            val user =  appModule.settingFunctions.getUser()
                             withContext(Dispatchers.Main) {
                                 _state.update {
                                     it.copy(
-                                        user = appModule.settingFunctions.getUser(),
+                                        user = user,
                                         loggedIn = true
                                     )
                                 }
+                                val testing = appModule.chatGptApi.initiateConversation(TopicPromptDTO(id = 0, topic_title = "", topic_background = ""), user.nickname)
+
                                 navigation.replaceAll(Configuration.HomeScreen)
 
                             }
@@ -92,7 +92,6 @@ class RootComponent(
                                         loggedIn = false
                                     )
                                 }
-                                println("Result is also null!!")
 
                                 navigation.replaceAll(Configuration.SignInScreen)
                             }
@@ -102,16 +101,12 @@ class RootComponent(
                     }
 
                     appModule.settingFunctions.getToken() == null -> {
-                        println("3. appModule get token return null!")
-
                         _state.update {
                             it.copy(
                                 user = null,
                                 loggedIn = false
                             )
                         }
-                        println("appModule get token return null!")
-
                         navigation.replaceAll(Configuration.SignInScreen)
                     }
                 }

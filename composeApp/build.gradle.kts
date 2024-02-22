@@ -1,5 +1,4 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import java.util.Properties
 
 buildscript {
@@ -69,15 +68,12 @@ kotlin {
                 implementation("io.github.jan-tennert.supabase:postgrest-kt")
                 implementation("io.github.jan-tennert.supabase:compose-auth:2.0.4")
                 implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.4")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-//                implementation("io.ktor:ktor-client-core:$ktorVersion")
-//                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-//                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json)
-                implementation(libs.ktor.auth)
+//                implementation(libs.ktor.auth)
+                implementation(libs.ktor.logging)
 
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.datetime)
@@ -105,13 +101,14 @@ kotlin {
             dependsOn(commonMain)
 
             dependencies {
-//                implementation("io.ktor:ktor-client-android:$ktorVersion")
                 implementation(libs.sql.android.driver)
-                implementation("androidx.appcompat:appcompat:1.6.1")
-                implementation("androidx.activity:activity-compose:1.7.2")
+                implementation(libs.androidx.appcompat)
+                implementation(libs.androidx.activity.compose)
                 implementation(libs.decompose)
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.ktor.client.android)
+
+                implementation(libs.kotlinx.coroutines.android)
             }
         }
         val androidUnitTest by getting
@@ -224,8 +221,11 @@ buildkonfig {
                 localProperties.load(it)
             }
         }
-        val apiKey = localProperties.getProperty("API_KEY") ?: "default_value"
+        val supabaseApiKey = localProperties.getProperty("API_KEY") ?: "default_value"
         buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
-            "API_KEY", apiKey)
+            "API_KEY", supabaseApiKey)
+        val gptApiKey = localProperties.getProperty("GPT_API_KEY") ?: "default_value"
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            "GPT_API_KEY", gptApiKey)
     }
 }

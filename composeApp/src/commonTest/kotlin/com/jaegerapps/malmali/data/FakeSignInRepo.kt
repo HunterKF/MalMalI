@@ -9,9 +9,10 @@ class FakeSignInRepo: SignInRepo {
         TODO("Not yet implemented")
     }
 
-    override suspend fun createUserWithGmailExternally(userId: String): Resource<UserData> {
+    override suspend fun createUserWithGmailExternally(): Resource<UserData> {
         TODO("Not yet implemented")
     }
+
 
     override suspend fun createUserWithEmailExternally(
         email: String,

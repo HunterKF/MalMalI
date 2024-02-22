@@ -12,9 +12,6 @@ class FakeSupabaseUserFunctions: SupabaseUserFunctions {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateUserEmail(email: String) {
-        TODO("Not yet implemented")
-    }
 
     override suspend fun updateUserId(id: String) {
         TODO("Not yet implemented")

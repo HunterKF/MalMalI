@@ -1,17 +1,10 @@
 package core.data
 
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.auth.Auth
-import io.ktor.client.plugins.auth.providers.BearerTokens
-import io.ktor.client.plugins.auth.providers.bearer
+import io.ktor.client.plugins.logging.Logging
 
 object KtorClient {
-    /*val client = HttpClient(Android) {
-        install(Loggi)
-        install(Auth) {
-            bearer {
-                BearerTokens("", "")
-            }
-        }
-    }*/
+    val client = HttpClient() {
+        install(Logging)
+    }
 }

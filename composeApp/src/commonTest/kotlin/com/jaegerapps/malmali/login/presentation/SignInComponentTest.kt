@@ -62,6 +62,12 @@ class SignInComponentTest {
             onNavigate = {
 
             },
+            createUserOnDb = {
+
+            },
+            saveToken = {
+
+            }
         )
 
 

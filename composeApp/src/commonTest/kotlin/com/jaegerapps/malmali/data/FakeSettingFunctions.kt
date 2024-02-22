@@ -10,7 +10,6 @@ class FakeSettingFunctions : SettingFunctions {
     private var userState = mutableStateOf(
         UserData(
             nickname = "",
-            email = "",
             experience = 1,
             currentLevel = 1,
             icon = IconResource.resourceFromTag("bear 1")
@@ -29,7 +28,6 @@ class FakeSettingFunctions : SettingFunctions {
 
     override suspend fun updateUserEmail(email: String) {
         userState.value = userState.value.copy(
-            email = email
         )
     }
 
@@ -82,19 +80,26 @@ class FakeSettingFunctions : SettingFunctions {
 
     override suspend fun createUser(email: String, id: String) {
         userState.value = userState.value.copy(
-            email = email,
         )
     }
 
-    override fun getUser(): UserData {
-        return userState.value
+    override suspend fun getUser(): UserData {
+        TODO("Not yet implemented")
     }
 
-    override fun getOnboardingBoolean(): Boolean {
-        return onboardingState.value
+    override suspend fun getOnboardingBoolean(): Boolean {
+        TODO("Not yet implemented")
     }
 
     override suspend fun changeOnboardingBoolean() {
         onboardingState.value = !onboardingState.value
+    }
+
+    override suspend fun saveToken(token: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getToken(): String? {
+        TODO("Not yet implemented")
     }
 }

@@ -3,11 +3,7 @@ package core.data.settings
 import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.login.domain.UserData
 import com.russhwolf.settings.Settings
-import com.russhwolf.settings.get
-import com.russhwolf.settings.nullableString
-import core.data.SupabaseClient
 import core.domain.SettingFunctions
-import io.github.jan.supabase.gotrue.auth
 
 class SettingFunctionsImpl(
     private val settings: Settings,
@@ -49,8 +45,8 @@ class SettingFunctionsImpl(
         settings.putInt(SettingKeys.CURRENT_LEVEL, currentLevel)
     }
 
-    override suspend fun updateUserIcon(iconTag: String) {
-        settings.putString(SettingKeys.ICON, iconTag)
+    override suspend fun updateUserIcon(icon: String) {
+        settings.putString(SettingKeys.ICON, icon)
     }
 
     override suspend fun updateUserAchievements(achievements: List<String>) {

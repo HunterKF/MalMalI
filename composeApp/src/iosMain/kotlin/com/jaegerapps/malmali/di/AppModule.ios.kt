@@ -12,10 +12,13 @@ import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.Settings
 import core.data.DatabaseDriverFactory
+import core.data.KtorClient
 import core.data.SupabaseClient
 import core.data.SupabaseSignInFunctionsImpl
 import core.data.SupabaseUserFunctionsImpl
+import core.data.gpt.ChatGptApiImpl
 import core.data.settings.SettingFunctionsImpl
+import core.domain.ChatGptApi
 import core.domain.SettingFunctions
 import core.domain.SupabaseSignInFunctions
 import core.domain.SupabaseUserFunctions
@@ -23,12 +26,14 @@ import platform.Foundation.NSUserDefaults
 
 actual class AppModule: AppModuleInterface {
 
-    val client = SupabaseClient.client
+    private val supabaseClient = SupabaseClient.client
+    private val okHttpClient = KtorClient.client
+
     private val delegate = NSUserDefaults()
     private val settings: Settings = NSUserDefaultsSettings(delegate)
     actual override val grammarRepo: GrammarRepo by lazy {
         GrammarRepoImpl(
-            client = client
+            client = supabaseClient
         )
     }
     actual override val signInRepo: SignInRepo by lazy {
@@ -51,17 +56,22 @@ actual class AppModule: AppModuleInterface {
     }
     actual override val userFunctions: SupabaseUserFunctions by lazy {
         SupabaseUserFunctionsImpl(
-            client = client
+            client = supabaseClient
         )
     }
     actual override val supabaseSignInFunctions: SupabaseSignInFunctions by lazy {
         SupabaseSignInFunctionsImpl(
-            client = client
+            client = supabaseClient
         )
     }
     actual override val chatFunctions: ChatRepo by lazy {
         ChatRepoImpl(
-            client = client
+            client = supabaseClient
+        )
+    }
+    actual override val chatGptApi: ChatGptApi by lazy {
+        ChatGptApiImpl(
+            client = okHttpClient
         )
     }
 }

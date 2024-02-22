@@ -49,7 +49,8 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientCore" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientCore" }
-ktor-auth = { module = " io.ktor:ktor-client-auth", version.ref = "ktorClientCore" }
+ktor-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorClientCore" }
+ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientCore" }
 ktor-client-ios = { module = "io.ktor:ktor-client-ios", version.ref = "ktorClientCore" }
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorClientCore" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCore" }
