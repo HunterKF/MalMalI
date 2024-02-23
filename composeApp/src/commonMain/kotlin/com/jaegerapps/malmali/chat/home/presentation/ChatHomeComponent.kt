@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.chat.presentation
+package com.jaegerapps.malmali.chat.home.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnCreate

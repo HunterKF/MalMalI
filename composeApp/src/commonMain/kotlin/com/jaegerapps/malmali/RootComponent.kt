@@ -15,7 +15,7 @@ import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.jaegerapps.malmali.chat.models.TopicPromptDTO
-import com.jaegerapps.malmali.chat.presentation.ChatHomeComponent
+import com.jaegerapps.malmali.chat.home.presentation.ChatHomeComponent
 import com.jaegerapps.malmali.components.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
 import com.jaegerapps.malmali.grammar.GrammarScreenComponent

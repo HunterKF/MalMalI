@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.chat.presentation
+package com.jaegerapps.malmali.chat.home.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

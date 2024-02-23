@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.chat.presentation
+package com.jaegerapps.malmali.chat.home.presentation
 
 import com.jaegerapps.malmali.chat.models.UiTopicPrompt
 

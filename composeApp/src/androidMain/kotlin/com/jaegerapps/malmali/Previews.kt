@@ -2,6 +2,7 @@ package com.jaegerapps.malmali
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -32,6 +34,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatBubble
+import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatPopUpAlert
+import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatTextField
 import com.jaegerapps.malmali.components.ActionButton
 import com.jaegerapps.malmali.components.TopBarLogo
 import com.jaegerapps.malmali.components.CustomTextFieldWithBlackBorder
@@ -62,6 +67,8 @@ import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
 import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
 import com.jaegerapps.malmali.vocabulary.study_flashcards.components.VocabularyButtons
 import com.jaegerapps.malmali.vocabulary.study_flashcards.components.VocabularyContainer
+import core.Knower
+import core.Knower.d
 import core.presentation.MalMalITheme
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
@@ -1072,6 +1079,169 @@ fun Preview_PagerIndicator() {
                 }
             )
 
+        }
+    }
+}
+
+@Preview
+@Composable
+fun Preview_ChatTextField() {
+    var text by remember {
+        mutableStateOf("")
+    }
+    MalMalITheme(false) {
+        Column(modifier = Modifier.fillMaxSize().padding(12.dp)) {
+            Spacer(Modifier.weight(1f))
+            ChatTextField(
+                text = text,
+                onValueChange = {
+                    text = it
+                },
+                micMode = false,
+                recording = false,
+                onFinish = {
+
+                }
+            )
+            Spacer(Modifier.weight(1f))
+
+        }
+    }
+}
+
+@Preview
+@Composable
+fun Preview_ChatBubble() {
+    var showOption by remember { mutableStateOf(false) }
+
+    MalMalITheme(false) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            ChatBubble(
+                text = "안녕하세요, 저는 말말이입니다!",
+                name = "말말이",
+                isUser = false,
+                showOptions = false,
+                onLongClick = {
+                    Knower.d("Preview Chat Bubble", "Hi from the preview!")
+                    showOption = true
+                }
+            ) {
+                if (showOption) {
+                    showOption = false
+                }
+            }
+            ChatBubble(
+                text = "안녕하세어, 저는 헌터입니다. 취미가 있어요?",
+                name = "Hunter",
+                isUser = true,
+                showOptions = false,
+                onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
+            ) {
+                if (showOption) {
+                    showOption = false
+                }
+            }
+            ChatBubble(
+                text = "저는 인공지능으로서 개인적인 취미를 가질 수 없습니다. 하지만 사용자들의 다양한 질문에 답하고, 정보를 제공하는 것을 '취미'라고 본다면, 그것이 제 '취미'라고 할 수 있겠네요. 사용자가 궁금해하는 것이나 관심사에 대해 어떻게 도움을 줄 수 있는지 알려주세요!!",
+                name = "말말이",
+                isUser = false,
+                showOptions = false,
+                onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
+            ) {
+                if (showOption) {
+                    showOption = false
+                }
+            }
+            ChatBubble(
+                text = "뭐지...?",
+                name = "Hunter",
+                isUser = true,
+                showOptions = false,
+                onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
+            ) {
+                if (showOption) {
+                    showOption = false
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun Preview_ChatPopUpAlert() {
+    var showOption by remember { mutableStateOf(false) }
+    MalMalITheme(false) {
+        Surface {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+
+            }
+            Column(
+                modifier = Modifier.fillMaxSize().padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                ChatPopUpAlert(
+                    onFavoriteClick = {},
+                    onShareClick = {},
+                    onInformationClick = {},
+                    onCopyClick = {}
+                )
+                ChatBubble(
+                    text = "안녕하세요, 저는 말말이입니다!",
+                    isUser = false,
+                    name = "말말이",
+                    onLongClick = {
+                        Knower.d("Preview Chat Bubble", "Hi from the preview!")
+                        showOption = true
+                    },
+                    onClick = {
+                        if (showOption) {
+                            showOption = false
+                        }
+                    },
+                    showOptions = showOption
+                )
+                ChatBubble(
+                    text = "안녕하세어, 저는 헌터입니다. 취미가 있어요?",
+                    name = "Hunter",
+                    isUser = true,
+                    showOptions = false,
+                    onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
+                ) {
+                    if (showOption) {
+                        showOption = false
+                    }
+                }
+                ChatBubble(
+                    text = "저는 인공지능으로서 개인적인 취미를 가질 수 없습니다. 하지만 사용자들의 다양한 질문에 답하고, 정보를 제공하는 것을 '취미'라고 본다면, 그것이 제 '취미'라고 할 수 있겠네요. 사용자가 궁금해하는 것이나 관심사에 대해 어떻게 도움을 줄 수 있는지 알려주세요!!",
+                    name = "말말이",
+                    isUser = false,
+                    showOptions = false,
+                    onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
+                ) {
+                    if (showOption) {
+                        showOption = false
+                    }
+                }
+                ChatBubble(
+                    text = "뭐지...?",
+                    name = "Hunter",
+                    isUser = true,
+                    showOptions = false,
+                    onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
+                ) {
+                    if (showOption) {
+                        showOption = false
+                    }
+                }
+
+            }
         }
     }
 }

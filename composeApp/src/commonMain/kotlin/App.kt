@@ -11,7 +11,7 @@ import com.jaegerapps.malmali.grammar.presentation.GrammarScreen
 import com.jaegerapps.malmali.home.HomeScreen
 import com.jaegerapps.malmali.login.presentation.SignInScreen
 import com.jaegerapps.malmali.RootComponent
-import com.jaegerapps.malmali.chat.presentation.ChatHomeScreen
+import com.jaegerapps.malmali.chat.home.presentation.ChatHomeScreen
 import com.jaegerapps.malmali.loading.LoadingScreen
 import com.jaegerapps.malmali.onboarding.completion.CompletionScreen
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
