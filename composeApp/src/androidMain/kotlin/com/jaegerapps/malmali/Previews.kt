@@ -34,9 +34,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jaegerapps.malmali.chat.conversation.presentation.ConversationScreen
+import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatAwaitAnimation
 import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatBubble
 import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatPopUpAlert
 import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatTextField
+import com.jaegerapps.malmali.chat.models.ConversationUi
 import com.jaegerapps.malmali.components.ActionButton
 import com.jaegerapps.malmali.components.TopBarLogo
 import com.jaegerapps.malmali.components.CustomTextFieldWithBlackBorder
@@ -1121,13 +1124,8 @@ fun Preview_ChatBubble() {
         ) {
             ChatBubble(
                 text = "안녕하세요, 저는 말말이입니다!",
-                name = "말말이",
                 isUser = false,
                 showOptions = false,
-                onLongClick = {
-                    Knower.d("Preview Chat Bubble", "Hi from the preview!")
-                    showOption = true
-                }
             ) {
                 if (showOption) {
                     showOption = false
@@ -1135,10 +1133,8 @@ fun Preview_ChatBubble() {
             }
             ChatBubble(
                 text = "안녕하세어, 저는 헌터입니다. 취미가 있어요?",
-                name = "Hunter",
                 isUser = true,
                 showOptions = false,
-                onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
             ) {
                 if (showOption) {
                     showOption = false
@@ -1146,10 +1142,8 @@ fun Preview_ChatBubble() {
             }
             ChatBubble(
                 text = "저는 인공지능으로서 개인적인 취미를 가질 수 없습니다. 하지만 사용자들의 다양한 질문에 답하고, 정보를 제공하는 것을 '취미'라고 본다면, 그것이 제 '취미'라고 할 수 있겠네요. 사용자가 궁금해하는 것이나 관심사에 대해 어떻게 도움을 줄 수 있는지 알려주세요!!",
-                name = "말말이",
                 isUser = false,
                 showOptions = false,
-                onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
             ) {
                 if (showOption) {
                     showOption = false
@@ -1157,10 +1151,8 @@ fun Preview_ChatBubble() {
             }
             ChatBubble(
                 text = "뭐지...?",
-                name = "Hunter",
                 isUser = true,
                 showOptions = false,
-                onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
             ) {
                 if (showOption) {
                     showOption = false
@@ -1195,11 +1187,6 @@ fun Preview_ChatPopUpAlert() {
                 ChatBubble(
                     text = "안녕하세요, 저는 말말이입니다!",
                     isUser = false,
-                    name = "말말이",
-                    onLongClick = {
-                        Knower.d("Preview Chat Bubble", "Hi from the preview!")
-                        showOption = true
-                    },
                     onClick = {
                         if (showOption) {
                             showOption = false
@@ -1209,10 +1196,8 @@ fun Preview_ChatPopUpAlert() {
                 )
                 ChatBubble(
                     text = "안녕하세어, 저는 헌터입니다. 취미가 있어요?",
-                    name = "Hunter",
                     isUser = true,
                     showOptions = false,
-                    onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
                 ) {
                     if (showOption) {
                         showOption = false
@@ -1220,10 +1205,8 @@ fun Preview_ChatPopUpAlert() {
                 }
                 ChatBubble(
                     text = "저는 인공지능으로서 개인적인 취미를 가질 수 없습니다. 하지만 사용자들의 다양한 질문에 답하고, 정보를 제공하는 것을 '취미'라고 본다면, 그것이 제 '취미'라고 할 수 있겠네요. 사용자가 궁금해하는 것이나 관심사에 대해 어떻게 도움을 줄 수 있는지 알려주세요!!",
-                    name = "말말이",
                     isUser = false,
                     showOptions = false,
-                    onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
                 ) {
                     if (showOption) {
                         showOption = false
@@ -1231,10 +1214,8 @@ fun Preview_ChatPopUpAlert() {
                 }
                 ChatBubble(
                     text = "뭐지...?",
-                    name = "Hunter",
                     isUser = true,
                     showOptions = false,
-                    onLongClick = { Knower.d("Preview Chat Bubble", "Hi from the preview!") }
                 ) {
                     if (showOption) {
                         showOption = false
@@ -1245,3 +1226,100 @@ fun Preview_ChatPopUpAlert() {
         }
     }
 }
+
+@Preview
+@Composable
+fun Preview_ChatAwaitAnimation() {
+    MalMalITheme(false) {
+        ChatAwaitAnimation()
+    }
+}
+
+/*
+@Preview
+@Composable
+fun Preview_ConversationScreen() {
+    val conversationList = listOf(
+        ConversationUi(
+            id = 1,
+            role = "User",
+            content = "Hi, I'm having trouble accessing my account.",
+            selected = false
+        ),
+        ConversationUi(
+            id = 2,
+            role = "Agent",
+            content = "Hello! I'd be happy to help you. Could you provide me with your account email, please?",
+            selected = false
+        ),
+        ConversationUi(
+            id = 3,
+            role = "User",
+            content = "Sure, it's user@example.com.",
+            selected = false
+        ),
+        ConversationUi(
+            id = 4,
+            role = "Agent",
+            content = "Thank you. One moment while I check your account details.",
+            selected = false
+        ),
+        ConversationUi(
+            id = 5,
+            role = "Agent",
+            content = "It looks like there's a temporary block on your account due to suspicious activity. I can help you resolve this.",
+            selected = true
+        ),
+        ConversationUi(
+            id = 6,
+            role = "User",
+            content = "Oh, I see. What do I need to do to remove the block?",
+            selected = false
+        ),
+        ConversationUi(
+            id = 7,
+            role = "Agent",
+            content = "You'll need to verify your identity with a photo ID. Can you upload a photo ID through our secure form?",
+            selected = false
+        ),
+        ConversationUi(
+            id = 8,
+            role = "User",
+            content = "Yes, I can do that. Where can I find the form?",
+            selected = false
+        ),
+        ConversationUi(
+            id = 9,
+            role = "Agent",
+            content = "I'm sending you the link to the form now. [Link to form]",
+            selected = false
+        ),
+        ConversationUi(
+            id = 10,
+            role = "User",
+            content = "I've submitted the form with my ID.",
+            selected = false
+        ),
+        ConversationUi(
+            id = 11,
+            role = "Agent",
+            content = "Great, your identity has been verified, and I've removed the block. You should be able to access your account now.",
+            selected = true
+        ),
+        ConversationUi(
+            id = 12,
+            role = "User",
+            content = "Thank you so much for your help!",
+            selected = false
+        ),
+        ConversationUi(
+            id = 13,
+            role = "Agent",
+            content = "You're welcome! If you have any more questions or need further assistance, feel free to contact us. Have a great day!",
+            selected = false
+        )
+    )
+    MalMalITheme(false) {
+        ConversationScreen(conversationList, isLoading = true)
+    }
+}*/

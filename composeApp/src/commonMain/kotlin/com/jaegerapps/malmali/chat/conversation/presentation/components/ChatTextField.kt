@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -51,11 +53,11 @@ fun ChatTextField(
     onValueChange: (String) -> Unit,
     micMode: Boolean,
     recording: Boolean,
-    onFinish: () -> Unit
+    onFinish: () -> Unit,
 ) {
 
     Box(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 25.dp)
+        modifier = modifier.fillMaxWidth().padding(horizontal = 25.dp).height(IntrinsicSize.Min)
     ) {
 
         Row(
@@ -63,7 +65,6 @@ fun ChatTextField(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val scrollState = rememberScrollState()
             BasicTextField(
                 modifier = Modifier.padding(12.dp)
                     .weight(1f),
@@ -74,21 +75,20 @@ fun ChatTextField(
                 singleLine = false,
                 maxLines = 3,
                 textStyle = TextStyle(fontSize = 16.sp, lineHeight = 18.sp),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-                keyboardActions = KeyboardActions(
-                    onSend = {
-                        onFinish()
-                    }
-                )
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
             )
-            Spacer(Modifier.width(20.dp))
+            Spacer(Modifier.width(48.dp))
 
         }
         Box(
-            modifier = Modifier.align(Alignment.TopEnd)
-                .offset(x = 18.dp, y = (-18).dp).size(40.dp).clip(CircleShape)
-                .background(MaterialTheme.colorScheme.outline).clickable {
-
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .fillMaxHeight()
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.outline)
+                .padding(horizontal = 12.dp)
+                .clickable {
+                    onFinish()
                 },
             contentAlignment = Alignment.Center
         ) {

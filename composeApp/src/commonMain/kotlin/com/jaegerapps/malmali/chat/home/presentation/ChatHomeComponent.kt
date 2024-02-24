@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
 class ChatHomeComponent(
     private val onModalNavigate: (String) -> Unit,
     private val chatRepo: ChatRepo,
+    private val navigateToConversation: (String, String, String) -> Unit,
     componentContext: ComponentContext,
 ) : ComponentContext by componentContext {
 
@@ -62,11 +63,13 @@ class ChatHomeComponent(
                 onModalNavigate(event.route)
             }
             is ChatHomeEvent.SelectTopic -> {
-                _state.update {
+                val topic = event.topic
+                /*_state.update {
                     it.copy(
-                        selectedTopic = event.topic
+                        selectedTopic = topic
                     )
-                }
+                }*/
+                navigateToConversation(topic.title, topic.background, topic.icon.tag)
 
             }
         }

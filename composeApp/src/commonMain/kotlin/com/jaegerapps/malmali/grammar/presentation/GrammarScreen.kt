@@ -116,7 +116,6 @@ fun GrammarScreen(
                         }
                     }
                 )
-                Spacer(Modifier.height(18.dp))
                 GrammarListContainer(
                     isEditingMode = state.isEditing,
                     levels = state.levels

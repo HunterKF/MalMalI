@@ -1,5 +1,7 @@
 package com.jaegerapps.malmali.chat.home.presentation
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -81,10 +83,16 @@ fun ChatHomeScreen(
                 )
                 Spacer(Modifier.height(18.dp))
                 LazyVerticalGrid(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     columns = GridCells.Fixed(2)
                 ) {
                     items(state.topics) { topic ->
-                        Column {
+                        Column(
+                            modifier = Modifier.clickable {
+                                component.onEvent(ChatHomeEvent.SelectTopic(topic))
+                            }
+                        ) {
                             IconContainer(
                                 icon = painterResource(MR.images.user_icon_bear_1)
                             )
@@ -93,6 +101,10 @@ fun ChatHomeScreen(
                             )
                         }
 
+                    }
+
+                    item {
+                        Spacer(Modifier.height(36.dp))
                     }
                 }
 

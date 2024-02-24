@@ -11,6 +11,7 @@ import com.jaegerapps.malmali.grammar.presentation.GrammarScreen
 import com.jaegerapps.malmali.home.HomeScreen
 import com.jaegerapps.malmali.login.presentation.SignInScreen
 import com.jaegerapps.malmali.RootComponent
+import com.jaegerapps.malmali.chat.conversation.presentation.ConversationScreen
 import com.jaegerapps.malmali.chat.home.presentation.ChatHomeScreen
 import com.jaegerapps.malmali.loading.LoadingScreen
 import com.jaegerapps.malmali.onboarding.completion.CompletionScreen
@@ -55,6 +56,9 @@ fun App(
                 is RootComponent.Child.CompletionScreen -> CompletionScreen(component = instance.component)
                 is RootComponent.Child.LoadingScreen -> LoadingScreen(component = instance.component)
                 is RootComponent.Child.ChatHomeScreen -> ChatHomeScreen(component = instance.component)
+                is RootComponent.Child.ConversationScreen -> ConversationScreen(
+                    component = instance.component
+                )
             }
         }
     }

@@ -66,7 +66,8 @@ actual class AppModule(
 
     actual override val chatFunctions: ChatRepo by lazy {
         ChatRepoImpl(
-            client = supabaseClient
+            client = supabaseClient,
+            api = chatGptApi
         )
     }
     actual override val chatGptApi: ChatGptApi by lazy {

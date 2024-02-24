@@ -2,6 +2,7 @@ package com.jaegerapps.malmali.chat.conversation.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,13 +23,10 @@ import com.jaegerapps.malmali.components.blackBorder
 fun ChatBubble(
     modifier: Modifier = Modifier,
     text: String,
-    name: String,
     isUser: Boolean,
     showOptions: Boolean,
-    onLongClick: () -> Unit,
     onClick: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
 
     Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
@@ -38,15 +36,9 @@ fun ChatBubble(
                 Spacer(modifier = Modifier.weight(0.1f))
             }
             Box(
-                modifier = modifier.weight(1f).blackBorder().combinedClickable(
-                    enabled = true,
-                    onLongClick = {
-                        onLongClick()
-                    },
-                    onClick = {
-                        onClick()
-                    }
-                ).padding(horizontal = 12.dp, vertical = 8.dp)
+                modifier = modifier.weight(1f).blackBorder().clickable {
+                    onClick()
+                }.padding(horizontal = 12.dp, vertical = 8.dp)
             ) {
                 Text(
                     text = text,

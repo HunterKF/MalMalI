@@ -3,9 +3,6 @@ package com.jaegerapps.malmali
 import VocabularySetSourceFunctions
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.scale
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
@@ -13,7 +10,7 @@ import com.arkivanov.decompose.router.stack.popTo
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.arkivanov.essenty.lifecycle.doOnResume
+import com.jaegerapps.malmali.chat.conversation.presentation.ConversationComponent
 import com.jaegerapps.malmali.chat.models.TopicPromptDTO
 import com.jaegerapps.malmali.chat.home.presentation.ChatHomeComponent
 import com.jaegerapps.malmali.components.Routes
@@ -29,8 +26,6 @@ import com.jaegerapps.malmali.vocabulary.folders.FlashcardHomeComponent
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsComponent
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
-import core.data.SupabaseClient
-import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -69,9 +64,10 @@ class RootComponent(
 
                         navigation.replaceAll(Configuration.IntroScreen)
                     }
+
                     appModule.settingFunctions.getToken() != null -> {
                         if (result != null) {
-                            val user =  appModule.settingFunctions.getUser()
+                            val user = appModule.settingFunctions.getUser()
                             withContext(Dispatchers.Main) {
                                 _state.update {
                                     it.copy(
@@ -79,7 +75,6 @@ class RootComponent(
                                         loggedIn = true
                                     )
                                 }
-                                val testing = appModule.chatGptApi.initiateConversation(TopicPromptDTO(id = 0, topic_title = "", topic_background = ""), user.nickname)
 
                                 navigation.replaceAll(Configuration.HomeScreen)
 
@@ -252,7 +247,8 @@ class RootComponent(
                         componentContext = context,
                         saveToken = {
                             scope.launch {
-                                val token = async { appModule.userFunctions.retrieveAccessToken() }.await()
+                                val token =
+                                    async { appModule.userFunctions.retrieveAccessToken() }.await()
                                 token?.let {
                                     appModule.settingFunctions.saveToken(it)
                                 }
@@ -268,7 +264,7 @@ class RootComponent(
                                         loggedIn = true
                                     )
                                 }
-                            } catch(e: Exception) {
+                            } catch (e: Exception) {
                                 println("An error occurred! ㅠㅠ")
                             }
 
@@ -317,6 +313,32 @@ class RootComponent(
                             modalNavigate(route)
                         },
                         chatRepo = appModule.chatFunctions,
+                        componentContext = context,
+
+                        navigateToConversation = { title, background, iconTag ->
+                            navigation.pushNew(
+                                Configuration.ConversationScreen(
+                                    title = title,
+                                    background = background,
+                                    topicTag = iconTag,
+                                )
+                            )
+                        },
+                    )
+                )
+            }
+
+            is Configuration.ConversationScreen -> {
+                Child.ConversationScreen(
+                    ConversationComponent(
+                        onNavigate = {
+                            modalNavigate(it)
+                        },
+                        userData = _state.value.user!!,
+                        api = appModule.chatFunctions,
+                        topic = config.title,
+                        topicBackground = config.background,
+                        topicIcon = config.topicTag,
                         componentContext = context
                     )
                 )
@@ -336,6 +358,7 @@ class RootComponent(
         data class CompletionScreen(val component: CompletionComponent) : Child()
         data class LoadingScreen(val component: LoadingComponent) : Child()
         data class ChatHomeScreen(val component: ChatHomeComponent) : Child()
+        data class ConversationScreen(val component: ConversationComponent) : Child()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -400,8 +423,16 @@ class RootComponent(
 
         @Serializable
         data object CompletionScreen : Configuration()
+
         @Serializable
         data object ChatHomeScreen : Configuration()
+
+        @Serializable
+        data class ConversationScreen(
+            val title: String,
+            val background: String,
+            val topicTag: String,
+        ) : Configuration()
     }
 }
 

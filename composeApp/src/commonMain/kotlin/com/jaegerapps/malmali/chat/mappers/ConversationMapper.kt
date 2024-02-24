@@ -6,7 +6,7 @@ import com.jaegerapps.malmali.chat.models.ConversationUi
 
 fun ConversationDTO.toConversationUi(): ConversationUi {
     return ConversationUi(
-        id = id,
+        id = 0,
         role = role,
         content = content,
         selected = false
@@ -16,5 +16,14 @@ fun ConversationDTO.toConversationUi(): ConversationUi {
 fun ConversationUi.toConversationEntity(): ConversationEntity {
     return ConversationEntity(
         id, role, content
+    )
+}
+
+fun ConversationEntity.toConversationUi(id: Int): ConversationUi {
+    return ConversationUi(
+        id = id,
+        role = role,
+        content = content,
+        selected = false
     )
 }

@@ -11,3 +11,11 @@ fun TopicPromptDTO.toTopicPrompt(): UiTopicPrompt {
         icon = IconResource.resourceFromTag(this.topic_title)
     )
 }
+
+fun UiTopicPrompt.toTopicPromptDTO(): TopicPromptDTO {
+    return TopicPromptDTO(
+        id = 0,
+        title,
+        background
+    )
+}

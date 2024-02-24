@@ -1,5 +1,6 @@
 package com.jaegerapps.malmali.vocabulary.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,7 +51,7 @@ fun FolderContainer(
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }
-        if (expanded) {
+        AnimatedVisibility(expanded) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
