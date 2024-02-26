@@ -69,6 +69,7 @@ kotlin {
                 implementation("io.github.jan-tennert.supabase:compose-auth:2.0.4")
                 implementation("io.github.jan-tennert.supabase:gotrue-kt:2.0.4")
 
+
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json)

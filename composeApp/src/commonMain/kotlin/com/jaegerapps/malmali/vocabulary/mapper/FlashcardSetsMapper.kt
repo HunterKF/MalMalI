@@ -4,8 +4,8 @@ import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.composeApp.database.FlashcardSets
 import com.jaegerapps.malmali.composeApp.database.Flashcards
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.toSetMode
-import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
-import com.jaegerapps.malmali.vocabulary.domain.VocabSet
+import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
 
 fun FlashcardSets.toVocabSet(): VocabSet {
     println("set_id")

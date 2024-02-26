@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -48,7 +50,6 @@ fun ChatHomeScreen(
     val state by component.state.collectAsState()
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-
     CustomNavigationDrawer(
         drawerState = drawerState,
         onNavigate = { route ->
@@ -67,7 +68,8 @@ fun ChatHomeScreen(
         ) { paddingValues ->
             Column(
                 modifier = Modifier.fillMaxWidth().padding(paddingValues)
-                    .padding(horizontal = 12.dp)
+                    .padding(horizontal = 12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SettingsAndModal(
                     onSettingsClick = {
@@ -91,7 +93,8 @@ fun ChatHomeScreen(
                         Column(
                             modifier = Modifier.clickable {
                                 component.onEvent(ChatHomeEvent.SelectTopic(topic))
-                            }
+                            },
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             IconContainer(
                                 icon = painterResource(MR.images.user_icon_bear_1)

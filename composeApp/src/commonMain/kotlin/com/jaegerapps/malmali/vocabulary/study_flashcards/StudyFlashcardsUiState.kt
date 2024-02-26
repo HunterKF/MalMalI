@@ -1,9 +1,7 @@
 package com.jaegerapps.malmali.vocabulary.study_flashcards
 
-import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
-import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
-import com.jaegerapps.malmali.vocabulary.domain.VocabSet
+import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
 
 data class StudyFlashcardsUiState(
     val set: VocabSet? = null,

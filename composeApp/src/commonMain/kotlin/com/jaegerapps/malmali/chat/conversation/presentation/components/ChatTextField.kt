@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -61,12 +63,12 @@ fun ChatTextField(
     ) {
 
         Row(
-            modifier = modifier.fillMaxWidth().blackBorder(),
+            modifier = modifier.fillMaxWidth().blackBorder().background(MaterialTheme.colorScheme.surface),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             BasicTextField(
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(12.dp).imePadding()
                     .weight(1f),
                 value = text,
                 onValueChange = {
@@ -84,8 +86,8 @@ fun ChatTextField(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .fillMaxHeight()
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.outline)
+                .blackBorder(clipSize = 100.dp)
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(horizontal = 12.dp)
                 .clickable {
                     onFinish()

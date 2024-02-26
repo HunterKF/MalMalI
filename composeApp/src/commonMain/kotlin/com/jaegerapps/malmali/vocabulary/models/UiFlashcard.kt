@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.vocabulary.domain
+package com.jaegerapps.malmali.vocabulary.models
 
 data class UiFlashcard(
     val uiId: Long? = null,

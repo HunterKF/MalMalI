@@ -12,15 +12,18 @@ import androidx.compose.material.icons.rounded.MenuOpen
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsAndModal(
     modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.outline,
     onSettingsClick: () -> Unit,
     onModalClick: () -> Unit
 ) {
@@ -35,6 +38,7 @@ fun SettingsAndModal(
             BasicIconContainer(
                 icon = Icons.Rounded.Menu,
                 contentDescription = "modal open",
+                tint = color,
                 onClick = {
                     onModalClick()
                 }
@@ -42,6 +46,7 @@ fun SettingsAndModal(
             BasicIconContainer(
                 icon = Icons.Rounded.Settings,
                 contentDescription = "modal open",
+                tint = color,
                 onClick = {
                     onSettingsClick()
                 }
@@ -57,15 +62,17 @@ fun SettingsAndModal(
 private fun BasicIconContainer(
     icon: ImageVector,
     contentDescription: String,
-    onClick: () -> Unit
+    tint: Color,
+    onClick: () -> Unit,
 ) {
     IconButton(
-        modifier = Modifier.blackBorder(),
+        modifier = Modifier.blackBorder(color = tint),
         onClick = { onClick()}
     ) {
         Icon(
             icon,
-            contentDescription
+            contentDescription,
+            tint = tint
         )
     }
 }

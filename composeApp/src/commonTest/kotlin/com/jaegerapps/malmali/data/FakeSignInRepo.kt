@@ -1,10 +1,10 @@
 package com.jaegerapps.malmali.data
 
-import com.jaegerapps.malmali.login.domain.SignInRepo
+import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.login.domain.UserData
 import core.util.Resource
 
-class FakeSignInRepo: SignInRepo {
+class FakeSignInRepo: SignInDataSource {
     override suspend fun createUserLocally(email: String, userId: String): Resource<Boolean> {
         TODO("Not yet implemented")
     }

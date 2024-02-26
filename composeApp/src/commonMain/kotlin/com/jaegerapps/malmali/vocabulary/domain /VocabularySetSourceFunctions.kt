@@ -1,6 +1,6 @@
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
-import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
-import com.jaegerapps.malmali.vocabulary.domain.VocabSet
+import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
 import kotlinx.coroutines.flow.Flow
 
 interface VocabularySetSourceFunctions {

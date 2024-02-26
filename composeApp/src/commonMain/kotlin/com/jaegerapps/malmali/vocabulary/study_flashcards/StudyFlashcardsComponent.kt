@@ -2,7 +2,7 @@ package com.jaegerapps.malmali.vocabulary.study_flashcards
 
 import VocabularySetSourceFunctions
 import com.arkivanov.decompose.ComponentContext
-import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

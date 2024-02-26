@@ -1,16 +1,16 @@
 package com.jaegerapps.malmali.login.data
 
-import com.jaegerapps.malmali.login.domain.SignInRepo
+import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.login.domain.UserData
 import core.domain.SettingFunctions
 import core.domain.SupabaseSignInFunctions
 import core.util.Resource
 import io.github.jan.supabase.exceptions.RestException
 
-class SignInRepoImpl(
+class SignInDataSourceImpl(
     private val settings: SettingFunctions,
     private val signInFunctions: SupabaseSignInFunctions,
-) : SignInRepo {
+) : SignInDataSource {
     override suspend fun createUserLocally(email: String, userId: String): Resource<Boolean> {
         return try {
             settings.createUser(email, userId)

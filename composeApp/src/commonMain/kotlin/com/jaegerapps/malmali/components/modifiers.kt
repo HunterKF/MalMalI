@@ -22,13 +22,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.abs
 
-fun Modifier.blackBorder(clipSize: Dp = 25.dp, width: Dp = 1.dp): Modifier = composed {
+fun Modifier.blackBorder(clipSize: Dp = 25.dp, width: Dp = 1.dp, color: Color? = null): Modifier = composed {
     Modifier
         .clip(RoundedCornerShape(clipSize))
         .border(
             width = width,
             shape = RoundedCornerShape(clipSize),
-            color = MaterialTheme.colorScheme.outline
+            color = color ?: MaterialTheme.colorScheme.outline
         )
 }
 

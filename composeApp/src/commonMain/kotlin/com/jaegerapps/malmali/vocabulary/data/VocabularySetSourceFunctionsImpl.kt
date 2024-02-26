@@ -6,8 +6,8 @@ import app.cash.sqldelight.coroutines.mapToList
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.toViewLong
-import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
-import com.jaegerapps.malmali.vocabulary.domain.VocabSet
+import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
 import com.jaegerapps.malmali.vocabulary.mapper.toUiFlashcard
 import com.jaegerapps.malmali.vocabulary.mapper.toVocabSet
 import kotlinx.coroutines.Dispatchers

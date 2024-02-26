@@ -5,7 +5,7 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
 import com.jaegerapps.malmali.core.FakeSignInImpl
-import com.jaegerapps.malmali.login.domain.SignInRepo
+import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.RootComponent
 import com.jaegerapps.malmali.di.FakeAppModule
 import core.util.Resource
@@ -22,7 +22,7 @@ class SignInComponentTest {
     private val activeChild get() = component
 
     @Mock
-    private val signInRepo = mock(classOf<SignInRepo>())
+    private val signInRepo = mock(classOf<SignInDataSource>())
 
 
 

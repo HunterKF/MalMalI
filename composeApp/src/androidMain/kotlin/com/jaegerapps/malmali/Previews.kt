@@ -34,12 +34,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jaegerapps.malmali.chat.conversation.presentation.ConversationScreen
 import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatAwaitAnimation
 import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatBubble
 import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatPopUpAlert
 import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatTextField
-import com.jaegerapps.malmali.chat.models.ConversationUi
 import com.jaegerapps.malmali.components.ActionButton
 import com.jaegerapps.malmali.components.TopBarLogo
 import com.jaegerapps.malmali.components.CustomTextFieldWithBlackBorder
@@ -59,7 +57,12 @@ import com.jaegerapps.malmali.home.components.UserIcon
 import com.jaegerapps.malmali.onboarding.intro.components.OnboardingContainer
 import com.jaegerapps.malmali.onboarding.intro.components.PagerIndicator
 import com.jaegerapps.malmali.onboarding.intro.components.SkipAndNextButton
-import com.jaegerapps.malmali.vocabulary.domain.VocabSet
+import com.jaegerapps.malmali.practice.models.UiPracticeGrammar
+import com.jaegerapps.malmali.practice.models.UiPracticeVocab
+import com.jaegerapps.malmali.practice.presentation.PracticeScreen
+import com.jaegerapps.malmali.practice.presentation.components.PracticeContainer
+import com.jaegerapps.malmali.practice.presentation.components.PracticeTextField
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
 import com.jaegerapps.malmali.vocabulary.components.AddCardButton
 import com.jaegerapps.malmali.vocabulary.components.EditVocabContainer
 import com.jaegerapps.malmali.vocabulary.components.FolderContainer
@@ -67,11 +70,9 @@ import com.jaegerapps.malmali.vocabulary.components.SelectIcon
 import com.jaegerapps.malmali.vocabulary.components.SelectableButton
 import com.jaegerapps.malmali.vocabulary.components.TitleBox
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
-import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
 import com.jaegerapps.malmali.vocabulary.study_flashcards.components.VocabularyButtons
 import com.jaegerapps.malmali.vocabulary.study_flashcards.components.VocabularyContainer
-import core.Knower
-import core.Knower.d
 import core.presentation.MalMalITheme
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
@@ -1235,91 +1236,64 @@ fun Preview_ChatAwaitAnimation() {
     }
 }
 
-/*
 @Preview
 @Composable
 fun Preview_ConversationScreen() {
-    val conversationList = listOf(
-        ConversationUi(
-            id = 1,
-            role = "User",
-            content = "Hi, I'm having trouble accessing my account.",
-            selected = false
-        ),
-        ConversationUi(
-            id = 2,
-            role = "Agent",
-            content = "Hello! I'd be happy to help you. Could you provide me with your account email, please?",
-            selected = false
-        ),
-        ConversationUi(
-            id = 3,
-            role = "User",
-            content = "Sure, it's user@example.com.",
-            selected = false
-        ),
-        ConversationUi(
-            id = 4,
-            role = "Agent",
-            content = "Thank you. One moment while I check your account details.",
-            selected = false
-        ),
-        ConversationUi(
-            id = 5,
-            role = "Agent",
-            content = "It looks like there's a temporary block on your account due to suspicious activity. I can help you resolve this.",
-            selected = true
-        ),
-        ConversationUi(
-            id = 6,
-            role = "User",
-            content = "Oh, I see. What do I need to do to remove the block?",
-            selected = false
-        ),
-        ConversationUi(
-            id = 7,
-            role = "Agent",
-            content = "You'll need to verify your identity with a photo ID. Can you upload a photo ID through our secure form?",
-            selected = false
-        ),
-        ConversationUi(
-            id = 8,
-            role = "User",
-            content = "Yes, I can do that. Where can I find the form?",
-            selected = false
-        ),
-        ConversationUi(
-            id = 9,
-            role = "Agent",
-            content = "I'm sending you the link to the form now. [Link to form]",
-            selected = false
-        ),
-        ConversationUi(
-            id = 10,
-            role = "User",
-            content = "I've submitted the form with my ID.",
-            selected = false
-        ),
-        ConversationUi(
-            id = 11,
-            role = "Agent",
-            content = "Great, your identity has been verified, and I've removed the block. You should be able to access your account now.",
-            selected = true
-        ),
-        ConversationUi(
-            id = 12,
-            role = "User",
-            content = "Thank you so much for your help!",
-            selected = false
-        ),
-        ConversationUi(
-            id = 13,
-            role = "Agent",
-            content = "You're welcome! If you have any more questions or need further assistance, feel free to contact us. Have a great day!",
-            selected = false
-        )
-    )
     MalMalITheme(false) {
-        ConversationScreen(conversationList, isLoading = true)
+//        ConversationScreen()
     }
-}*/
+}
+
+
+@Preview
+@Composable
+fun Preview_PracticeContainer() {
+    MalMalITheme(false) {
+        var grammarExpand by remember { mutableStateOf(false) }
+        var vocabExpand by remember { mutableStateOf(false) }
+        PracticeContainer(
+            vocab = UiPracticeVocab(word = "가다", "to go, to move"),
+            grammar = UiPracticeGrammar(
+                grammar = "(으)면",
+                definition1 = "To indicate that one action occurs 'when or if' another action (that hasn't happened yet) occurs",
+                definition2 = null,
+                level = "Level 1"
+            ),
+            vocabExpanded = vocabExpand,
+            grammarExpanded = grammarExpand,
+            onClick = {
+                if (grammarExpand) {
+                    grammarExpand = false
+                    vocabExpand = true
+                } else if (vocabExpand) {
+                    grammarExpand = true
+                    vocabExpand = false
+                } else {
+                    vocabExpand = true
+                }
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+fun Preview_PracticeTextField() {
+    var text by remember { mutableStateOf("") }
+    MalMalITheme(false) {
+        PracticeTextField(
+            value = text,
+            onValueChange = {
+                text = it
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+fun Preview_PracticeScreen() {
+    MalMalITheme(false) {
+        PracticeScreen()
+    }
+}

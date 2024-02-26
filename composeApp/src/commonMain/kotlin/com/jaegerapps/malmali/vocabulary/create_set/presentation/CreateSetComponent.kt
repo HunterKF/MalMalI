@@ -2,8 +2,8 @@ package com.jaegerapps.malmali.vocabulary.create_set.presentation
 
 import VocabularySetSourceFunctions
 import com.arkivanov.decompose.ComponentContext
-import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
-import com.jaegerapps.malmali.vocabulary.domain.VocabSet
+import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

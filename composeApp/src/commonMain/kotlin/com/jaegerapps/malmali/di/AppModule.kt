@@ -3,19 +3,18 @@ package com.jaegerapps.malmali.di
 import VocabularySetSourceFunctions
 import com.jaegerapps.malmali.chat.domain.ChatRepo
 import com.jaegerapps.malmali.grammar.domain.GrammarRepo
-import com.jaegerapps.malmali.login.domain.SignInRepo
+import com.jaegerapps.malmali.login.domain.SignInDataSource
 import core.domain.ChatGptApi
 import core.domain.SettingFunctions
 import core.domain.SupabaseSignInFunctions
 import core.domain.SupabaseUserFunctions
-import io.github.jan.supabase.SupabaseClient
 
 expect class AppModule: AppModuleInterface {
 
     //Used in grammar screen
     override val grammarRepo: GrammarRepo
     //Used in sign in screen
-    override val signInRepo: SignInRepo
+    override val signInRepo: SignInDataSource
     //Used in vocabulary screen
     override  val vocabFunctions: VocabularySetSourceFunctions
     //All functions to do with the settings
@@ -34,7 +33,7 @@ interface AppModuleInterface {
     //Used in grammar screen
     val grammarRepo: GrammarRepo
     //Used in sign in screen
-    val signInRepo: SignInRepo
+    val signInRepo: SignInDataSource
     //Used in vocabulary screen
     val vocabFunctions: VocabularySetSourceFunctions
     //All functions to do with the settings

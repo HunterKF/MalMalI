@@ -2,7 +2,7 @@ package com.jaegerapps.malmali.vocabulary.create_set.presentation
 
 import androidx.compose.ui.graphics.painter.Painter
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
 import dev.icerock.moko.resources.ImageResource
 
 data class CreateSetUiState(

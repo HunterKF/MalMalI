@@ -77,4 +77,21 @@
     <string name="desc_previous_card">Go to previous card</string>
     <string name="desc_next_card">Go to next card</string>
     <string name="desc_flip_card">Flip card</string>
+
+    <string name="practice_vocabulary_definition">Definition: %s</string>
+    <string name="practice_definition_1">Definition 1: %s</string>
+    <string name="practice_definition_2">Definition 2: %s</string>
+    <string name="practice_content_desc_refresh">Change current selection</string>
+    <string name="practice_content_desc_open_vocab">Open vocabulary</string>
+    <string name="practice_content_desc_close_vocab">Close vocabulary</string>
+    <string name="practice_content_desc_open_grammar">Open grammar</string>
+    <string name="practice_content_desc_close_grammar">Close grammar</string>
+    <string name="prompt_start_practice">Start practice!</string>
+
+    <string name="content_description_favorite">Favorite</string>
+    <string name="content_description_share">Share</string>
+    <string name="content_description_info">Info</string>
+    <string name="content_description_modal">Open side drawer</string>
+    <string name="content_description_modal">Go to settings</string>
+
 </resources>

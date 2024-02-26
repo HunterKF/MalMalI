@@ -8,8 +8,8 @@ import com.jaegerapps.malmali.chat.domain.ChatRepo
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
 import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
 import com.jaegerapps.malmali.grammar.domain.GrammarRepo
-import com.jaegerapps.malmali.login.data.SignInRepoImpl
-import com.jaegerapps.malmali.login.domain.SignInRepo
+import com.jaegerapps.malmali.login.data.SignInDataSourceImpl
+import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
 import com.russhwolf.settings.SharedPreferencesSettings
 import core.data.DatabaseDriverFactory
@@ -35,8 +35,8 @@ actual class AppModule(
     actual override val grammarRepo: GrammarRepo by lazy {
         GrammarRepoImpl(client = supabaseClient)
     }
-    actual override val signInRepo: SignInRepo by lazy {
-        SignInRepoImpl(
+    actual override val signInRepo: SignInDataSource by lazy {
+        SignInDataSourceImpl(
             settings = settingFunctions,
             signInFunctions = supabaseSignInFunctions
         )

@@ -59,7 +59,27 @@ UPDATE flashcardSets
 SET set_title=:setTitle, set_size=:size, tags=:tags, is_public=:isPrivate
 WHERE set_id = :id;
 
+CREATE TABLE history (
+    set_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    input_sentence TEXT NOT NULL,
+    grammar_point TEXT NOT NULL,
+    grammar_definition_1 TEXT NOT NULL,
+    grammar_definition_2 TEXT,
+    grammar_level TEXT NOT NULL,
+    vocabulary_word TEXT NOT NULL,
+    vocabulary_definition TEXT NOT NULL,
+    date_created INTEGER NOT NULL,
+    is_favorited INTEGER NOT NULL
+);
+insertHistory:
+INSERT OR REPLACE INTO history(set_id, input_sentence, grammar_point, grammar_definition_1, grammar_definition_2, grammar_level, vocabulary_word, vocabulary_definition, date_created, is_favorited)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
+deleteHistory:
+DELETE FROM history
+WHERE set_id=:setId;
 
+selectHistory:
+SELECT * FROM history;
 
 

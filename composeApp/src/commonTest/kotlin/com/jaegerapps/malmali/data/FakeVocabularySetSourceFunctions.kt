@@ -3,8 +3,8 @@ package com.jaegerapps.malmali.data
 import VocabularySetSourceFunctions
 import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
-import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
-import com.jaegerapps.malmali.vocabulary.domain.VocabSet
+import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
 import com.jaegerapps.malmali.vocabulary.exampleUiFlashcardList
 import com.jaegerapps.malmali.vocabulary.exampleVocabSetList
 import kotlinx.coroutines.flow.Flow

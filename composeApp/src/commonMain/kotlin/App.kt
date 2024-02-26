@@ -13,6 +13,7 @@ import com.jaegerapps.malmali.login.presentation.SignInScreen
 import com.jaegerapps.malmali.RootComponent
 import com.jaegerapps.malmali.chat.conversation.presentation.ConversationScreen
 import com.jaegerapps.malmali.chat.home.presentation.ChatHomeScreen
+import com.jaegerapps.malmali.components.KeyboardAware
 import com.jaegerapps.malmali.loading.LoadingScreen
 import com.jaegerapps.malmali.onboarding.completion.CompletionScreen
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
@@ -35,6 +36,7 @@ fun App(
 //            root.onLogout()
         }
     }
+
     MalMalITheme(
         darkTheme
     ) {
@@ -56,10 +58,13 @@ fun App(
                 is RootComponent.Child.CompletionScreen -> CompletionScreen(component = instance.component)
                 is RootComponent.Child.LoadingScreen -> LoadingScreen(component = instance.component)
                 is RootComponent.Child.ChatHomeScreen -> ChatHomeScreen(component = instance.component)
-                is RootComponent.Child.ConversationScreen -> ConversationScreen(
-                    component = instance.component
-                )
+                is RootComponent.Child.ConversationScreen ->KeyboardAware {
+                    ConversationScreen(
+                        component = instance.component
+                    )
+                }
             }
+
         }
     }
 }

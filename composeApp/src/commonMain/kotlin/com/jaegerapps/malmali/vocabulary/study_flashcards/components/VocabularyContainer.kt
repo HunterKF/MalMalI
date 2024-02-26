@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.components.blackBorder
-import com.jaegerapps.malmali.vocabulary.domain.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsUiEvent
 
 @Composable

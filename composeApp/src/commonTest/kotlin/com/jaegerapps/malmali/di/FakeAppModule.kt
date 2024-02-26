@@ -9,17 +9,16 @@ import com.jaegerapps.malmali.data.FakeSupabaseSignInFunctions
 import com.jaegerapps.malmali.data.FakeSupabaseUserFunctions
 import com.jaegerapps.malmali.data.FakeVocabularySetSourceFunctions
 import com.jaegerapps.malmali.grammar.domain.GrammarRepo
-import com.jaegerapps.malmali.login.domain.SignInRepo
+import com.jaegerapps.malmali.login.domain.SignInDataSource
 import core.domain.ChatGptApi
 import core.domain.SettingFunctions
 import core.domain.SupabaseSignInFunctions
 import core.domain.SupabaseUserFunctions
-import io.github.jan.supabase.SupabaseClient
 
 class FakeAppModule: AppModuleInterface {
 
     override val grammarRepo: GrammarRepo = FakeGrammarRepo()
-    override val signInRepo: SignInRepo = FakeSignInRepo()
+    override val signInRepo: SignInDataSource = FakeSignInRepo()
     override val vocabFunctions: VocabularySetSourceFunctions = FakeVocabularySetSourceFunctions()
     override val settingFunctions: SettingFunctions = FakeSettingFunctions()
     override val userFunctions: SupabaseUserFunctions = FakeSupabaseUserFunctions()

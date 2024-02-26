@@ -1,15 +1,9 @@
 package com.jaegerapps.malmali.login.presentation
 
 import com.arkivanov.decompose.ComponentContext
-import com.jaegerapps.malmali.login.domain.SignInRepo
-import core.data.SupabaseClient
+import com.jaegerapps.malmali.login.domain.SignInDataSource
 import core.util.Resource
-import io.github.jan.supabase.exceptions.BadRequestRestException
-import io.github.jan.supabase.exceptions.NotFoundRestException
 import io.github.jan.supabase.exceptions.RestException
-import io.github.jan.supabase.exceptions.UnauthorizedRestException
-import io.github.jan.supabase.exceptions.UnknownRestException
-import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -20,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class SignInComponent(
     componentContext: ComponentContext,
-    private val signIn: SignInRepo,
+    private val signIn: SignInDataSource,
     private val saveToken: suspend () -> Unit,
     private val createUserOnDb: suspend () -> Unit,
     private val onNavigate: () -> Unit,

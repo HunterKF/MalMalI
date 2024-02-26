@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.vocabulary.domain
+package com.jaegerapps.malmali.vocabulary.models
 
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
 import dev.icerock.moko.resources.ImageResource
