@@ -186,10 +186,10 @@ val exampleGrammarPoint = GrammarPoint(
     grammarTitle = "Title 2",
     grammarDef1 = "Definition 2-1",
     grammarDef2 = "Definition 2-2",
-    exampleEn1 = "English Example 2-1",
-    exampleEn2 = "English Example 2-2",
-    exampleKo1 = "Korean Example 2-1",
-    exampleKo2 = "Korean Example 2-2",
+    exampleEng1 = "English Example 2-1",
+    exampleEng2 = "English Example 2-2",
+    exampleKor1 = "Korean Example 2-1",
+    exampleKor2 = "Korean Example 2-2",
     grammarCategory = 1
 )
 
@@ -198,10 +198,10 @@ val exampleGrammarPointList = (1..10).map {
         grammarTitle = "Point $it",
         grammarDef1 = "Definition $it-1",
         grammarDef2 = "Definition $it-2",
-        exampleEn1 = "English Example $it-1",
-        exampleEn2 = "English Example $it-2",
-        exampleKo1 = "Korean Example $it-1",
-        exampleKo2 = "Korean Example $it-2",
+        exampleEng1 = "English Example $it-1",
+        exampleEng2 = "English Example $it-2",
+        exampleKor1 = "Korean Example $it-1",
+        exampleKor2 = "Korean Example $it-2",
         grammarCategory = 1
     )
 }

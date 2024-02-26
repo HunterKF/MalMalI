@@ -1,26 +1,61 @@
 package com.jaegerapps.malmali.practice.data
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
-import com.jaegerapps.malmali.login.domain.UserEntity
+import com.jaegerapps.malmali.grammar.mapper.toGrammarLevels
+import com.jaegerapps.malmali.grammar.mapper.toGrammarPoint
+import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.practice.domain.PracticeDataSource
+import com.jaegerapps.malmali.practice.mappers.toGrammarDTO
 import com.jaegerapps.malmali.practice.mappers.toHistoryDTO
 import com.jaegerapps.malmali.practice.mappers.toHistoryEntity
 import com.jaegerapps.malmali.practice.models.HistoryEntity
 import com.jaegerapps.malmali.practice.models.UiHistoryItem
+import com.jaegerapps.malmali.vocabulary.mapper.toVocabSet
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
 import core.Knower
-import core.Knower.d
 import core.Knower.e
 import core.util.Resource
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.postgrest.postgrest
-import kotlinx.datetime.Clock
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.supervisorScope
 
 class PracticeDataSourceImpl(
     val client: SupabaseClient,
     val database: MalMalIDatabase,
 ) : PracticeDataSource {
+    override suspend fun getGrammar(): Resource<List<GrammarLevel>> {
+        return try {
+            val result = database.flashCardsQueries.getAllGrammar()
+                .executeAsList()
+                .map { it.toGrammarDTO() }
+            val list = result.map { it.toGrammarPoint() }
+            val levels = list.toGrammarLevels()
+            Resource.Success(levels)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(Throwable())
+        }
+    }
+
+    override suspend fun getSets(): Resource<List<VocabSet>> {
+        return try {
+            val result = database.flashCardsQueries.selectAllSets()
+                .executeAsList()
+                .map { it.toVocabSet() }
+
+            Resource.Success(result)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(Throwable())
+        }
+    }
 
 
     override suspend fun insertHistorySql(history: UiHistoryItem): Resource<Boolean> {
@@ -33,7 +68,7 @@ class PracticeDataSourceImpl(
                 grammar_point = dto.grammar_point,
                 grammar_definition_1 = dto.grammar_definition_1,
                 grammar_definition_2 = dto.grammar_definition_2,
-                grammar_level = dto.grammar_level,
+                grammar_category = dto.grammar_level,
                 vocabulary_word = dto.vocabulary_word,
                 vocabulary_definition = dto.vocabulary_definition,
                 date_created = dto.date_created,
@@ -64,19 +99,19 @@ class PracticeDataSourceImpl(
 
     }
 
-    override suspend fun getHistorySql(): Resource<List<HistoryEntity>> {
-        return try {
-            val result = database.flashCardsQueries.selectHistory()
-                .executeAsList()
-                .map {
-                    it.toHistoryEntity()
+    override fun getHistorySql(): Flow<List<HistoryEntity>> {
+        return database.flashCardsQueries.selectHistory()
+            .asFlow()
+            .mapToList(Dispatchers.IO)
+            .map { list ->
+                supervisorScope {
+                    list.map {
+                        it.toHistoryEntity()
+
+                    }
                 }
-            Resource.Success(result)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Knower.e("getHistorySQL", "An error has occurred here. ${e.message}")
-            Resource.Error(Throwable())
-        }
+            }
+
     }
 
 }

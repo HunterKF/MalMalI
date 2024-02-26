@@ -1,6 +1,7 @@
 package com.jaegerapps.malmali.practice.presentation.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -21,7 +22,7 @@ fun PracticeTextField(
     onValueChange: (String) -> Unit,
 ) {
     OutlinedTextField(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().height(140.dp),
         placeholder = {
             Text(stringResource(MR.strings.prompt_start_practice))
         },

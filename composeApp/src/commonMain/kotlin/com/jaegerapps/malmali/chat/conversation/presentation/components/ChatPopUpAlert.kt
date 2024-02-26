@@ -25,7 +25,8 @@ import com.jaegerapps.malmali.components.blackBorder
 
 @Composable
 fun ChatPopUpAlert(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp).blackBorder(),
+    horizontal: Arrangement.Horizontal = Arrangement.spacedBy(16.dp),
     onFavoriteClick: () -> Unit,
     onShareClick: () -> Unit,
     onInformationClick: () -> Unit,
@@ -33,10 +34,10 @@ fun ChatPopUpAlert(
 ) {
 
     Row(
-        modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp).blackBorder()
+        modifier = modifier
             .background(MaterialTheme.colorScheme.surface),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = horizontal
     ) {
         PopUpIcon(Icons.Default.Favorite, "", {})
         PopUpIcon(Icons.Default.Share, "", {})

@@ -18,6 +18,7 @@ import com.jaegerapps.malmali.loading.LoadingScreen
 import com.jaegerapps.malmali.onboarding.completion.CompletionScreen
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
 import com.jaegerapps.malmali.onboarding.intro.IntroScreen
+import com.jaegerapps.malmali.practice.presentation.PracticeScreen
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetScreen
 import com.jaegerapps.malmali.vocabulary.folders.presentation.FolderScreen
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsScreen
@@ -63,6 +64,7 @@ fun App(
                         component = instance.component
                     )
                 }
+                is RootComponent.Child.PracticeScreen -> PracticeScreen(component = instance.component)
             }
 
         }

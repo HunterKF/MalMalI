@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Message
 import androidx.compose.material3.DrawerValue
@@ -31,14 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.components.CustomNavigationDrawer
-import com.jaegerapps.malmali.components.Routes
+import com.jaegerapps.malmali.components.models.Routes
 import com.jaegerapps.malmali.components.SettingsAndModal
 import com.jaegerapps.malmali.components.TopBarLogo
 import com.jaegerapps.malmali.home.components.CardButton
 import com.jaegerapps.malmali.home.components.LevelBar
 import com.jaegerapps.malmali.home.components.UserIcon
-import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetComponent
-import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetUiEvent
 import dev.icerock.moko.resources.compose.painterResource
 import kotlinx.coroutines.launch
 

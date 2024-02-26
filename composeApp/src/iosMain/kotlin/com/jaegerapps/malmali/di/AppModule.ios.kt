@@ -8,10 +8,13 @@ import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
 import com.jaegerapps.malmali.grammar.domain.GrammarRepo
 import com.jaegerapps.malmali.login.data.SignInDataSourceImpl
 import com.jaegerapps.malmali.login.domain.SignInDataSource
+import com.jaegerapps.malmali.practice.data.PracticeDataSourceImpl
+import com.jaegerapps.malmali.practice.domain.PracticeDataSource
 import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.Settings
 import core.data.DatabaseDriverFactory
+import core.data.GrammarDataSourceImpl
 import core.data.KtorClient
 import core.data.SupabaseClient
 import core.data.SupabaseSignInFunctionsImpl
@@ -19,6 +22,7 @@ import core.data.SupabaseUserFunctionsImpl
 import core.data.gpt.ChatGptApiImpl
 import core.data.settings.SettingFunctionsImpl
 import core.domain.ChatGptApi
+import core.domain.GrammarDataSource
 import core.domain.SettingFunctions
 import core.domain.SupabaseSignInFunctions
 import core.domain.SupabaseUserFunctions
@@ -36,6 +40,9 @@ actual class AppModule: AppModuleInterface {
             client = supabaseClient
         )
     }
+    private val database = MalMalIDatabase(
+        driver = DatabaseDriverFactory().createDriver()
+    )
     actual override val signInRepo: SignInDataSource by lazy {
         SignInDataSourceImpl(
             settings = settingFunctions,
@@ -44,9 +51,7 @@ actual class AppModule: AppModuleInterface {
     }
     actual override val vocabFunctions: VocabularySetSourceFunctions by lazy {
         VocabularySetSourceFunctionsImpl(
-            database = MalMalIDatabase(
-                driver = DatabaseDriverFactory().createDriver()
-            )
+            database = database
         )
     }
     actual override val settingFunctions: SettingFunctions by lazy {
@@ -73,6 +78,19 @@ actual class AppModule: AppModuleInterface {
     actual override val chatGptApi: ChatGptApi by lazy {
         ChatGptApiImpl(
             client = okHttpClient
+        )
+    }
+
+    actual override val practiceFunctions: PracticeDataSource by lazy {
+        PracticeDataSourceImpl(
+            client = supabaseClient,
+            database = database
+        )
+    }
+
+    actual override val grammarFunctions: GrammarDataSource by lazy {
+        GrammarDataSourceImpl(
+            database = database
         )
     }
 }

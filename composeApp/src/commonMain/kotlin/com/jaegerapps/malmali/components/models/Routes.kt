@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.components
+package com.jaegerapps.malmali.components.models
 
 object Routes {
     const val HOME = "home"

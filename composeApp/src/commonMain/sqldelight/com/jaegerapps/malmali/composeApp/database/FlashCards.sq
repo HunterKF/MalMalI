@@ -65,14 +65,14 @@ CREATE TABLE history (
     grammar_point TEXT NOT NULL,
     grammar_definition_1 TEXT NOT NULL,
     grammar_definition_2 TEXT,
-    grammar_level TEXT NOT NULL,
+    grammar_category TEXT NOT NULL,
     vocabulary_word TEXT NOT NULL,
     vocabulary_definition TEXT NOT NULL,
     date_created INTEGER NOT NULL,
     is_favorited INTEGER NOT NULL
 );
 insertHistory:
-INSERT OR REPLACE INTO history(set_id, input_sentence, grammar_point, grammar_definition_1, grammar_definition_2, grammar_level, vocabulary_word, vocabulary_definition, date_created, is_favorited)
+INSERT OR REPLACE INTO history(set_id, input_sentence, grammar_point, grammar_definition_1, grammar_definition_2, grammar_category, vocabulary_word, vocabulary_definition, date_created, is_favorited)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 deleteHistory:
@@ -82,4 +82,28 @@ WHERE set_id=:setId;
 selectHistory:
 SELECT * FROM history;
 
+CREATE TABLE grammar (
+    set_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    grammar_category INTEGER NOT NULL,
+    grammar_title TEXT NOT NULL,
+    grammar_definition_1 TEXT NOT NULL,
+    grammar_definition_2 TEXT,
+    example_eng_1 TEXT NOT NULL,
+    example_eng_2 TEXT NOT NULL,
+    example_kor_1 TEXT NOT NULL,
+    example_kor_2 TEXT NOT NULL
+);
 
+insertGrammar:
+INSERT INTO grammar(set_id, grammar_category, grammar_title, grammar_definition_1, grammar_definition_2, example_eng_1, example_eng_2, example_kor_1, example_kor_2)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateGrammar:
+UPDATE grammar
+SET grammar_category=:category,  grammar_title=:grammar_title,  grammar_definition_1=:grammar_definition_1,  grammar_definition_2=:grammar_definition_2,  example_eng_1=:example_eng_1,  example_eng_2=:example_eng_2,  example_kor_1=:example_kor_1, example_kor_2=:example_kor_2
+WHERE grammar_title =:title;
+getAllGrammar:
+SELECT * FROM grammar;
+
+countGrammar:
+SELECT COUNT(*) FROM grammar;

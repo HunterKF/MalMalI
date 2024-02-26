@@ -11,9 +11,8 @@ import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.jaegerapps.malmali.chat.conversation.presentation.ConversationComponent
-import com.jaegerapps.malmali.chat.models.TopicPromptDTO
 import com.jaegerapps.malmali.chat.home.presentation.ChatHomeComponent
-import com.jaegerapps.malmali.components.Routes
+import com.jaegerapps.malmali.components.models.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
 import com.jaegerapps.malmali.grammar.GrammarScreenComponent
 import com.jaegerapps.malmali.home.HomeScreenComponent
@@ -26,6 +25,8 @@ import com.jaegerapps.malmali.vocabulary.folders.FlashcardHomeComponent
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsComponent
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
+import com.jaegerapps.malmali.practice.presentation.PracticeComponent
+import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -58,7 +59,9 @@ class RootComponent(
         lifecycle.doOnCreate {
 
             scope.launch {
+                checkGrammar()
                 val result = async { appModule.userFunctions.retrieveAccessToken() }.await()
+
                 when {
                     appModule.settingFunctions.getOnboardingBoolean() -> {
 
@@ -343,6 +346,18 @@ class RootComponent(
                     )
                 )
             }
+
+            Configuration.PracticeScreen -> {
+                Child.PracticeScreen(
+                    PracticeComponent(
+                        onNavigate = {
+                            modalNavigate(it)
+                        },
+                        practiceDataSource = appModule.practiceFunctions,
+                        componentContext = context
+                    )
+                )
+            }
         }
     }
 
@@ -359,6 +374,7 @@ class RootComponent(
         data class LoadingScreen(val component: LoadingComponent) : Child()
         data class ChatHomeScreen(val component: ChatHomeComponent) : Child()
         data class ConversationScreen(val component: ConversationComponent) : Child()
+        data class PracticeScreen(val component: PracticeComponent): Child()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -368,6 +384,7 @@ class RootComponent(
             Routes.VOCABULARY -> navigation.pushNew(Configuration.FlashcardHomeScreen(appModule.vocabFunctions))
             Routes.GRAMMAR -> navigation.pushNew(Configuration.GrammarScreen)
             Routes.CHAT -> navigation.pushNew(Configuration.ChatHomeScreen)
+            Routes.PRACTICE -> navigation.pushNew(Configuration.PracticeScreen)
             else -> {
                 navigation.popTo(0)
             }
@@ -433,6 +450,43 @@ class RootComponent(
             val background: String,
             val topicTag: String,
         ) : Configuration()
+        @Serializable
+        data object PracticeScreen : Configuration()
+    }
+    private fun checkGrammar() {
+        scope.launch {
+            when (val grammar = async { appModule.grammarRepo.getGrammar() }.await()) {
+                is Resource.Error -> TODO()
+                is Resource.Success -> {
+                    grammar.data?.forEach {
+                        appModule.grammarFunctions.updateGrammar(it.grammarList)
+                    }
+                }
+            }
+            /*when (appModule.grammarFunctions.grammarExists()) {
+                true -> {
+                    when (val grammar = async { appModule.grammarRepo.getGrammar() }.await()) {
+                            is Resource.Error -> TODO()
+                            is Resource.Success -> {
+                                grammar.data?.forEach {
+                                    appModule.grammarFunctions.updateGrammar(it.grammarList)
+                                }
+                            }
+                        }
+                }
+                false -> {
+                    when (val grammar = async { appModule.grammarRepo.getGrammar() }.await()) {
+                        is Resource.Error -> TODO()
+                        is Resource.Success -> {
+                            grammar.data?.forEach {
+                                appModule.grammarFunctions.updateGrammar(it.grammarList)
+                            }
+                        }
+                    }
+                }
+            }*/
+        }
+
     }
 }
 

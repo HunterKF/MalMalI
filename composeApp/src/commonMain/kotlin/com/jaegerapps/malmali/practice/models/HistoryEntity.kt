@@ -1,6 +1,7 @@
 package com.jaegerapps.malmali.practice.models
 
 data class HistoryEntity(
+    val id: Int,
     val input_sentence: String,
     val grammar_point: String,
     val grammar_definition_1: String,

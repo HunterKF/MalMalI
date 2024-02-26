@@ -24,11 +24,14 @@ class GrammarScreenComponent(
 
     init {
         scope.launch {
+            /*when (repo.getGrammar()) {
+
+            }
             _state.update {
                 it.copy(
                     levels = repo.getGrammar()
                 )
-            }
+            }*/
         }
     }
     fun onEvent(event: GrammarUiEvent) {

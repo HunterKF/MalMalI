@@ -5,9 +5,9 @@ data class GrammarPoint(
     val grammarTitle: String,
     val grammarDef1: String,
     val grammarDef2: String? = null,
-    val exampleEn1: String,
-    val exampleEn2: String,
-    val exampleKo1: String,
-    val exampleKo2: String,
+    val exampleEng1: String,
+    val exampleEng2: String,
+    val exampleKor1: String,
+    val exampleKor2: String,
     val selected: Boolean = false
 )
