@@ -6,6 +6,7 @@ import com.jaegerapps.malmali.grammar.mapper.toGrammarPoint
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.grammar.models.GrammarPointDTO
 import core.Knower
+import core.Knower.d
 import core.Knower.e
 import core.util.Resource
 import io.github.jan.supabase.SupabaseClient
@@ -18,8 +19,13 @@ class GrammarRepoImpl(
     override suspend fun getGrammar(): Resource<List<GrammarLevel>> {
 
         return try {
-            val data = client.from("grammar").select().decodeList<GrammarPointDTO>()
-            val list = data.map { it.toGrammarPoint() }
+            val data = client.from("grammar").select()
+            Knower.d("getGrammar", "Here is the data: ${data.data}")
+
+            val decode = data.decodeList<GrammarPointDTO>()
+            Knower.d("getGrammar", "Here is the decode: ${decode}")
+
+            val list = decode.map { it.toGrammarPoint() }
             Resource.Success(list.toGrammarLevels())
         } catch (e: RestException) {
             e.printStackTrace()

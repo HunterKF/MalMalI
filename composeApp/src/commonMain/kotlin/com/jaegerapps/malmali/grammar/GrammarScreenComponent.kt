@@ -2,6 +2,7 @@ package com.jaegerapps.malmali.grammar
 
 import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.grammar.domain.GrammarRepo
+import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.grammar.presentation.GrammarUiEvent
 import com.jaegerapps.malmali.grammar.presentation.GrammarUiState
 import kotlinx.coroutines.CoroutineScope
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 class GrammarScreenComponent(
     componentContext: ComponentContext,
     private val onNavigate: (String) -> Unit,
-    private val repo: GrammarRepo
+    grammar: List<GrammarLevel>
 ) : ComponentContext by componentContext {
 
     private val _state = MutableStateFlow(GrammarUiState())
@@ -23,15 +24,10 @@ class GrammarScreenComponent(
     val scope = CoroutineScope(Dispatchers.IO)
 
     init {
-        scope.launch {
-            /*when (repo.getGrammar()) {
-
-            }
-            _state.update {
-                it.copy(
-                    levels = repo.getGrammar()
-                )
-            }*/
+        _state.update {
+            it.copy(
+                levels = grammar
+            )
         }
     }
     fun onEvent(event: GrammarUiEvent) {

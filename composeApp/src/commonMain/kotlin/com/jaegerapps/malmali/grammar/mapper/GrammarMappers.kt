@@ -8,8 +8,8 @@ fun GrammarPointDTO.toGrammarPoint(): GrammarPoint {
     return GrammarPoint(
         grammarCategory = grammar_level,
         grammarTitle = grammar_point,
-        grammarDef1 = grammar_definition_1,
-        grammarDef2 = grammar_definition_2,
+        grammarDef1 = grammar_explanation_1,
+        grammarDef2 = grammar_explanation_2,
         exampleEng1 = explain_1_ex_en,
         exampleEng2 = explain_2_ex_en,
         exampleKor1 = explain_1_ex_ko,

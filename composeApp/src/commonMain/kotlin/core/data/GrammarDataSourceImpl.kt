@@ -12,8 +12,14 @@ class GrammarDataSourceImpl(
     private val database: MalMalIDatabase,
 ) : GrammarDataSource {
     //This is used on start up to see if grammar exists and then to save grammar if it doesn't
-    override suspend fun grammarExists(): Boolean {
-        return database.flashCardsQueries.countGrammar().executeAsOne() == 0L
+    override suspend fun grammarExists(): Resource<Boolean> {
+        return try {
+            Resource.Success(database.flashCardsQueries.countGrammar().executeAsOne() == 0L)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Knower.e("grammarExists", "Grammar has failed. ${e.message}")
+            Resource.Error(e)
+        }
     }
 
     override suspend fun insertGrammar(grammar: List<GrammarPoint>): Resource<Boolean> {
