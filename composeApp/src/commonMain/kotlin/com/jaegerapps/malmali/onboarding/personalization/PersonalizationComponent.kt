@@ -2,11 +2,10 @@ package com.jaegerapps.malmali.onboarding.personalization
 
 import com.arkivanov.decompose.ComponentContext
 import core.domain.SettingFunctions
-import core.domain.SupabaseUserFunctions
+import core.domain.supabase.account.SupabaseUserFunctions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

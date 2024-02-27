@@ -15,24 +15,25 @@ import com.jaegerapps.malmali.practice.domain.PracticeDataSource
 import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
 import com.russhwolf.settings.SharedPreferencesSettings
 import core.data.DatabaseDriverFactory
-import core.data.GrammarDataSourceImpl
+import core.data.supabase.grammar.GrammarDataSourceImpl
 import core.data.KtorClient
-import core.data.SupabaseSignInFunctionsImpl
-import core.data.SupabaseUserFunctionsImpl
+import core.data.supabase.signin.SupabaseSignInFunctionsImpl
+import core.data.supabase.account.SupabaseUserFunctionsImpl
 import core.data.gpt.ChatGptApiImpl
 import core.data.settings.SettingFunctionsImpl
+import core.data.supabase.SupabaseClient
 import core.domain.ChatGptApi
-import core.domain.GrammarDataSource
+import core.domain.supabase.grammar.GrammarDataSource
 import core.domain.SettingFunctions
-import core.domain.SupabaseSignInFunctions
-import core.domain.SupabaseUserFunctions
+import core.domain.supabase.signin.SupabaseSignInFunctions
+import core.domain.supabase.account.SupabaseUserFunctions
 
 actual class AppModule(
     private val context: Context,
     private val sharedPreferences: SharedPreferences,
 ) : AppModuleInterface {
 
-    private val supabaseClient = core.data.SupabaseClient.client
+    private val supabaseClient = SupabaseClient.client
     private val okHttpClient = KtorClient.client
     private val database = MalMalIDatabase(
         driver = DatabaseDriverFactory(context).createDriver()

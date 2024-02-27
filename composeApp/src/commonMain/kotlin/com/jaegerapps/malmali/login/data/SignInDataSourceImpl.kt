@@ -3,7 +3,7 @@ package com.jaegerapps.malmali.login.data
 import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.login.domain.UserData
 import core.domain.SettingFunctions
-import core.domain.SupabaseSignInFunctions
+import core.domain.supabase.signin.SupabaseSignInFunctions
 import core.util.Resource
 import io.github.jan.supabase.exceptions.RestException
 

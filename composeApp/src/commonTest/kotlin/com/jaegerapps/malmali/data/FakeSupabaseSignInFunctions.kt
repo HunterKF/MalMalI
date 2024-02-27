@@ -2,7 +2,7 @@ package com.jaegerapps.malmali.data
 
 import com.jaegerapps.malmali.login.data.UserDTO
 import com.jaegerapps.malmali.login.domain.UserData
-import core.domain.SupabaseSignInFunctions
+import core.domain.supabase.signin.SupabaseSignInFunctions
 import core.util.Resource
 
 class FakeSupabaseSignInFunctions: SupabaseSignInFunctions {

@@ -1,9 +1,9 @@
-package core.data
+package core.data.supabase.account
 
 import com.jaegerapps.malmali.login.data.UserDTO
 import com.jaegerapps.malmali.login.domain.UserData
 import com.russhwolf.settings.Settings
-import core.domain.SupabaseUserFunctions
+import core.domain.supabase.account.SupabaseUserFunctions
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.gotrue.auth

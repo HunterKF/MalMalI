@@ -1,11 +1,10 @@
-package core.data
+package core.data.supabase.grammar
 
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
-import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.grammar.models.GrammarPoint
 import core.Knower
 import core.Knower.e
-import core.domain.GrammarDataSource
+import core.domain.supabase.grammar.GrammarDataSource
 import core.util.Resource
 
 class GrammarDataSourceImpl(

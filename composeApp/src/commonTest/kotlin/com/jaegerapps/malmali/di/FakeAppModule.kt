@@ -12,8 +12,8 @@ import com.jaegerapps.malmali.grammar.domain.GrammarRepo
 import com.jaegerapps.malmali.login.domain.SignInDataSource
 import core.domain.ChatGptApi
 import core.domain.SettingFunctions
-import core.domain.SupabaseSignInFunctions
-import core.domain.SupabaseUserFunctions
+import core.domain.supabase.signin.SupabaseSignInFunctions
+import core.domain.supabase.account.SupabaseUserFunctions
 
 class FakeAppModule: AppModuleInterface {
 

@@ -1,7 +1,7 @@
 package com.jaegerapps.malmali.data
 
 import com.jaegerapps.malmali.login.domain.UserData
-import core.domain.SupabaseUserFunctions
+import core.domain.supabase.account.SupabaseUserFunctions
 
 class FakeSupabaseUserFunctions: SupabaseUserFunctions {
     override suspend fun updateUser(user: UserData) {

@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.components.blackBorder
+import core.data.supabase.SupabaseClient
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.compose.stringResource
 import io.github.jan.supabase.compose.auth.composable.NativeSignInResult
@@ -329,7 +330,7 @@ private fun SignInContent(
 private fun GoogleSignInButton(
     onUiEvent: (SignInUiEvent) -> Unit,
 ) {
-    val client = core.data.SupabaseClient.client
+    val client = SupabaseClient.client
     val authState = client.composeAuth.rememberSignInWithGoogle(
         onResult = {
             when (it) { //handle errors

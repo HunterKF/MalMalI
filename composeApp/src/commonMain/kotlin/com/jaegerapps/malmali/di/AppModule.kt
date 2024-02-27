@@ -6,10 +6,10 @@ import com.jaegerapps.malmali.grammar.domain.GrammarRepo
 import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.practice.domain.PracticeDataSource
 import core.domain.ChatGptApi
-import core.domain.GrammarDataSource
+import core.domain.supabase.grammar.GrammarDataSource
 import core.domain.SettingFunctions
-import core.domain.SupabaseSignInFunctions
-import core.domain.SupabaseUserFunctions
+import core.domain.supabase.signin.SupabaseSignInFunctions
+import core.domain.supabase.account.SupabaseUserFunctions
 
 expect class AppModule: AppModuleInterface {
 

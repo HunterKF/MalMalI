@@ -46,8 +46,7 @@ class PracticeComponent(
     init {
         lifecycle.doOnCreate {
             scope.launch {
-                val sets = async { practiceDataSource.getSets() }.await()
-                val grammar = async { practiceDataSource.getGrammar() }.await()
+
 
             }
 

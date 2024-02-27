@@ -1,4 +1,4 @@
-package core.data
+package core.data.supabase
 
 import com.jaegerapps.malmali.BuildKonfig
 import io.github.jan.supabase.compose.auth.ComposeAuth

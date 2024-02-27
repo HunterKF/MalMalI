@@ -2,13 +2,12 @@ CREATE TABLE flashcards(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     word TEXT NOT NULL,
     meaning TEXT NOT NULL,
-    memorization_level INTEGER DEFAULT 0,
     linked_set INTEGER NOT NULL
 );
 
 insertFlashCard:
-INSERT OR REPLACE INTO flashcards(id, word, meaning, memorization_level, linked_set)
-VALUES(?, ?, ?, ?, ? );
+INSERT OR REPLACE INTO flashcards(id, word, meaning, linked_set)
+VALUES(?, ?, ?, ?);
 
 selectSetCards:
 SELECT * FROM flashcards
@@ -16,7 +15,7 @@ WHERE linked_set=:setId;
 
 updateCard:
 UPDATE flashcards
-SET word=:word, meaning=:meaning, memorization_level=:newLevel
+SET word=:word, meaning=:meaning
 WHERE id=:id;
 
 deleteSingleCard:

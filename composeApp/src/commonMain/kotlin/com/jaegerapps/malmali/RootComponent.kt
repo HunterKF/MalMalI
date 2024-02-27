@@ -27,6 +27,8 @@ import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsCompone
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
 import com.jaegerapps.malmali.practice.presentation.PracticeComponent
+import core.Knower
+import core.Knower.e
 import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,6 +63,7 @@ class RootComponent(
 
             scope.launch {
                 checkGrammar()
+
                 val result = async { appModule.userFunctions.retrieveAccessToken() }.await()
 
                 when {
@@ -269,7 +272,7 @@ class RootComponent(
                                     )
                                 }
                             } catch (e: Exception) {
-                                println("An error occurred! ㅠㅠ")
+                                Knower.e("onCreateUser", "An error occurred! ㅠㅠ")
                             }
 
                         },
@@ -318,7 +321,6 @@ class RootComponent(
                         },
                         chatRepo = appModule.chatFunctions,
                         componentContext = context,
-
                         navigateToConversation = { title, background, iconTag ->
                             navigation.pushNew(
                                 Configuration.ConversationScreen(
@@ -458,16 +460,7 @@ class RootComponent(
 
     private fun checkGrammar() {
         scope.launch {
-            /*when (val grammar = async { appModule.grammarRepo.getGrammar() }.await()) {
-                is Resource.Error -> TODO()
-                is Resource.Success -> {
-                    grammar.data?.forEach {
-                        appModule.grammarFunctions.updateGrammar(it.grammarList)
-                    }
-                }
-            }*/
             when (appModule.grammarFunctions.grammarExists()) {
-
                 is Resource.Error -> {
                     when (val grammar = async { appModule.grammarRepo.getGrammar() }.await()) {
                         is Resource.Error -> TODO()
@@ -512,7 +505,11 @@ class RootComponent(
                 }
             }
         }
+    }
+    private fun getDefaultFlashcards() {
+        scope.launch {
 
+        }
     }
 }
 
@@ -520,5 +517,5 @@ data class RootState(
     val user: UserData? = null,
     val loggedIn: Boolean = false,
     val loading: Boolean = false,
-    val grammar: List<GrammarLevel> = emptyList()
+    val grammar: List<GrammarLevel> = emptyList(),
 )

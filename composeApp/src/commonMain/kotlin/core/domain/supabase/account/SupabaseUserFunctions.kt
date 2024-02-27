@@ -1,4 +1,4 @@
-package core.domain
+package core.domain.supabase.account
 
 import com.jaegerapps.malmali.login.domain.UserData
 

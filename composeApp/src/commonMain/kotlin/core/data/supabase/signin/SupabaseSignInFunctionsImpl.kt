@@ -1,10 +1,10 @@
-package core.data
+package core.data.supabase.signin
 
 import com.jaegerapps.malmali.login.data.UserDTO
 import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.login.domain.UserEntity
 import com.jaegerapps.malmali.login.domain.toUserData
-import core.domain.SupabaseSignInFunctions
+import core.domain.supabase.signin.SupabaseSignInFunctions
 import core.util.Resource
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.RestException

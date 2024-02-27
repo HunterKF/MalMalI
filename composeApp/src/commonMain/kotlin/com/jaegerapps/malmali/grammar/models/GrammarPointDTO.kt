@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class GrammarPointDTO(
+    //DTOs are sent to the database
     @SerialName("id") val id: Int,
     @SerialName("grammar_point") val grammar_point: String,
     @SerialName("grammar_explanation_1") val grammar_explanation_1: String,
