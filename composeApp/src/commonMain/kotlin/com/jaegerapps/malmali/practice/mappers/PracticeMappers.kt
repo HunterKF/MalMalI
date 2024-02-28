@@ -1,6 +1,5 @@
 package com.jaegerapps.malmali.practice.mappers
 
-import com.jaegerapps.malmali.composeApp.database.Grammar
 import com.jaegerapps.malmali.composeApp.database.History
 import com.jaegerapps.malmali.grammar.models.GrammarPointDTO
 import com.jaegerapps.malmali.practice.models.HistoryDTO
@@ -39,19 +38,6 @@ fun History.toHistoryEntity(): HistoryEntity {
     )
 }
 
-fun Grammar.toGrammarDTO(): GrammarPointDTO {
-    return GrammarPointDTO(
-        id = grammar_category.toInt(),
-        grammar_level = grammar_category.toInt(),
-        grammar_point = grammar_title,
-        grammar_explanation_1 = grammar_definition_1,
-        grammar_explanation_2 = grammar_definition_2,
-        explain_1_ex_en = example_eng_1,
-        explain_2_ex_en = example_eng_2,
-        explain_1_ex_ko = example_kor_1,
-        explain_2_ex_ko = example_kor_2
-    )
-}
 
 fun HistoryEntity.toUiHistoryItem(): UiHistoryItem {
     return UiHistoryItem(

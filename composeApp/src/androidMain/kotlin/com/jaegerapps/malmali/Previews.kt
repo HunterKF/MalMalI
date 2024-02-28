@@ -59,7 +59,6 @@ import com.jaegerapps.malmali.onboarding.intro.components.PagerIndicator
 import com.jaegerapps.malmali.onboarding.intro.components.SkipAndNextButton
 import com.jaegerapps.malmali.practice.models.UiPracticeGrammar
 import com.jaegerapps.malmali.practice.models.UiPracticeVocab
-import com.jaegerapps.malmali.practice.presentation.PracticeScreen
 import com.jaegerapps.malmali.practice.presentation.components.PracticeContainer
 import com.jaegerapps.malmali.practice.presentation.components.PracticeTextField
 import com.jaegerapps.malmali.vocabulary.models.VocabSet
@@ -71,6 +70,7 @@ import com.jaegerapps.malmali.vocabulary.components.SelectableButton
 import com.jaegerapps.malmali.vocabulary.components.TitleBox
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
 import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.VocabularyCard
 import com.jaegerapps.malmali.vocabulary.study_flashcards.components.VocabularyButtons
 import com.jaegerapps.malmali.vocabulary.study_flashcards.components.VocabularyContainer
 import core.presentation.MalMalITheme
@@ -436,146 +436,6 @@ private fun Preview_ActionButton() {
 
 @Preview
 @Composable
-private fun Preview_FolderScreen() {
-    val list = listOf<VocabSet>(
-        VocabSet(
-            "Default",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 1,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Food",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 2,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Travel",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 3,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-        VocabSet(
-            "Test",
-            MR.images.cat_icon,
-            expanded = false,
-            setId = 4,
-            isPrivate = SetMode.PUBLIC,
-            dateCreated = 1
-        ),
-    )
-    MalMalITheme(false) {
-//        FolderScreen(
-//            list
-//        )
-    }
-}
-
-@Preview
-@Composable
 private fun Preview_SettingsAndModal() {
     MalMalITheme(false) {
         Column(Modifier.padding(12.dp)) {
@@ -614,7 +474,7 @@ fun Preview_VocabularyContainer() {
         VocabularyContainer(
             setSize = 30,
             currentIndex = 1,
-            card = UiFlashcard(uiId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+            card = VocabularyCard(word = "먹다", definition = "to eat"),
             showBack = false,
             onClick = {
 

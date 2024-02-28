@@ -6,8 +6,8 @@ import android.content.SharedPreferences
 import com.jaegerapps.malmali.chat.data.ChatRepoImpl
 import com.jaegerapps.malmali.chat.domain.ChatRepo
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
-import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
-import com.jaegerapps.malmali.grammar.domain.GrammarRepo
+import com.jaegerapps.malmali.grammar.data.RootComponentUseCasesImpl
+import com.jaegerapps.malmali.grammar.domain.RootComponentUseCases
 import com.jaegerapps.malmali.login.data.SignInDataSourceImpl
 import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.practice.data.PracticeDataSourceImpl
@@ -15,7 +15,6 @@ import com.jaegerapps.malmali.practice.domain.PracticeDataSource
 import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
 import com.russhwolf.settings.SharedPreferencesSettings
 import core.data.DatabaseDriverFactory
-import core.data.supabase.grammar.GrammarDataSourceImpl
 import core.data.KtorClient
 import core.data.supabase.signin.SupabaseSignInFunctionsImpl
 import core.data.supabase.account.SupabaseUserFunctionsImpl
@@ -23,7 +22,6 @@ import core.data.gpt.ChatGptApiImpl
 import core.data.settings.SettingFunctionsImpl
 import core.data.supabase.SupabaseClient
 import core.domain.ChatGptApi
-import core.domain.supabase.grammar.GrammarDataSource
 import core.domain.SettingFunctions
 import core.domain.supabase.signin.SupabaseSignInFunctions
 import core.domain.supabase.account.SupabaseUserFunctions
@@ -40,8 +38,8 @@ actual class AppModule(
     )
 
 
-    actual override val grammarRepo: GrammarRepo by lazy {
-        GrammarRepoImpl(client = supabaseClient)
+    actual override val rootComponentUseCases: RootComponentUseCases by lazy {
+        RootComponentUseCasesImpl(client = supabaseClient)
     }
     actual override val signInRepo: SignInDataSource by lazy {
         SignInDataSourceImpl(
@@ -51,7 +49,7 @@ actual class AppModule(
     }
     actual override val vocabFunctions: VocabularySetSourceFunctions by lazy {
         VocabularySetSourceFunctionsImpl(
-            database = database
+            client = supabaseClient
         )
     }
     actual override val settingFunctions: SettingFunctions by lazy {
@@ -88,10 +86,4 @@ actual class AppModule(
             database = database
         )
     }
-    actual override val grammarFunctions: GrammarDataSource by lazy {
-        GrammarDataSourceImpl(
-            database = database
-        )
-    }
-
 }

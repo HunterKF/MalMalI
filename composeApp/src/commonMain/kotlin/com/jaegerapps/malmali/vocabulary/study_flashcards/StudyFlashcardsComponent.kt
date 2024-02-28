@@ -2,10 +2,15 @@ package com.jaegerapps.malmali.vocabulary.study_flashcards
 
 import VocabularySetSourceFunctions
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
+import com.jaegerapps.malmali.vocabulary.models.VocabularyCard
+import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -18,63 +23,32 @@ class StudyFlashcardsComponent(
     private val database: VocabularySetSourceFunctions,
     private val onCompleteNavigate: () -> Unit,
     private val onNavigate: (String) -> Unit,
-    private val onEditNavigate: (String, Long, Long) -> Unit,
-    setId: Long,
-    setTitle: String,
-    date: Long,
+    private val onEditNavigate: (String, Int, String) -> Unit,
+    private val set: VocabSet,
 ) : ComponentContext by componentContext {
 
     private val _state = MutableStateFlow(StudyFlashcardsUiState())
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    val state = combine(
-        _state,
-        database.getAllSetCards(setId),
-        database.getSetAsFlow(setTitle, date)
-    ) { newState, cards, set ->
-        val cardWithUiId = (cards.indices).map {
-            cards[it].copy(
-                uiId = it.toLong()
-            )
+    val state = _state
+
+    init {
+        lifecycle.doOnCreate {
+            _state.update {
+                it.copy(
+                    loading = false,
+                    set = set,
+                    currentCard = set.cards.first(),
+                    currentIndex = 0
+                )
+            }
         }
-        val state = newState.copy(
-            set = if (this._state.value.set == null) set else this._state.value.set,
-            cards = this._state.value.cards.ifEmpty { cardWithUiId },
-            currentCard = this._state.value.currentCard ?: cardWithUiId.first(),
-            currentIndex = if (this._state.value.currentIndex == -1) 0 else this._state.value.currentIndex,
-            showBack = this._state.value.showBack,
-            isComplete = this._state.value.isComplete,
-            experienceGained = this._state.value.experienceGained,
-            uiError = this._state.value.uiError
-        )
-        _state.update {
-            it.copy(
-                set = set,
-                cards = if (_state.value.cards.isEmpty()) {
-                    cardWithUiId
-                } else {
-                    it.cards
-                },
-                currentCard = it.currentCard ?: cardWithUiId.first(),
-                currentIndex = if (it.currentIndex == -1) 0 else it.currentIndex,
-                showBack = it.showBack,
-                isComplete = it.isComplete,
-                experienceGained = it.experienceGained,
-                uiError = it.uiError
-            )
-        }
-        state
-    }.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(300L),
-        initialValue = StudyFlashcardsUiState()
-    )
+    }
 
 
     fun onEvent(event: StudyFlashcardsUiEvent) {
         when (event) {
             StudyFlashcardsUiEvent.OnFlipCard -> {
-
                 _state.update {
                     it.copy(
                         showBack = !it.showBack
@@ -89,7 +63,7 @@ class StudyFlashcardsComponent(
                     _state.update {
                         it.copy(
                             currentIndex = newIndex,
-                            currentCard = _state.value.cards[newIndex]
+                            currentCard = _state.value.set?.cards?.get(newIndex)
                         )
                     }
                 } else {
@@ -111,40 +85,34 @@ class StudyFlashcardsComponent(
             }
 
             is StudyFlashcardsUiEvent.OnDontKnowClick -> {
-                val cardToUpdate = _state.value.currentCard!!.copy(
-                    level = _state.value.currentCard!!.level - 1
-                )
+
                 val newList = moveCardToEnd(
                     _state.value.currentIndex,
-                    card = cardToUpdate,
-                    cards = _state.value.cards
+                    card = _state.value.currentCard!!,
+                    cards = _state.value.set!!.cards
                 )
                 scope.launch {
                     _state.update {
                         it.copy(
-                            cards = newList,
+                            set = it.set!!.copy(
+                                cards = newList
+                            ),
                             currentCard = newList[it.currentIndex]
                         )
                     }
-                    println("dead here")
-                    database.updateCard(cardToUpdate)
                 }
             }
 
             is StudyFlashcardsUiEvent.OnGotItClick -> {
                 scope.launch {
-                    val cardToUpdate = state.value.currentCard!!.copy(
-                        level = 2
-                    )
-                    database.updateCard(cardToUpdate)
 
                     //size = 5, current index is 4
                     val newIndex = state.value.currentIndex + 1
 
-                    if (newIndex <= state.value.cards.size - 1) {
+                    if (newIndex <= state.value.set!!.cards.size - 1) {
                         _state.update {
                             it.copy(
-                                currentCard = it.cards[newIndex],
+                                currentCard = it.set!!.cards[newIndex],
                                 currentIndex = newIndex
                             )
                         }
@@ -174,9 +142,9 @@ class StudyFlashcardsComponent(
                 _state.update { currentState ->
                     val newIndex = currentState.currentIndex + 1
 
-                    if (newIndex <= currentState.cards.size - 1) {
+                    if (newIndex <= currentState.set!!.cards.size - 1) {
                         currentState.copy(
-                            currentCard = currentState.cards[newIndex],
+                            currentCard = currentState.set.cards[newIndex],
                             currentIndex = newIndex
                         )
                     } else {
@@ -189,14 +157,10 @@ class StudyFlashcardsComponent(
             }
 
             StudyFlashcardsUiEvent.OnRepeatClick -> {
-                val repeatList = _state.value.cards.sortedBy { it.level }
-                println("repeatList")
-                println(repeatList)
                 _state.update {
                     it.copy(
-                        cards = repeatList,
                         currentIndex = 0,
-                        currentCard = repeatList[0],
+                        currentCard = it.set!!.cards[0],
                         isComplete = false
                     )
                 }
@@ -231,15 +195,12 @@ class StudyFlashcardsComponent(
 
 private fun moveCardToEnd(
     currentIndex: Int,
-    card: UiFlashcard,
-    cards: List<UiFlashcard>,
-): List<UiFlashcard> {
-    println("List before being moved")
-    println(cards)
-    val dropList: MutableList<UiFlashcard> = cards.toMutableList()
+    card: VocabularyCard,
+    cards: List<VocabularyCard>,
+): List<VocabularyCard> {
+    val dropList: MutableList<VocabularyCard> = cards.toMutableList()
     dropList.removeAt(currentIndex)
     dropList.add(card)
-    println("List after being moved")
     println(dropList)
     return dropList.toList()
 }

@@ -1,133 +1,40 @@
 package com.jaegerapps.malmali.vocabulary.data
 
 import VocabularySetSourceFunctions
-import app.cash.sqldelight.coroutines.asFlow
-import app.cash.sqldelight.coroutines.mapToList
-import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
-import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
-import com.jaegerapps.malmali.vocabulary.create_set.presentation.toViewLong
-import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.mapper.toFlashSetDto
 import com.jaegerapps.malmali.vocabulary.models.VocabSet
-import com.jaegerapps.malmali.vocabulary.mapper.toUiFlashcard
-import com.jaegerapps.malmali.vocabulary.mapper.toVocabSet
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.supervisorScope
+import core.data.supabase.SupabaseKeys
+import core.util.Resource
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.postgrest.from
 
-class VocabularySetSourceFunctionsImpl(database: MalMalIDatabase) : VocabularySetSourceFunctions {
-    private val queries = database.flashCardsQueries
-
+class VocabularySetSourceFunctionsImpl(private val client: SupabaseClient) : VocabularySetSourceFunctions {
     override suspend fun addSet(
-        title: String,
-        size: Long,
-        tags: String?,
-        isPrivate: SetMode,
-        id: Long?,
-        dateCreated: Long
+        vocabSet: VocabSet,
+        username: String
     ) {
-        queries.insertSet(
-            null,
-            set_title = title,
-            set_size = size,
-            tags = tags,
-            date_created = dateCreated,
-            is_public = isPrivate.toViewLong()
-        )
-    }
 
-    override suspend fun getSet(title: String, date: Long): VocabSet {
-        return queries.selectOneSet(title, date).executeAsOne().toVocabSet()
-    }
-
-    override fun getSetAsFlow(setTitle: String, date: Long): Flow<VocabSet> {
-        return queries.selectOneSet(setTitle, dateCreated =date)
-            .asFlow()
-            .mapToList(Dispatchers.IO)
-            .map { listEntity ->
-                supervisorScope {
-                    listEntity.map {
-                        it.toVocabSet()
-                    }
-                        .first()
-                }
-            }
-    }
-
-    override fun getAllSets(): Flow<List<VocabSet>> {
-        return queries.selectAllSets()
-            .asFlow()
-            .mapToList(Dispatchers.IO)
-            .map { listEntity ->
-                supervisorScope {
-                    listEntity.map {
-                        it.toVocabSet()
-                    }
-                }
-            }
-    }
-
-
-    override suspend fun deleteSet(setId: Long) {
-        queries.deleteSet(setId)
-    }
-
-    override suspend fun updateSet(set: VocabSet) {
-        queries.updateSet(
-            setTitle = set.title, size = 0, tags = null, isPrivate = set.isPrivate.toViewLong(), id = set.setId!!
-        )
-    }
-
-
-    override suspend fun insertCards(list: List<UiFlashcard>, linkedSetId: Long) {
-        list.forEach {
-            when (it.cardId) {
-                null -> {
-                    queries.insertFlashCard(
-                        id = null,
-                        word = it.word,
-                        meaning = it.def,
-                        memorization_level = it.level,
-                        linked_set = linkedSetId
-                    )
-                }
-                else -> {
-                    queries.updateCard(
-                        id = it.cardId,
-                        word = it.word,
-                        meaning = it.def,
-                        newLevel = it.level
-                    )
-                }
-            }
-
+        client.from(SupabaseKeys.SETS).insert(vocabSet.toFlashSetDto(arrayOf(username))) {
+            select()
         }
     }
 
-    override suspend fun updateCard(card: UiFlashcard) {
-        queries.updateCard(card.word, card.def, card.level, card.cardId!!)
+    override suspend fun getSet(setId: Int, setTitle: String): Resource<VocabSet> {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun deleteSingleCard(card: UiFlashcard) {
-        queries.deleteSingleCard(card.cardId!!)
+    override suspend fun getAllSets(): Resource<List<VocabSet>> {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun deleteAllCards(setId: Long) {
-        queries.deleteSetCards(setId)
+
+    override suspend fun deleteSet(setId: Int) {
+        TODO("Not yet implemented")
     }
 
-    override fun getAllSetCards(setId: Long): Flow<List<UiFlashcard>> {
-        return queries.selectSetCards(setId)
-            .asFlow()
-            .mapToList(Dispatchers.IO)
-            .map { listEntity ->
-                supervisorScope {
-                    listEntity.map {
-                        it.toUiFlashcard()
-                    }
-                }
-            }
+    override suspend fun updateSet(set: VocabSet) {
+        TODO("Not yet implemented")
     }
+
 
 }

@@ -4,5 +4,7 @@ import com.jaegerapps.malmali.vocabulary.models.VocabSet
 
 data class VocabHomeUiState(
     val setList: List<VocabSet> = emptyList(),
-    val isExpanded: Boolean = false
+    val error: String? = null,
+    val isExpanded: Boolean = false,
+    val loading: Boolean = false
 )

@@ -111,7 +111,7 @@ fun StudyFlashcardsScreen(
 
                     FolderContainer(
                         title = state.value.set?.title ?: "error",
-                        icon = painterResource(it.icon),
+                        icon = painterResource(it.icon.resource),
                         onEvent = {
                             component.onEvent(StudyFlashcardsUiEvent.OnFolderClick(onClick = {
                                 expanded = !expanded
@@ -150,7 +150,7 @@ fun StudyFlashcardsScreen(
                 state.value.currentCard?.let { card ->
                     VocabularyContainer(
                         modifier = Modifier.weight(1f),
-                        setSize = state.value.cards.size,
+                        setSize = state.value.set!!.cards.size,
                         currentIndex = state.value.currentIndex + 1,
                         card = card,
                         showBack = state.value.showBack,

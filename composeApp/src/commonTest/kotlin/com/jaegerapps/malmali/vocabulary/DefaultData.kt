@@ -1,184 +1,106 @@
 package com.jaegerapps.malmali.vocabulary
 
 import com.jaegerapps.malmali.MR
+import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.grammar.models.GrammarPoint
 import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
 import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
 import com.jaegerapps.malmali.vocabulary.models.VocabSet
+import com.jaegerapps.malmali.vocabulary.models.VocabularyCard
 
-val exampleVocabSetList = listOf<VocabSet>(
+val exampleVocabSetList = listOf(
     VocabSet(
-        "Set 1",
-        MR.images.cat_icon,
-        expanded = false,
         setId = 1,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 11
+        title = "Fruits",
+        icon = IconResource.resourceFromTag("bear 1"),
+        isPublic = true,
+        tags = listOf("Food", "Nature"),
+        dateCreated = "2024-02-28",
+        cards = listOf(
+            VocabularyCard(word = "Apple", definition = "A round fruit with red, yellow, or green skin."),
+            VocabularyCard(word = "Banana", definition = "A long curved fruit with a yellow skin.")
+        )
     ),
     VocabSet(
-        "Set 2",
-        MR.images.cat_icon,
-        expanded = false,
         setId = 2,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 12
+        title = "Vegetables",
+        icon = IconResource.resourceFromTag("bear 1"),
+        isPublic = false,
+        tags = listOf("Food", "Healthy"),
+        dateCreated = "2024-02-27",
+        cards = listOf(
+            VocabularyCard(word = "Carrot", definition = "A long pointed orange vegetable."),
+            VocabularyCard(word = "Tomato", definition = "A red or yellowish fruit with a juicy pulp.")
+        )
     ),
     VocabSet(
-        "Set 3",
-        MR.images.cat_icon,
-        expanded = false,
         setId = 3,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 13
-    ),
-    VocabSet(
-        "Set 3",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 3,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 14
-    ),
-    VocabSet(
-        "Set 4",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 4,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 15
-    ),
-    VocabSet(
-        "Set 5",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 5,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 16
-    ),
-    VocabSet(
-        "Set 6",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 6,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 17
-    ),
-    VocabSet(
-        "Set 7",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 7,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 18
-    ),
-    VocabSet(
-        "Set 8",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 8,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 19
-    ),
-    VocabSet(
-        "Set 9",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 9,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 20
-    ),
-    VocabSet(
-        "Set 10",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 10,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 21
-    ),
-    VocabSet(
-        "Set 11",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 11,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 22
-    ),
-    VocabSet(
-        "Set 12",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 12,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 23
-    ),
-    VocabSet(
-        "Set 13",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 13,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 24
-    ),
-    VocabSet(
-        "Set 14",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 14,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 25
-    ),
-    VocabSet(
-        "Set 15",
-        MR.images.cat_icon,
-        expanded = false,
-        setId = 15,
-        isPrivate = SetMode.PUBLIC,
-        dateCreated = 26
+        title = "Tech Terms",
+        icon = IconResource.resourceFromTag("bear 1"),
+        isPublic = true,
+        tags = listOf("Technology", "Modern"),
+        dateCreated = "2024-02-26",
+        cards = listOf(
+            VocabularyCard(word = "Computer", definition = "An electronic device for storing and processing data."),
+            VocabularyCard(word = "Internet", definition = "A global computer network providing a variety of information.")
+        )
     )
 )
 
 val exampleUiFlashcardList = listOf<UiFlashcard>(
     UiFlashcard(
-        cardId = 1,
         word = "먹다",
         def = "to eat",
-        level = 1,
         error = false
     ),
     UiFlashcard(
-        cardId = 2,
         word = "가다",
         def = "to go",
-        level = 1,
         error = false
     ),
     UiFlashcard(
-        cardId = 3,
         word = "마시다",
         def = "to drink",
-        level = 1,
         error = false
     ),
     UiFlashcard(
-        cardId = 4,
         word = "재밌다",
         def = "to be fun",
-        level = 1,
         error = false
     ),
     UiFlashcard(
-        cardId = 5,
         word = "성공하다",
         def = "to succeed",
-        level = 1,
         error = false
+    )
+)
+val exampleVocabularyCardList = listOf<VocabularyCard>(
+    VocabularyCard(
+        word = "먹다",
+        definition = "to eat",
+    ),
+    VocabularyCard(
+        word = "가다",
+        definition = "to go",
+    ),
+    VocabularyCard(
+        word = "마시다",
+        definition = "to drink",
+    ),
+    VocabularyCard(
+        word = "재밌다",
+        definition = "to be fun",
+    ),
+    VocabularyCard(
+        word = "성공하다",
+        definition = "to succeed",
     )
 )
 
 val exampleUiFlashcardListWithUiId = (exampleUiFlashcardList.indices).map {
     exampleUiFlashcardList[it].copy(
-        uiId = it.toLong()
+        uiId = it
     )
 }
 

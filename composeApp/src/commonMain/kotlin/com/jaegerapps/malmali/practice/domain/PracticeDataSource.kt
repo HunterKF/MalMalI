@@ -8,8 +8,6 @@ import core.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface PracticeDataSource {
-    suspend fun getGrammar(): Resource<List<GrammarLevel>>
-    suspend fun getSets(): Resource<List<VocabSet>>
     suspend fun insertHistorySql(history: UiHistoryItem): Resource<Boolean>
     suspend fun insertHistorySupabase(history: UiHistoryItem): Resource<Boolean>
     fun getHistorySql(): Flow<List<HistoryEntity>>

@@ -50,11 +50,14 @@
 
     <string name="popup_confirm_save_title">Save?</string>
     <string name="popup_confirm_save_content">You can edit this later.</string>
-     <string name="popup_confirm_delete_title">Delete?</string>
+    <string name="popup_confirm_delete_title">Delete?</string>
     <string name="popup_confirm_delete_content">This cannot be undone.</string>
     <string name="popup_set_complete_title">All done!</string>
     <string name="popup_set_complete_cards_reviewed">Cards reviewed: %s</string>
     <string name="popup_set_complete_exp_gained">Experience gained: %s</string>
+
+    <string name="placeholder_definition">Definition</string>
+    <string name="placeholder_word">Word</string>
 
 
 

@@ -1,7 +1,6 @@
 package com.jaegerapps.malmali.grammar
 
 import com.arkivanov.decompose.ComponentContext
-import com.jaegerapps.malmali.grammar.domain.GrammarRepo
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.grammar.presentation.GrammarUiEvent
 import com.jaegerapps.malmali.grammar.presentation.GrammarUiState
@@ -10,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class GrammarScreenComponent(
     componentContext: ComponentContext,

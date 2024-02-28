@@ -2,25 +2,28 @@ package com.jaegerapps.malmali.vocabulary.create_set.presentation
 
 import VocabularySetSourceFunctions
 import com.arkivanov.decompose.ComponentContext
+import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.login.domain.UserData
+import com.jaegerapps.malmali.vocabulary.create_set.domain.mapper.toUiFlashcard
+import com.jaegerapps.malmali.vocabulary.create_set.domain.mapper.toVocabCardList
 import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
 import com.jaegerapps.malmali.vocabulary.models.VocabSet
+import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 
 class CreateSetComponent(
     componentContext: ComponentContext,
     val setTitle: String?,
-    val date: Long?,
-    val setId: Long?,
+    val date: String?,
+    val setId: Int?,
     private val vocabFunctions: VocabularySetSourceFunctions,
+    private val userData: UserData,
     private val onComplete: () -> Unit,
     private val onModalNavigate: (String) -> Unit,
 ) : ComponentContext by componentContext {
@@ -35,47 +38,40 @@ class CreateSetComponent(
         //If we are going to edit a set, we check it here. In order to get a set, we need the id, title, and date.
         //The date is used to check for a single set, so the names could be duplicates, but with the date, it returns one set.
         if (setId != null && setTitle != null && date != null) {
-            println("setId")
-            println(setId)
-            val combineFlow = combine(
-                vocabFunctions.getSetAsFlow(setTitle, date = date),
-                vocabFunctions.getAllSetCards(setId)
-            ) { set, cards ->
-                //We use a uiId for the cards in the ui. This is given because the id of the card is used for the database, not for the ui
-                val uiIdAddedCards = (cards.indices).map {
-                    cards[it].copy(
-                        uiId = it.toLong()
-                    )
-                }
-                _state.update {
-                    it.copy(
-                        title = set.title,
-                        uiFlashcards = uiIdAddedCards,
-                        icon = set.icon,
-                        isPrivate = set.isPrivate
-                    )
-                }
-            }
             scope.launch {
-                //takes while these values don't exist
-                combineFlow.takeWhile { _state.value.title == "" && _state.value.uiFlashcards.isEmpty() }
-                    .collect()
+                _state.update { it.copy(isLoading = true) }
+                when (val result = async { vocabFunctions.getSet(setId, setTitle) }.await()) {
+                    is Resource.Error -> _state.update { it.copy(error = UiError.UNKNOWN_ERROR) }
+                    is Resource.Success -> {
+                        if (result.data != null) {
+                            val set = result.data
+                            _state.update {
+                                it.copy(
+                                    title = set.title,
+                                    uiFlashcards = set.toUiFlashcard(),
+                                    icon = set.icon,
+                                    isPublic = set.isPublic,
+                                    isLoading = false
+                                )
+                            }
+                        }
+                    }
+                }
             }
-        } else if (_state.value.uiFlashcards.isEmpty()){
+        } else if (_state.value.uiFlashcards.isEmpty()) {
             //creates 10 UiFlashcards for the user to enter.
-           _state.update {
-               it.copy(
-                   uiFlashcards = (1..10).map {
-                       UiFlashcard(
-                           uiId = it.toLong(),
-                           word = "",
-                           def = "",
-                           level = 1,
-                           error = false
-                       )
-                   }
-               )
-           }
+            _state.update {
+                it.copy(
+                    uiFlashcards = (1..10).map { id ->
+                        UiFlashcard(
+                            uiId = id,
+                            word = "",
+                            def = "",
+                            error = false
+                        )
+                    }
+                )
+            }
         }
 
     }
@@ -92,7 +88,6 @@ class CreateSetComponent(
                                 uiId = if (id != null) id + 1 else 1,
                                 word = "",
                                 def = "",
-                                level = 1,
                                 error = false
                             )
                         )
@@ -128,7 +123,7 @@ class CreateSetComponent(
             is CreateSetUiEvent.ChangePublicSetting -> {
                 _state.update {
                     it.copy(
-                        isPrivate = event.viewSetting
+                        isPublic = event.viewSetting
                     )
                 }
             }
@@ -147,6 +142,7 @@ class CreateSetComponent(
                             )
                         }
                     }
+
                     PopUpMode.SAVE -> {
                         //changes mode to save, checks for errors, then changes popup to true and the mode to SAVE
                         val error = checkForBlanks()
@@ -165,6 +161,7 @@ class CreateSetComponent(
                             }
                         }
                     }
+
                     PopUpMode.DISMISS -> {
                         _state.update {
                             it.copy(
@@ -184,8 +181,7 @@ class CreateSetComponent(
                         scope.launch {
                             if (setId != null) {
                                 //If we have a set that was being edited, all will be erased. then we go to home screen
-                                vocabFunctions.deleteSet(setId)
-                                vocabFunctions.deleteAllCards(setId)
+                                async { vocabFunctions.deleteSet(setId) }.await()
                                 onComplete()
                             } else {
                                 //There is no set, we go to home screen
@@ -198,42 +194,38 @@ class CreateSetComponent(
                         //Made a vocab set to bring all the elements of the UI together. This is where we set the date stamp for this.
                         val vocabSet = VocabSet(
                             title = _state.value.title,
-                            icon = _state.value.icon,
-                            setId = setId,
-                            expanded = false,
-                            isPrivate = _state.value.isPrivate,
-                            dateCreated = date ?: Clock.System.now().toEpochMilliseconds()
+                            icon = _state.value.icon ?: IconResource.resourceFromTag("bear 1"),
+                            setId = 0,
+                            isPublic = _state.value.isPublic,
+                            tags = _state.value.tags,
+                            dateCreated = "",
+                            cards = _state.value.uiFlashcards.toVocabCardList()
                         )
                         scope.launch {
 
                             if (setId != null && setTitle != null && date != null) {
                                 //this means we are editing a set, so we just update it based on this
                                 vocabFunctions.updateSet(
-                                    set = vocabSet
+                                    set = vocabSet.copy(
+                                        setId = setId,
+                                        title = setTitle,
+                                        dateCreated = date
+                                    )
                                 )
                             } else {
                                 //Adding a set
                                 vocabFunctions.addSet(
-                                    id = null,
-                                    title = vocabSet.title,
-                                    size = _state.value.uiFlashcards.size.toLong(),
-                                    tags = null,
-                                    isPrivate = vocabSet.isPrivate,
-                                    dateCreated = vocabSet.dateCreated
+                                    vocabSet,
+                                    username = userData.nickname
                                 )
                             }
-                            //In order to link the flashcards with the set, we need a reference to the setId.
-                            val setId = vocabFunctions.getSet(title = vocabSet.title, date = vocabSet.dateCreated).setId
-                            if (setId != null) {
-                                vocabFunctions.insertCards(_state.value.uiFlashcards, setId)
-                            } else {
-                                /*TODO - Error handling*/
-                            }
+
                         }
                         //moved outside of scope b/c this has to run on the main, can't do it inside a coroutine
                         onComplete()
 
                     }
+
                     else -> {
                         //Shouldn't be able to get here
                     }
@@ -242,22 +234,13 @@ class CreateSetComponent(
             }
 
             is CreateSetUiEvent.DeleteWord -> {
-                val toBeDeleted = state.value.uiFlashcards.firstOrNull { it.uiId == event.cardId }
-                toBeDeleted?.let { card ->
-                    _state.update {
-                        it.copy(
-                            uiFlashcards = it.uiFlashcards.minus(card)
-                        )
-                    }
-                    if (card.cardId != null) {
-                        //the card id is the reference to the id inside the database, if it is not null, then it is not a new card.
-                        //Maybe I should make it so you don't delete something until you confirm that you want to save it...
-                        //TODO - Make a to delete list as part of the ui, and then delete the list from the db on save. Boo
-                        scope.launch {
-                            vocabFunctions.deleteSingleCard(card)
-                        }
-                    }
+                val toBeDeleted = state.value.uiFlashcards[event.cardIndex]
+                _state.update {
+                    it.copy(
+                        uiFlashcards = it.uiFlashcards.minus(toBeDeleted)
+                    )
                 }
+                /*This will just remove a card from the Ui card list, it does not delete anything.*/
             }
 
             is CreateSetUiEvent.EditDef -> {
@@ -269,7 +252,7 @@ class CreateSetComponent(
                                 id = card.uiId!!,
                                 word = card.word,
                                 def = event.text,
-                                )
+                            )
                         )
                     }
                 }
@@ -319,7 +302,14 @@ class CreateSetComponent(
         val id = state.value.uiFlashcards.lastOrNull()?.uiId
 
         for (i in 1..10) {
-            list = list.plus(UiFlashcard(if (id != null) id + i else 1, cardId = null, "", "", 0, error = false))
+            list = list.plus(
+                UiFlashcard(
+                    uiId = if (id != null) id + i else 1,
+                    word = "",
+                    def = "",
+                    error = false
+                )
+            )
         }
         return list
     }
@@ -341,7 +331,7 @@ class CreateSetComponent(
                 uiFlashcards = checkList
             )
         }
-        while (!hasError && index < state.value.uiFlashcards.size ) {
+        while (!hasError && index < state.value.uiFlashcards.size) {
             hasError = state.value.uiFlashcards[index].error
             //size is 10, error 10th one, its index is 9
             //if index is 9, size is 10,
@@ -355,7 +345,7 @@ class CreateSetComponent(
     }
 
     private fun List<UiFlashcard>.updateFlashcard(
-        id: Long,
+        id: Int,
         word: String,
         def: String,
     ): List<UiFlashcard> =

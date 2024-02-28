@@ -27,6 +27,8 @@ import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsCompone
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
 import com.jaegerapps.malmali.practice.presentation.PracticeComponent
+import com.jaegerapps.malmali.vocabulary.mapper.toVocabSet
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
 import core.Knower
 import core.Knower.e
 import core.util.Resource
@@ -62,19 +64,18 @@ class RootComponent(
         lifecycle.doOnCreate {
 
             scope.launch {
-                checkGrammar()
-
+                getGrammar()
                 val result = async { appModule.userFunctions.retrieveAccessToken() }.await()
-
                 when {
                     appModule.settingFunctions.getOnboardingBoolean() -> {
-
                         navigation.replaceAll(Configuration.IntroScreen)
                     }
 
                     appModule.settingFunctions.getToken() != null -> {
                         if (result != null) {
-                            val user = appModule.settingFunctions.getUser()
+                            val user = async { appModule.settingFunctions.getUser() }.await()
+                            getFlashcards(user.nickname)
+
                             withContext(Dispatchers.Main) {
                                 _state.update {
                                     it.copy(
@@ -131,6 +132,7 @@ class RootComponent(
                         date = config.date,
                         componentContext = context,
                         vocabFunctions = appModule.vocabFunctions,
+                        userData = _state.value.user!!,
                         onComplete = {
                             navigation.pop()
                         },
@@ -146,6 +148,7 @@ class RootComponent(
                     FlashcardHomeComponent(
                         componentContext = context,
                         database = appModule.vocabFunctions,
+                        sets = _state.value.sets,
                         onNavigateBack = {
                             navigation.pop()
                         },
@@ -192,20 +195,18 @@ class RootComponent(
                     StudyFlashcardsComponent(
                         componentContext = context,
                         database = config.vocabFunctions,
-                        setId = config.setId,
-                        setTitle = config.title,
-                        date = config.date,
                         onNavigate = { route ->
                             modalNavigate(route)
                         },
                         onCompleteNavigate = { navigation.pop() },
+                        set = _state.value.sets.first { it.title == config.title && it.setId == config.setId },
                         onEditNavigate = { title, id, date ->
                             navigation.pushNew(
                                 Configuration.CreateSetScreen(
                                     appModule.vocabFunctions,
-                                    title,
-                                    id,
-                                    date
+                                    title = title,
+                                    id = id,
+                                    date = date
                                 )
                             )
                         }
@@ -407,8 +408,8 @@ class RootComponent(
         data class CreateSetScreen(
             val vocabFunctions: VocabularySetSourceFunctions,
             val title: String?,
-            val id: Long?,
-            val date: Long?,
+            val id: Int?,
+            val date: String?,
         ) : Configuration()
 
         @Serializable
@@ -418,9 +419,9 @@ class RootComponent(
         @Serializable
         data class StudyFlashcardsScreen(
             val vocabFunctions: VocabularySetSourceFunctions,
-            val setId: Long,
+            val setId: Int,
             val title: String,
-            val date: Long,
+            val date: String,
         ) : Configuration()
 
         @Serializable
@@ -458,57 +459,43 @@ class RootComponent(
         data object PracticeScreen : Configuration()
     }
 
-    private fun checkGrammar() {
-        scope.launch {
-            when (appModule.grammarFunctions.grammarExists()) {
-                is Resource.Error -> {
-                    when (val grammar = async { appModule.grammarRepo.getGrammar() }.await()) {
-                        is Resource.Error -> TODO()
-                        is Resource.Success -> {
-                            if (grammar.data != null) {
-                                grammar.data.forEach {
-                                    appModule.grammarFunctions.updateGrammar(it.grammarList)
-                                }
+    private suspend fun getFlashcards(user: String) {
+        when (val sets = appModule.rootComponentUseCases.getSets(user)) {
+            is Resource.Error -> {
+                Knower.e(
+                    "getDefaultFlashcards",
+                    "An error has occurred here: ${sets.throwable?.message}"
+                )
 
-                                if (_state.value.grammar.isEmpty()) {
-                                    _state.update {
-                                        it.copy(
-                                            grammar = grammar.data
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                is Resource.Success -> {
-                    when (val grammar = async { appModule.grammarRepo.getGrammar() }.await()) {
-                        is Resource.Error -> TODO()
-                        is Resource.Success -> {
-                            if (grammar.data != null) {
-                                grammar.data.forEach {
-                                    appModule.grammarFunctions.updateGrammar(it.grammarList)
-                                }
-
-                                if (_state.value.grammar.isEmpty()) {
-                                    _state.update {
-                                        it.copy(
-                                            grammar = grammar.data
-                                        )
-                                    }
-                                }
-                            }
-                        }
-
+            }
+            is Resource.Success -> {
+                if (sets.data != null) {
+                    _state.update {
+                        it.copy(
+                            sets = sets.data.map { it.toVocabSet() }
+                        )
                     }
                 }
             }
         }
     }
-    private fun getDefaultFlashcards() {
-        scope.launch {
 
+    private suspend fun getGrammar() {
+        when (val result = appModule.rootComponentUseCases.getGrammar()) {
+            is Resource.Error -> {
+                Knower.e(
+                    "getGrammar",
+                    "An error occurred in the RootComponent. ${result.throwable}"
+                )
+            }
+
+            is Resource.Success -> {
+                if (result.data != null) {
+                    _state.update {
+                        it.copy(grammar = result.data)
+                    }
+                }
+            }
         }
     }
 }
@@ -518,4 +505,5 @@ data class RootState(
     val loggedIn: Boolean = false,
     val loading: Boolean = false,
     val grammar: List<GrammarLevel> = emptyList(),
+    val sets: List<VocabSet> = emptyList(),
 )

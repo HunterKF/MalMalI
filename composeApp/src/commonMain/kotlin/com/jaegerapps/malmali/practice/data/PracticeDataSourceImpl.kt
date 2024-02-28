@@ -7,7 +7,6 @@ import com.jaegerapps.malmali.grammar.mapper.toGrammarLevels
 import com.jaegerapps.malmali.grammar.mapper.toGrammarPoint
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.practice.domain.PracticeDataSource
-import com.jaegerapps.malmali.practice.mappers.toGrammarDTO
 import com.jaegerapps.malmali.practice.mappers.toHistoryDTO
 import com.jaegerapps.malmali.practice.mappers.toHistoryEntity
 import com.jaegerapps.malmali.practice.models.HistoryEntity
@@ -30,32 +29,7 @@ class PracticeDataSourceImpl(
     val client: SupabaseClient,
     val database: MalMalIDatabase,
 ) : PracticeDataSource {
-    override suspend fun getGrammar(): Resource<List<GrammarLevel>> {
-        return try {
-            val result = database.flashCardsQueries.getAllGrammar()
-                .executeAsList()
-                .map { it.toGrammarDTO() }
-            val list = result.map { it.toGrammarPoint() }
-            val levels = list.toGrammarLevels()
-            Resource.Success(levels)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Resource.Error(Throwable())
-        }
-    }
 
-    override suspend fun getSets(): Resource<List<VocabSet>> {
-        return try {
-            val result = database.flashCardsQueries.selectAllSets()
-                .executeAsList()
-                .map { it.toVocabSet() }
-
-            Resource.Success(result)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Resource.Error(Throwable())
-        }
-    }
 
 
     override suspend fun insertHistorySql(history: UiHistoryItem): Resource<Boolean> {

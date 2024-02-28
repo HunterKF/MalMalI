@@ -154,31 +154,32 @@ fun CreateSetScreen(
                     ) {
                         SelectableButton(
                             text = "Private",
-                            isSelected = state.value.isPrivate == SetMode.PRIVATE,
+                            isSelected = state.value.isPublic == false,
                             onClick = {
-                                component.onEvent(CreateSetUiEvent.ChangePublicSetting(SetMode.PRIVATE))
+                                component.onEvent(CreateSetUiEvent.ChangePublicSetting(false))
                             }
                         )
                         SelectableButton(
                             text = "Public",
-                            isSelected = state.value.isPrivate == SetMode.PUBLIC,
+                            isSelected = state.value.isPublic == true,
                             onClick = {
-                                component.onEvent(CreateSetUiEvent.ChangePublicSetting(SetMode.PUBLIC))
+                                component.onEvent(CreateSetUiEvent.ChangePublicSetting(true))
                             }
                         )
                     }
                 }
                 item {
-                    SelectIcon(
-                        defaultIcon = painterResource(state.value.icon),
-                        onClick = {
-                            component.onEvent(CreateSetUiEvent.OpenIconSelection)
-                        }
-                    )
+                    state.value.icon?.let {
+                        SelectIcon(
+                            defaultIcon = painterResource(it.resource),
+                            onClick = {
+                                component.onEvent(CreateSetUiEvent.OpenIconSelection)
+                            }
+                        )
+                    }
                 }
                 itemsIndexed(state.value.uiFlashcards) { index, card ->
                     card.uiId?.let {
-
                         EditVocabContainer(
                             word = card.word,
                             def = card.def,
@@ -190,7 +191,7 @@ fun CreateSetScreen(
                                 component.onEvent(CreateSetUiEvent.EditDef(card.uiId, it))
                             },
                             onDelete = {
-                                component.onEvent(CreateSetUiEvent.DeleteWord(card.uiId))
+                                component.onEvent(CreateSetUiEvent.DeleteWord(index))
                             },
                             onClearError = {
                                 component.onEvent(CreateSetUiEvent.OnClearErrorVocab(card.uiId))

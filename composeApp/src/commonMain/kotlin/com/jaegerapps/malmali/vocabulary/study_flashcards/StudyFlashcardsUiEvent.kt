@@ -6,8 +6,8 @@ sealed interface StudyFlashcardsUiEvent {
     data object OnSetShareClick: StudyFlashcardsUiEvent
     data object OnSetEditClick: StudyFlashcardsUiEvent
     //Card interactions
-    data class OnGotItClick(val id: Long): StudyFlashcardsUiEvent
-    data class OnDontKnowClick(val id: Long): StudyFlashcardsUiEvent
+    data object OnGotItClick: StudyFlashcardsUiEvent
+    data object OnDontKnowClick: StudyFlashcardsUiEvent
     data object OnCardFlipClick: StudyFlashcardsUiEvent
     data object OnFlipCard: StudyFlashcardsUiEvent
     data object OnForward: StudyFlashcardsUiEvent

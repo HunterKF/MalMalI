@@ -7,7 +7,7 @@ import com.arkivanov.essenty.lifecycle.resume
 import com.jaegerapps.malmali.data.FakeVocabularySetSourceFunctions
 import com.jaegerapps.malmali.di.FakeAppModule
 import com.jaegerapps.malmali.RootComponent
-import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.VocabularyCard
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyError
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsComponent
 import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsUiEvent
@@ -31,12 +31,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                expected = exampleUiFlashcardListWithUiId,
-                actual = nextState.cards
+                expected = exampleVocabularyCardList,
+                actual = nextState.set!!.cards
             )
             assertEquals(
                 nextState.set,
@@ -55,12 +55,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                nextState.cards,
-                exampleUiFlashcardListWithUiId
+                nextState.set!!.cards,
+                exampleVocabularyCardList
             )
             assertEquals(
                 nextState.set,
@@ -86,12 +86,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                nextState.cards,
-                exampleUiFlashcardListWithUiId
+                nextState.set!!.cards,
+                exampleVocabularyCardList
             )
             assertEquals(
                 nextState.set,
@@ -119,12 +119,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                nextState.cards,
-                exampleUiFlashcardListWithUiId
+                nextState.set!!.cards,
+                exampleVocabularyCardList
             )
             assertEquals(
                 nextState.set,
@@ -138,7 +138,7 @@ class StudyFlashcardsComponentTest {
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val updatedCardState = awaitItem()
             assertEquals(updatedCardState.currentIndex, 1)
-            assertEquals(updatedCardState.currentCard, exampleUiFlashcardListWithUiId[1])
+            assertEquals(updatedCardState.currentCard, exampleVocabularyCardList[1])
         }
     }
 
@@ -153,12 +153,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                nextState.cards,
-                exampleUiFlashcardListWithUiId
+                nextState.set!!.cards,
+                exampleVocabularyCardList
             )
             assertEquals(
                 nextState.set,
@@ -172,11 +172,11 @@ class StudyFlashcardsComponentTest {
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState = awaitItem()
             assertEquals(cardState.currentIndex, 1)
-            assertEquals(cardState.currentCard, exampleUiFlashcardListWithUiId[1])
+            assertEquals(cardState.currentCard, exampleVocabularyCardList[1])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnPrevious)
             val previousState = awaitItem()
             assertEquals(previousState.currentIndex, 0)
-            assertEquals(previousState.currentCard, exampleUiFlashcardListWithUiId[0])
+            assertEquals(previousState.currentCard, exampleVocabularyCardList[0])
         }
     }
 
@@ -190,12 +190,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                exampleUiFlashcardListWithUiId,
-                nextState.cards
+                exampleVocabularyCardList,
+                nextState.set!!.cards
             )
             assertEquals(
                 nextState.set,
@@ -214,24 +214,24 @@ class StudyFlashcardsComponentTest {
             println("CardState1")
             assertEquals(cardState1.currentIndex, 1)
 
-            assertEquals(cardState1.currentCard, exampleUiFlashcardListWithUiId[1])
+            assertEquals(cardState1.currentCard, exampleVocabularyCardList[1])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState2 = awaitItem()
             assertEquals(cardState2.currentIndex, 2)
-            assertEquals(cardState2.currentCard, exampleUiFlashcardListWithUiId[2])
+            assertEquals(cardState2.currentCard, exampleVocabularyCardList[2])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState3 = awaitItem()
             assertEquals(cardState3.currentIndex, 3)
-            assertEquals(cardState3.currentCard, exampleUiFlashcardListWithUiId[3])
+            assertEquals(cardState3.currentCard, exampleVocabularyCardList[3])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState4 = awaitItem()
             assertEquals(cardState4.currentIndex, 4)
-            assertEquals(cardState4.currentCard, exampleUiFlashcardListWithUiId[4])
+            assertEquals(cardState4.currentCard, exampleVocabularyCardList[4])
             println("The code is done: ${activeChild.state.value.currentIndex}")
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val onCompleteState = awaitItem()
             assertEquals(4, onCompleteState.currentIndex)
-            assertEquals(exampleUiFlashcardListWithUiId[4], onCompleteState.currentCard)
+            assertEquals(exampleVocabularyCardList[4], onCompleteState.currentCard)
             assertEquals(true, onCompleteState.isComplete)
             println("The code is done: ${activeChild.state.value.currentIndex}")
         }
@@ -247,12 +247,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                nextState.cards,
-                exampleUiFlashcardListWithUiId
+                nextState.set!!.cards,
+                exampleVocabularyCardList
             )
             assertEquals(
                 nextState.set,
@@ -278,12 +278,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                nextState.cards,
-                exampleUiFlashcardListWithUiId
+                nextState.set!!.cards,
+                exampleVocabularyCardList
             )
             assertEquals(
                 nextState.set,
@@ -293,11 +293,11 @@ class StudyFlashcardsComponentTest {
                 nextState.currentIndex,
                 0
             )
-            activeChild.onEvent(StudyFlashcardsUiEvent.OnDontKnowClick(nextState.currentCard!!.uiId!!))
+            activeChild.onEvent(StudyFlashcardsUiEvent.OnDontKnowClick)
             val dontKnowState = awaitItem()
-            assertEquals(exampleUiFlashcardListWithUiId[0].uiId, dontKnowState.cards.last().uiId)
-            assertEquals(exampleUiFlashcardListWithUiId.size, dontKnowState.cards.size)
-            assertEquals(exampleUiFlashcardListWithUiId[1], dontKnowState.cards[0])
+            assertEquals(exampleVocabularyCardList[0], dontKnowState.set!!.cards.last())
+            assertEquals(exampleVocabularyCardList.size, dontKnowState.set!!.cards.size)
+            assertEquals(exampleVocabularyCardList[1], dontKnowState.set!!.cards[0])
         }
     }
 
@@ -310,12 +310,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                nextState.cards,
-                exampleUiFlashcardListWithUiId
+                nextState.set!!.cards,
+                exampleVocabularyCardList
             )
             assertEquals(
                 nextState.set,
@@ -325,21 +325,21 @@ class StudyFlashcardsComponentTest {
                 nextState.currentIndex,
                 0
             )
-            activeChild.onEvent(StudyFlashcardsUiEvent.OnDontKnowClick(nextState.currentCard!!.uiId!!))
+            activeChild.onEvent(StudyFlashcardsUiEvent.OnDontKnowClick)
             val dontKnowState1 = awaitItem()
-            assertEquals(exampleUiFlashcardListWithUiId[0].uiId, dontKnowState1.cards.last().uiId)
-            assertEquals(exampleUiFlashcardListWithUiId.size, dontKnowState1.cards.size)
-            assertEquals(exampleUiFlashcardListWithUiId[1].uiId, dontKnowState1.cards[0].uiId)
-            activeChild.onEvent(StudyFlashcardsUiEvent.OnDontKnowClick(nextState.currentCard!!.uiId!!))
+            assertEquals(exampleVocabularyCardList[0], dontKnowState1.set!!.cards.last())
+            assertEquals(exampleVocabularyCardList.size, dontKnowState1.set!!.cards.size)
+            assertEquals(exampleVocabularyCardList[1], dontKnowState1.set!!.cards[0])
+            activeChild.onEvent(StudyFlashcardsUiEvent.OnDontKnowClick)
             val dontKnowState2 = awaitItem()
-            assertEquals(exampleUiFlashcardListWithUiId[1].uiId, dontKnowState2.cards.last().uiId)
-            assertEquals(exampleUiFlashcardListWithUiId.size, dontKnowState2.cards.size)
-            assertEquals(exampleUiFlashcardListWithUiId[2].uiId, dontKnowState2.cards[0].uiId)
-            activeChild.onEvent(StudyFlashcardsUiEvent.OnDontKnowClick(nextState.currentCard!!.uiId!!))
+            assertEquals(exampleVocabularyCardList[1], dontKnowState2.set!!.cards.last())
+            assertEquals(exampleVocabularyCardList.size, dontKnowState2.set!!.cards.size)
+            assertEquals(exampleVocabularyCardList[2], dontKnowState2.set!!.cards[0])
+            activeChild.onEvent(StudyFlashcardsUiEvent.OnDontKnowClick)
             val dontKnowState3 = awaitItem()
-            assertEquals(exampleUiFlashcardListWithUiId[2].uiId, dontKnowState3.cards.last().uiId)
-            assertEquals(exampleUiFlashcardListWithUiId.size, dontKnowState3.cards.size)
-            assertEquals(exampleUiFlashcardListWithUiId[3].uiId, dontKnowState3.cards[0].uiId)
+            assertEquals(exampleVocabularyCardList[2], dontKnowState3.set!!.cards.last())
+            assertEquals(exampleVocabularyCardList.size, dontKnowState3.set!!.cards.size)
+            assertEquals(exampleVocabularyCardList[3], dontKnowState3.set!!.cards[0])
         }
     }
 
@@ -352,12 +352,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                nextState.cards,
-                exampleUiFlashcardListWithUiId
+                nextState.set!!.cards,
+                exampleVocabularyCardList
             )
             assertEquals(
                 nextState.set,
@@ -372,24 +372,24 @@ class StudyFlashcardsComponentTest {
             println("CardState1")
             println("CardState1")
             assertEquals(cardState1.currentIndex, 1)
-            assertEquals(cardState1.currentCard, exampleUiFlashcardListWithUiId[1])
+            assertEquals(cardState1.currentCard, exampleVocabularyCardList[1])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState2 = awaitItem()
             assertEquals(cardState2.currentIndex, 2)
-            assertEquals(cardState2.currentCard, exampleUiFlashcardListWithUiId[2])
+            assertEquals(cardState2.currentCard, exampleVocabularyCardList[2])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState3 = awaitItem()
             assertEquals(cardState3.currentIndex, 3)
-            assertEquals(cardState3.currentCard, exampleUiFlashcardListWithUiId[3])
+            assertEquals(cardState3.currentCard, exampleVocabularyCardList[3])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState4 = awaitItem()
             assertEquals(cardState4.currentIndex, 4)
-            assertEquals(cardState4.currentCard, exampleUiFlashcardListWithUiId[4])
+            assertEquals(cardState4.currentCard, exampleVocabularyCardList[4])
             println("The code is done: ${activeChild.state.value.currentIndex}")
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val onCompleteState = awaitItem()
             assertEquals(4, onCompleteState.currentIndex)
-            assertEquals(exampleUiFlashcardListWithUiId[4], onCompleteState.currentCard)
+            assertEquals(exampleVocabularyCardList[4], onCompleteState.currentCard)
             assertEquals(true, onCompleteState.isComplete)
             println("The code is done: ${activeChild.state.value.currentIndex}")
 
@@ -408,12 +408,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                nextState.cards,
-                exampleUiFlashcardListWithUiId
+                nextState.set!!.cards,
+                exampleVocabularyCardList
             )
             assertEquals(
                 nextState.set,
@@ -428,23 +428,23 @@ class StudyFlashcardsComponentTest {
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState1 = awaitItem()
             assertEquals(cardState1.currentIndex, 1)
-            assertEquals(cardState1.currentCard, exampleUiFlashcardListWithUiId[1])
+            assertEquals(cardState1.currentCard, exampleVocabularyCardList[1])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState2 = awaitItem()
             assertEquals(cardState2.currentIndex, 2)
-            assertEquals(cardState2.currentCard, exampleUiFlashcardListWithUiId[2])
+            assertEquals(cardState2.currentCard, exampleVocabularyCardList[2])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState3 = awaitItem()
             assertEquals(cardState3.currentIndex, 3)
-            assertEquals(cardState3.currentCard, exampleUiFlashcardListWithUiId[3])
+            assertEquals(cardState3.currentCard, exampleVocabularyCardList[3])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState4 = awaitItem()
             assertEquals(cardState4.currentIndex, 4)
-            assertEquals(cardState4.currentCard, exampleUiFlashcardListWithUiId[4])
+            assertEquals(cardState4.currentCard, exampleVocabularyCardList[4])
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val onCompleteState = awaitItem()
             assertEquals(4, onCompleteState.currentIndex)
-            assertEquals(exampleUiFlashcardListWithUiId[4], onCompleteState.currentCard)
+            assertEquals(exampleVocabularyCardList[4], onCompleteState.currentCard)
             assertEquals(true, onCompleteState.isComplete)
 
 
@@ -452,7 +452,7 @@ class StudyFlashcardsComponentTest {
             val repeatState = awaitItem()
             assertEquals(false, repeatState.isComplete)
             assertEquals(0, repeatState.currentIndex)
-            assertEquals(exampleUiFlashcardListWithUiId[0], repeatState.currentCard)
+            assertEquals(exampleVocabularyCardList[0], repeatState.currentCard)
         }
     }
 
@@ -466,12 +466,12 @@ class StudyFlashcardsComponentTest {
             assertEquals(initialState.currentCard, null)
             val nextState = awaitItem()
             assertEquals(
-                UiFlashcard(uiId = 0, cardId = 1, word = "먹다", def = "to eat", level = 1, error = false),
+                VocabularyCard(word = "먹다", definition = "to eat"),
                 nextState.currentCard
             )
             assertEquals(
-                nextState.cards,
-                exampleUiFlashcardListWithUiId
+                nextState.set!!.cards,
+                exampleVocabularyCardList
             )
             assertEquals(
                 nextState.set,
@@ -485,37 +485,37 @@ class StudyFlashcardsComponentTest {
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState1 = awaitItem()
             assertEquals(cardState1.currentIndex, 1)
-            assertEquals(cardState1.currentCard, exampleUiFlashcardListWithUiId[1])
+            assertEquals(cardState1.currentCard, exampleVocabularyCardList[1])
 
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState2 = awaitItem()
             assertEquals(cardState2.currentIndex, 2)
-            assertEquals(cardState2.currentCard, exampleUiFlashcardListWithUiId[2])
+            assertEquals(cardState2.currentCard, exampleVocabularyCardList[2])
 
             println("cardState2.currentCard")
             println(cardState2.currentCard)
-            activeChild.onEvent(StudyFlashcardsUiEvent.OnDontKnowClick(cardState2.currentCard!!.uiId!!))
+            activeChild.onEvent(StudyFlashcardsUiEvent.OnDontKnowClick)
             val cardState3 = awaitItem()
             //currentCard of index 2 is now index of 4
             //id = 3, last should have id of 3
             assertEquals(cardState3.currentIndex, 2)
-            assertEquals(cardState3.currentCard, exampleUiFlashcardListWithUiId[3])
-            assertEquals(cardState3.cards.last().uiId, exampleUiFlashcardListWithUiId[2].uiId)
+            assertEquals(cardState3.currentCard, exampleVocabularyCardList[3])
+            assertEquals(cardState3.set!!.cards.last(), exampleVocabularyCardList[2])
 
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState4 = awaitItem()
             assertEquals(cardState4.currentIndex, 3)
-            assertEquals(cardState4.currentCard, exampleUiFlashcardListWithUiId[4])
+            assertEquals(cardState4.currentCard, exampleVocabularyCardList[4])
 
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val cardState5 = awaitItem()
             assertEquals(cardState5.currentIndex, 4)
-            assertEquals(cardState5.currentCard!!.uiId, exampleUiFlashcardListWithUiId[2].uiId)
+            assertEquals(cardState5.currentCard!!, exampleVocabularyCardList[2])
 
             activeChild.onEvent(StudyFlashcardsUiEvent.OnForward)
             val onCompleteState = awaitItem()
             assertEquals(4, onCompleteState.currentIndex)
-            assertEquals(exampleUiFlashcardListWithUiId[2].uiId, onCompleteState.currentCard!!.uiId)
+            assertEquals(exampleVocabularyCardList[2], onCompleteState.currentCard!!)
             assertEquals(true, onCompleteState.isComplete)
 
 
@@ -523,7 +523,7 @@ class StudyFlashcardsComponentTest {
             val repeatState = awaitItem()
             assertEquals(false, repeatState.isComplete)
             assertEquals(0, repeatState.currentIndex)
-            assertEquals(exampleUiFlashcardListWithUiId[2].uiId, repeatState.currentCard!!.uiId)
+            assertEquals(exampleVocabularyCardList[2], repeatState.currentCard!!)
         }
     }
 
@@ -543,7 +543,7 @@ class StudyFlashcardsComponentTest {
             onEditNavigate = { string, long, date -> },
             onCompleteNavigate = {},
             onNavigate = {},
-            date = 11
+            date = "11"
         )
 
 

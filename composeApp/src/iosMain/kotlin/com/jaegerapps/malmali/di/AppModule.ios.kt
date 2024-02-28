@@ -4,8 +4,8 @@ import VocabularySetSourceFunctions
 import com.jaegerapps.malmali.chat.data.ChatRepoImpl
 import com.jaegerapps.malmali.chat.domain.ChatRepo
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
-import com.jaegerapps.malmali.grammar.data.GrammarRepoImpl
-import com.jaegerapps.malmali.grammar.domain.GrammarRepo
+import com.jaegerapps.malmali.grammar.data.RootComponentUseCasesImpl
+import com.jaegerapps.malmali.grammar.domain.RootComponentUseCases
 import com.jaegerapps.malmali.login.data.SignInDataSourceImpl
 import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.practice.data.PracticeDataSourceImpl
@@ -14,7 +14,6 @@ import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.Settings
 import core.data.DatabaseDriverFactory
-import core.data.supabase.grammar.GrammarDataSourceImpl
 import core.data.KtorClient
 import core.data.supabase.SupabaseClient
 import core.data.supabase.signin.SupabaseSignInFunctionsImpl
@@ -35,8 +34,8 @@ actual class AppModule: AppModuleInterface {
 
     private val delegate = NSUserDefaults()
     private val settings: Settings = NSUserDefaultsSettings(delegate)
-    actual override val grammarRepo: GrammarRepo by lazy {
-        GrammarRepoImpl(
+    actual override val rootComponentUseCases: RootComponentUseCases by lazy {
+        RootComponentUseCasesImpl(
             client = supabaseClient
         )
     }

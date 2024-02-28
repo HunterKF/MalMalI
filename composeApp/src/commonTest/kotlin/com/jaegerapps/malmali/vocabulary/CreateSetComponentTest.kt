@@ -39,7 +39,7 @@ class CreateSetComponentTest {
         createComponent(
             title = "Set 1",
             setId = 1,
-            date = 11
+            date = "11"
         )
 
         activeChild.state.test {
@@ -57,7 +57,7 @@ class CreateSetComponentTest {
 
             assertEquals(exampleUiFlashcardListWithUiId, nextState1.uiFlashcards)
             assertEquals(exampleVocabSetList[0].title, nextState1.title)
-            assertEquals(exampleVocabSetList[0].isPrivate, nextState1.isPrivate)
+            assertEquals(exampleVocabSetList[0].isPublic, nextState1.isPublic)
         }
     }
 
@@ -67,7 +67,7 @@ class CreateSetComponentTest {
         createComponent(
             title = "Set 1",
             setId = 1,
-            date = 11
+            date = "11"
         )
 
         activeChild.state.test {
@@ -85,7 +85,7 @@ class CreateSetComponentTest {
 
             assertEquals(exampleUiFlashcardListWithUiId, nextState1.uiFlashcards)
             assertEquals(exampleVocabSetList[0].title, nextState1.title)
-            assertEquals(exampleVocabSetList[0].isPrivate, nextState1.isPrivate)
+            assertEquals(exampleVocabSetList[0].isPublic, nextState1.isPublic)
             activeChild.onEvent(CreateSetUiEvent.TogglePopUp(PopUpMode.SAVE))
             val popUpState = awaitItem()
             assertEquals(true, popUpState.showSavePopUp)
@@ -100,7 +100,7 @@ class CreateSetComponentTest {
         createComponent(
             title = "Set 1",
             setId = 1,
-            date = 11
+            date = "11"
         )
 
         activeChild.state.test {
@@ -118,14 +118,14 @@ class CreateSetComponentTest {
 
             assertEquals(exampleUiFlashcardListWithUiId, nextState1.uiFlashcards)
             assertEquals(exampleVocabSetList[0].title, nextState1.title)
-            assertEquals(exampleVocabSetList[0].isPrivate, nextState1.isPrivate)
-            activeChild.onEvent(CreateSetUiEvent.ChangePublicSetting(SetMode.PRIVATE))
+            assertEquals(exampleVocabSetList[0].isPublic, nextState1.isPublic)
+            activeChild.onEvent(CreateSetUiEvent.ChangePublicSetting(false))
             val privateState = awaitItem()
-            assertEquals(SetMode.PRIVATE, privateState.isPrivate)
+            assertEquals(false, privateState.isPublic)
 
             activeChild.onEvent(CreateSetUiEvent.TogglePopUp(PopUpMode.SAVE))
             val popUpState = awaitItem()
-            assertEquals(SetMode.PRIVATE, privateState.isPrivate)
+            assertEquals(false, privateState.isPublic)
 
             assertEquals(true, popUpState.showSavePopUp)
             assertEquals(PopUpMode.SAVE, popUpState.mode)
@@ -162,12 +162,12 @@ class CreateSetComponentTest {
             assertEquals(10, initialState.uiFlashcards.size)
             assertEquals(false, initialState.showSavePopUp)
             //Test after here
-            activeChild.onEvent(CreateSetUiEvent.ChangePublicSetting(SetMode.PUBLIC))
+            activeChild.onEvent(CreateSetUiEvent.ChangePublicSetting(true))
             val publicState = awaitItem()
-            assertEquals(SetMode.PUBLIC, publicState.isPrivate)
-            activeChild.onEvent(CreateSetUiEvent.ChangePublicSetting(SetMode.PRIVATE))
+            assertEquals(true, publicState.isPublic)
+            activeChild.onEvent(CreateSetUiEvent.ChangePublicSetting(false))
             val privateState = awaitItem()
-            assertEquals(SetMode.PRIVATE, privateState.isPrivate)
+            assertEquals(false, privateState.isPublic)
         }
     }
 
@@ -227,10 +227,10 @@ class CreateSetComponentTest {
             assertEquals("testing", titleState.title)
 
             for (i in 1..10) {
-                activeChild.onEvent(CreateSetUiEvent.EditWord(i.toLong(), text = "Word $i"))
+                activeChild.onEvent(CreateSetUiEvent.EditWord(i, text = "Word $i"))
                 val wordChangedState = awaitItem()
                 assertEquals("Word $i", wordChangedState.uiFlashcards[i - 1].word)
-                activeChild.onEvent(CreateSetUiEvent.EditDef(i.toLong(), "Def $i"))
+                activeChild.onEvent(CreateSetUiEvent.EditDef(i, "Def $i"))
                 val defChangedState = awaitItem()
                 assertEquals("Def $i", defChangedState.uiFlashcards[i - 1].def)
             }
@@ -257,10 +257,10 @@ class CreateSetComponentTest {
             assertEquals("testing", titleState.title)
 
             for (i in 1..9) {
-                activeChild.onEvent(CreateSetUiEvent.EditWord(i.toLong(), text = "Word $i"))
+                activeChild.onEvent(CreateSetUiEvent.EditWord(i, text = "Word $i"))
                 val wordChangedState = awaitItem()
                 assertEquals("Word $i", wordChangedState.uiFlashcards[i - 1].word)
-                activeChild.onEvent(CreateSetUiEvent.EditDef(i.toLong(), "Def $i"))
+                activeChild.onEvent(CreateSetUiEvent.EditDef(i, "Def $i"))
                 val defChangedState = awaitItem()
                 assertEquals("Def $i", defChangedState.uiFlashcards[i - 1].def)
             }
@@ -294,8 +294,8 @@ class CreateSetComponentTest {
 
     private fun createComponent(
         title: String? = null,
-        setId: Long? = null,
-        date: Long? = null
+        setId: Int? = null,
+        date: String? = null
     ) {
         val lifecycle = LifecycleRegistry()
         val root = RootComponent(

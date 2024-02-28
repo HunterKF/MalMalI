@@ -142,7 +142,7 @@ fun FolderScreen(
                 itemsIndexed(state.value.setList) { index, grammarSet ->
                     FolderContainer(
                         title = grammarSet.title,
-                        icon = painterResource(grammarSet.icon),
+                        icon = painterResource(grammarSet.icon.resource),
                         onEvent = {
                             isExpanded = if (isExpanded != index) {
                                 index
@@ -170,15 +170,13 @@ fun FolderScreen(
                             )
                         }
                         TextButton(onClick = {
-                            if (grammarSet.setId != null) {
-                                component.onEvent(
-                                    FolderUiEvent.OnEditClick(
-                                        grammarSet.title,
-                                        grammarSet.setId,
-                                        grammarSet.dateCreated
-                                    )
+                            component.onEvent(
+                                FolderUiEvent.OnEditClick(
+                                    grammarSet.title,
+                                    grammarSet.setId,
+                                    grammarSet.dateCreated
                                 )
-                            }
+                            )
                         }) {
                             Text(
                                 text = "Edit",
@@ -186,7 +184,7 @@ fun FolderScreen(
                             )
                         }
                         TextButton(onClick = {
-                            grammarSet.setId?.let { id ->
+                            grammarSet.setId.let { id ->
                                 component.onEvent(FolderUiEvent.OnShareClick(id))
                             }
                         }) {
