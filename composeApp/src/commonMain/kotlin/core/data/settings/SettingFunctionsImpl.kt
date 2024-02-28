@@ -80,9 +80,8 @@ class SettingFunctionsImpl(
             currentLevel = settings.getInt(SettingKeys.CURRENT_LEVEL, 0),
             icon = IconResource.resourceFromTag(settings.getString(SettingKeys.ICON, "bear 1")),
             achievements = settings.getString(SettingKeys.ACHIEVEMENTS, "").split("|&|"),
-            selectedLevels = settings.getString(SettingKeys.LEVELS, "1").split("|&|")
-                .map { it.toInt() },
-            sets = settings.getString(SettingKeys.SETS, "").split("|&|")
+            selectedLevels = settings.getString(SettingKeys.LEVELS, "Level 1").split("|&|"),
+            sets = settings.getString(SettingKeys.SETS, "Korean 101").split("|&|")
 
         )
     }

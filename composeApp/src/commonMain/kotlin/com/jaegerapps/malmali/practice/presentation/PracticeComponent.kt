@@ -2,9 +2,18 @@ package com.jaegerapps.malmali.practice.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnCreate
+import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.practice.domain.PracticeDataSource
 import com.jaegerapps.malmali.practice.mappers.toUiHistoryItem
+import com.jaegerapps.malmali.practice.mappers.toUiPracticeGrammarList
+import com.jaegerapps.malmali.practice.mappers.toUiPracticeVocabList
 import com.jaegerapps.malmali.practice.models.UiHistoryItem
+import com.jaegerapps.malmali.vocabulary.create_set.domain.mapper.toUiFlashcard
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
+import core.Knower
+import core.Knower.d
+import core.Knower.e
 import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +28,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PracticeComponent(
+    private val grammarLevel: List<GrammarLevel>,
+    private val userData: UserData,
+    private val vocabularySets: List<VocabSet>,
     private val onNavigate: (String) -> Unit,
     private val practiceDataSource: PracticeDataSource,
     componentContext: ComponentContext,
@@ -29,6 +41,8 @@ class PracticeComponent(
         _state,
         practiceDataSource.getHistorySql(),
     ) { state, history ->
+        Knower.e("combine PracticeComponent", "Something changed. Here is the history: $history")
+
         _state.update {
             it.copy(
                 history = history.map { it.toUiHistoryItem() }
@@ -42,6 +56,43 @@ class PracticeComponent(
         SharingStarted.WhileSubscribed(5000),
         PracticeUiState()
     )
+
+    init {
+        lifecycle.doOnCreate {
+            val filteredLevels = grammarLevel.toUiPracticeGrammarList()
+                .filter { level -> level.title in userData.selectedLevels }
+            val filteredSets = vocabularySets.first { set ->
+                set.title in userData.sets
+            }.toUiPracticeVocabList()
+            _state.update {
+                Knower.d(
+                    "PracticeComponent onCreate",
+                    "Here is the value for vocabSets: ${vocabularySets}"
+                )
+                Knower.d(
+                    "PracticeComponent onCreate",
+                    "Here is the value for grammarLevel: ${grammarLevel}"
+                )
+                Knower.d(
+                    "PracticeComponent onCreate", "Here is the value for vocabSets filtered: ${
+                        vocabularySets.filter { set ->
+                            set.title in userData.sets
+                        }
+                    }"
+                )
+                Knower.d(
+                    "PracticeComponent onCreate",
+                    "Here is the value for grammarLevel filtered: ${grammarLevel}.toUiPracticeGrammarList().filter { level -> level.title in userData.selectedLevels }"
+                )
+                it.copy(
+                    grammarList = filteredLevels,
+                    activeFlashcards = filteredSets,
+                    currentGrammar = filteredLevels.first().grammar.first(),
+                    currentVocabulary = filteredSets.first()
+                )
+            }
+        }
+    }
 
     init {
         lifecycle.doOnCreate {
@@ -68,21 +119,30 @@ class PracticeComponent(
             }
 
             PracticeUiEvent.SavePractice -> {
-                val newHistory = UiHistoryItem(
-                    id = 0,
-                    sentence = _state.value.text,
-                    grammar = _state.value.currentGrammar!!,
-                    vocab = _state.value.currentVocabulary!!,
-                )
-                scope.launch {
-                    when (val result = practiceDataSource.insertHistorySql(newHistory)) {
-                        is Resource.Error -> _state.update {
-                            it.copy(
-                                errorMessage = result.throwable?.message ?: "Unknown error"
-                            )
-                        }
+                if (_state.value.text.isNotBlank()) {
+                    val newHistory = UiHistoryItem(
+                        id = 0,
+                        sentence = _state.value.text,
+                        grammar = _state.value.currentGrammar!!,
+                        vocab = _state.value.currentVocabulary!!,
+                    )
+                    scope.launch {
+                        when (val result = practiceDataSource.insertHistorySql(newHistory)) {
+                            is Resource.Error -> {
+                                Knower.e("SavePractice", "An error occurred: ${result.throwable}")
+                                _state.update {
+                                    it.copy(
+                                        errorMessage = result.throwable?.message ?: "Unknown error"
+                                    )
+                                }
+                            }
 
-                        is Resource.Success -> _state.update { it.copy(text = "") }
+                            is Resource.Success -> {
+                                Knower.e("SavePractice", "Saved")
+
+                                _state.update { it.copy(text = "") }
+                            }
+                        }
                     }
                 }
             }

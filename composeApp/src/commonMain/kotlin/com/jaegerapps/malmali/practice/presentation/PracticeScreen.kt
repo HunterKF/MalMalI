@@ -83,8 +83,6 @@ fun PracticeScreen(
                         }
                     }
                 )
-                var grammarExpand by remember { mutableStateOf(false) }
-                var vocabExpand by remember { mutableStateOf(false) }
                 var expanded by remember { mutableStateOf(-1) }
                 val list = listOf("1", "2", "3", "4", "5")
                 LazyColumn(
@@ -126,9 +124,9 @@ fun PracticeScreen(
                     }
 
 
-                    itemsIndexed(list) { index, string ->
+                    itemsIndexed(state.history.asReversed()) { index, string ->
                         HistoryContainer(
-                            text = "Practice text $string",
+                            text = "Practice text ${string.sentence}",
                             showOptions = expanded == index,
                             toggleExpand = {
                                 expanded = if (expanded != index) {

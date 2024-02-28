@@ -74,6 +74,7 @@ class PracticeDataSourceImpl(
     }
 
     override fun getHistorySql(): Flow<List<HistoryEntity>> {
+        Knower.e("getHistorySql", "This was called.")
         return database.flashCardsQueries.selectHistory()
             .asFlow()
             .mapToList(Dispatchers.IO)

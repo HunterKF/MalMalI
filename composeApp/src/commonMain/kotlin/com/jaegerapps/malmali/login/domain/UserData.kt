@@ -10,6 +10,6 @@ data class UserData(
     val currentLevel: Int,
     val icon: IconResource,
     val achievements: List<String> = emptyList(),
-    val selectedLevels: List<Int> = emptyList(),
+    val selectedLevels: List<String> = emptyList(),
     val sets: List<String> = emptyList()
 )

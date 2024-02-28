@@ -6,3 +6,9 @@ data class UiPracticeGrammar(
     val definition2: String?,
     val level: String
 )
+
+data class UiPracticeGrammarLevel(
+    val title: String,
+    val selected: Boolean,
+    val grammar: List<UiPracticeGrammar>
+)

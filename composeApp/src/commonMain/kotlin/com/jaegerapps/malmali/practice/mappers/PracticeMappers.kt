@@ -1,12 +1,17 @@
 package com.jaegerapps.malmali.practice.mappers
 
 import com.jaegerapps.malmali.composeApp.database.History
-import com.jaegerapps.malmali.grammar.models.GrammarPointDTO
+import com.jaegerapps.malmali.grammar.mapper.toGrammarLevels
+import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.grammar.models.GrammarPoint
 import com.jaegerapps.malmali.practice.models.HistoryDTO
 import com.jaegerapps.malmali.practice.models.HistoryEntity
 import com.jaegerapps.malmali.practice.models.UiHistoryItem
 import com.jaegerapps.malmali.practice.models.UiPracticeGrammar
+import com.jaegerapps.malmali.practice.models.UiPracticeGrammarLevel
 import com.jaegerapps.malmali.practice.models.UiPracticeVocab
+import com.jaegerapps.malmali.vocabulary.models.VocabSet
+import com.jaegerapps.malmali.vocabulary.models.VocabularyCard
 import kotlinx.datetime.Clock
 
 fun UiHistoryItem.toHistoryDTO(): HistoryDTO {
@@ -62,5 +67,39 @@ private fun HistoryEntity.toUiPracticeGrammar(): UiPracticeGrammar {
         definition1 = grammar_definition_1,
         definition2 = grammar_definition_2,
         level = grammar_level
+    )
+}
+
+fun List<GrammarLevel>.toUiPracticeGrammarList(): List<UiPracticeGrammarLevel> {
+    var list = emptyList<UiPracticeGrammarLevel>()
+    for (i in 0 until this.size - 1) {
+
+        list = list.plus(UiPracticeGrammarLevel(
+            this[i].title,
+            false,
+            this[i].grammarList.map { it.toUiPracticeGrammar() }
+        ))
+    }
+    return list
+
+}
+
+fun GrammarPoint.toUiPracticeGrammar(): UiPracticeGrammar {
+    return UiPracticeGrammar(
+        grammar = this.grammarTitle,
+        definition1 = this.grammarDef1,
+        definition2 = this.grammarDef2,
+        level = this.grammarCategory.toString()
+    )
+}
+
+fun VocabSet.toUiPracticeVocabList(): List<UiPracticeVocab> {
+    return this.cards.map { it.toUiPracticeVocab() }
+}
+
+fun VocabularyCard.toUiPracticeVocab(): UiPracticeVocab {
+    return UiPracticeVocab(
+        word = this.word,
+        definition = this.definition
     )
 }

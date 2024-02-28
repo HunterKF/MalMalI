@@ -358,7 +358,10 @@ class RootComponent(
                             modalNavigate(it)
                         },
                         practiceDataSource = appModule.practiceFunctions,
-                        componentContext = context
+                        componentContext = context,
+                        userData = _state.value.user!!,
+                        grammarLevel = _state.value.grammar,
+                        vocabularySets = _state.value.sets
                     )
                 )
             }
