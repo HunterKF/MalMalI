@@ -4,13 +4,12 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.login.domain.UserData
-import com.jaegerapps.malmali.practice.domain.PracticeDataSource
+import com.jaegerapps.malmali.practice.domain.repo.PracticeRepo
 import com.jaegerapps.malmali.practice.mappers.toUiHistoryItem
 import com.jaegerapps.malmali.practice.mappers.toUiPracticeGrammarList
 import com.jaegerapps.malmali.practice.mappers.toUiPracticeVocabList
 import com.jaegerapps.malmali.practice.models.UiHistoryItem
-import com.jaegerapps.malmali.vocabulary.create_set.domain.mapper.toUiFlashcard
-import com.jaegerapps.malmali.vocabulary.models.VocabSet
+import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import core.Knower
 import core.Knower.d
 import core.Knower.e
@@ -18,28 +17,26 @@ import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PracticeComponent(
     private val grammarLevel: List<GrammarLevel>,
     private val userData: UserData,
-    private val vocabularySets: List<VocabSet>,
+    private val vocabularySets: List<VocabSetModel>,
     private val onNavigate: (String) -> Unit,
-    private val practiceDataSource: PracticeDataSource,
+    private val practiceRepo: PracticeRepo,
     componentContext: ComponentContext,
 ) : ComponentContext by componentContext {
 
     private val _state = MutableStateFlow(PracticeUiState())
     val state = combine(
         _state,
-        practiceDataSource.getHistorySql(),
+        practiceRepo.getHistorySql(),
     ) { state, history ->
         Knower.e("combine PracticeComponent", "Something changed. Here is the history: $history")
 
@@ -127,7 +124,7 @@ class PracticeComponent(
                         vocab = _state.value.currentVocabulary!!,
                     )
                     scope.launch {
-                        when (val result = practiceDataSource.insertHistorySql(newHistory)) {
+                        when (val result = practiceRepo.insertHistorySql(newHistory)) {
                             is Resource.Error -> {
                                 Knower.e("SavePractice", "An error occurred: ${result.throwable}")
                                 _state.update {

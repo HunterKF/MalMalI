@@ -61,18 +61,15 @@ import com.jaegerapps.malmali.practice.models.UiPracticeGrammar
 import com.jaegerapps.malmali.practice.models.UiPracticeVocab
 import com.jaegerapps.malmali.practice.presentation.components.PracticeContainer
 import com.jaegerapps.malmali.practice.presentation.components.PracticeTextField
-import com.jaegerapps.malmali.vocabulary.models.VocabSet
-import com.jaegerapps.malmali.vocabulary.components.AddCardButton
-import com.jaegerapps.malmali.vocabulary.components.EditVocabContainer
-import com.jaegerapps.malmali.vocabulary.components.FolderContainer
-import com.jaegerapps.malmali.vocabulary.components.SelectIcon
-import com.jaegerapps.malmali.vocabulary.components.SelectableButton
-import com.jaegerapps.malmali.vocabulary.components.TitleBox
-import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
-import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
-import com.jaegerapps.malmali.vocabulary.models.VocabularyCard
-import com.jaegerapps.malmali.vocabulary.study_flashcards.components.VocabularyButtons
-import com.jaegerapps.malmali.vocabulary.study_flashcards.components.VocabularyContainer
+import com.jaegerapps.malmali.vocabulary.presentation.components.AddCardButton
+import com.jaegerapps.malmali.vocabulary.presentation.components.EditVocabContainer
+import com.jaegerapps.malmali.vocabulary.presentation.components.FolderContainer
+import com.jaegerapps.malmali.vocabulary.presentation.components.SelectIcon
+import com.jaegerapps.malmali.vocabulary.presentation.components.SelectableButton
+import com.jaegerapps.malmali.vocabulary.presentation.components.TitleBox
+import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.components.VocabularyButtons
+import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.components.VocabularyContainer
 import core.presentation.MalMalITheme
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
@@ -474,7 +471,7 @@ fun Preview_VocabularyContainer() {
         VocabularyContainer(
             setSize = 30,
             currentIndex = 1,
-            card = VocabularyCard(word = "먹다", definition = "to eat"),
+            card = VocabularyCardModel(word = "먹다", definition = "to eat"),
             showBack = false,
             onClick = {
 

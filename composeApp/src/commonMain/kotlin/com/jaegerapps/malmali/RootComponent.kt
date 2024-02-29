@@ -1,6 +1,6 @@
 package com.jaegerapps.malmali
 
-import VocabularySetSourceFunctions
+import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -21,14 +21,14 @@ import com.jaegerapps.malmali.loading.LoadingComponent
 import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.login.presentation.SignInComponent
 import com.jaegerapps.malmali.onboarding.intro.IntroComponent
-import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetComponent
-import com.jaegerapps.malmali.vocabulary.folders.FlashcardHomeComponent
-import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsComponent
+import com.jaegerapps.malmali.vocabulary.presentation.create_set.CreateSetComponent
+import com.jaegerapps.malmali.vocabulary.presentation.folders.FlashcardHomeComponent
+import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.StudyFlashcardsComponent
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
 import com.jaegerapps.malmali.practice.presentation.PracticeComponent
-import com.jaegerapps.malmali.vocabulary.mapper.toVocabSet
-import com.jaegerapps.malmali.vocabulary.models.VocabSet
+import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSet
+import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import core.Knower
 import core.Knower.e
 import core.util.Resource
@@ -65,15 +65,15 @@ class RootComponent(
 
             scope.launch {
                 getGrammar()
-                val result = async { appModule.userFunctions.retrieveAccessToken() }.await()
+                val result = async { appModule.userRepo.retrieveAccessToken() }.await()
                 when {
-                    appModule.settingFunctions.getOnboardingBoolean() -> {
+                    appModule.settingsDataSource.getOnboardingBoolean() -> {
                         navigation.replaceAll(Configuration.IntroScreen)
                     }
 
-                    appModule.settingFunctions.getToken() != null -> {
+                    appModule.settingsDataSource.getToken() != null -> {
                         if (result != null) {
-                            val user = async { appModule.settingFunctions.getUser() }.await()
+                            val user = async { appModule.settingsDataSource.getUser() }.await()
                             getFlashcards(user.nickname)
 
                             withContext(Dispatchers.Main) {
@@ -103,7 +103,7 @@ class RootComponent(
 
                     }
 
-                    appModule.settingFunctions.getToken() == null -> {
+                    appModule.settingsDataSource.getToken() == null -> {
                         _state.update {
                             it.copy(
                                 user = null,
@@ -131,7 +131,7 @@ class RootComponent(
                         setId = config.id,
                         date = config.date,
                         componentContext = context,
-                        vocabFunctions = appModule.vocabFunctions,
+                        vocabFunctions = appModule.vocabularyRepo,
                         userData = _state.value.user!!,
                         onComplete = {
                             navigation.pop()
@@ -147,7 +147,7 @@ class RootComponent(
                 Child.FlashcardHomeScreen(
                     FlashcardHomeComponent(
                         componentContext = context,
-                        database = appModule.vocabFunctions,
+                        database = appModule.vocabularyRepo,
                         sets = _state.value.sets,
                         onNavigateBack = {
                             navigation.pop()
@@ -155,7 +155,7 @@ class RootComponent(
                         onNavigateToCreateScreen = {
                             navigation.pushNew(
                                 Configuration.CreateSetScreen(
-                                    appModule.vocabFunctions,
+                                    appModule.vocabularyRepo,
                                     null,
                                     null,
                                     null
@@ -165,7 +165,7 @@ class RootComponent(
                         onNavigateToStudyCard = { setId, title, date ->
                             navigation.pushNew(
                                 Configuration.StudyFlashcardsScreen(
-                                    appModule.vocabFunctions,
+                                    appModule.vocabularyRepo,
                                     setId,
                                     title,
                                     date
@@ -176,7 +176,7 @@ class RootComponent(
                         onNavigateToEdit = { title, setId, date ->
                             navigation.pushNew(
                                 Configuration.CreateSetScreen(
-                                    appModule.vocabFunctions,
+                                    appModule.vocabularyRepo,
                                     title,
                                     setId,
                                     date
@@ -203,7 +203,7 @@ class RootComponent(
                         onEditNavigate = { title, id, date ->
                             navigation.pushNew(
                                 Configuration.CreateSetScreen(
-                                    appModule.vocabFunctions,
+                                    appModule.vocabularyRepo,
                                     title = title,
                                     id = id,
                                     date = date
@@ -256,9 +256,9 @@ class RootComponent(
                         saveToken = {
                             scope.launch {
                                 val token =
-                                    async { appModule.userFunctions.retrieveAccessToken() }.await()
+                                    async { appModule.userRepo.retrieveAccessToken() }.await()
                                 token?.let {
-                                    appModule.settingFunctions.saveToken(it)
+                                    appModule.settingsDataSource.saveToken(it)
                                 }
                             }
 
@@ -268,7 +268,7 @@ class RootComponent(
                                 appModule.signInRepo.createUserWithGmailExternally()
                                 _state.update {
                                     it.copy(
-                                        user = appModule.settingFunctions.getUser(),
+                                        user = appModule.settingsDataSource.getUser(),
                                         loggedIn = true
                                     )
                                 }
@@ -289,8 +289,8 @@ class RootComponent(
                 Child.PersonalizationScreen(
                     PersonalizationComponent(
                         componentContext = context,
-                        settings = appModule.settingFunctions,
-                        handleUser = appModule.userFunctions,
+                        settings = appModule.settingsDataSource,
+                        handleUser = appModule.userRepo,
                         onNavigate = {
                             navigation.pushNew(Configuration.CompletionScreen)
                         })
@@ -320,7 +320,7 @@ class RootComponent(
                         onModalNavigate = { route ->
                             modalNavigate(route)
                         },
-                        chatRepo = appModule.chatFunctions,
+                        chatRepo = appModule.chatRepo,
                         componentContext = context,
                         navigateToConversation = { title, background, iconTag ->
                             navigation.pushNew(
@@ -342,7 +342,7 @@ class RootComponent(
                             modalNavigate(it)
                         },
                         userData = _state.value.user!!,
-                        api = appModule.chatFunctions,
+                        api = appModule.chatRepo,
                         topic = config.title,
                         topicBackground = config.background,
                         topicIcon = config.topicTag,
@@ -357,7 +357,7 @@ class RootComponent(
                         onNavigate = {
                             modalNavigate(it)
                         },
-                        practiceDataSource = appModule.practiceFunctions,
+                        practiceRepo = appModule.practiceRepo,
                         componentContext = context,
                         userData = _state.value.user!!,
                         grammarLevel = _state.value.grammar,
@@ -388,7 +388,7 @@ class RootComponent(
     private fun modalNavigate(route: String) {
         when (route) {
             Routes.HOME -> navigation.popTo(0)
-            Routes.VOCABULARY -> navigation.pushNew(Configuration.FlashcardHomeScreen(appModule.vocabFunctions))
+            Routes.VOCABULARY -> navigation.pushNew(Configuration.FlashcardHomeScreen(appModule.vocabularyRepo))
             Routes.GRAMMAR -> navigation.pushNew(Configuration.GrammarScreen)
             Routes.CHAT -> navigation.pushNew(Configuration.ChatHomeScreen)
             Routes.PRACTICE -> navigation.pushNew(Configuration.PracticeScreen)
@@ -409,19 +409,19 @@ class RootComponent(
 
         @Serializable
         data class CreateSetScreen(
-            val vocabFunctions: VocabularySetSourceFunctions,
+            val vocabFunctions: VocabularyRepo,
             val title: String?,
             val id: Int?,
             val date: String?,
         ) : Configuration()
 
         @Serializable
-        data class FlashcardHomeScreen(val vocabFunctions: VocabularySetSourceFunctions) :
+        data class FlashcardHomeScreen(val vocabFunctions: VocabularyRepo) :
             Configuration()
 
         @Serializable
         data class StudyFlashcardsScreen(
-            val vocabFunctions: VocabularySetSourceFunctions,
+            val vocabFunctions: VocabularyRepo,
             val setId: Int,
             val title: String,
             val date: String,
@@ -508,5 +508,5 @@ data class RootState(
     val loggedIn: Boolean = false,
     val loading: Boolean = false,
     val grammar: List<GrammarLevel> = emptyList(),
-    val sets: List<VocabSet> = emptyList(),
+    val sets: List<VocabSetModel> = emptyList(),
 )

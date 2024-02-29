@@ -1,6 +1,6 @@
 package com.jaegerapps.malmali.di
 
-import VocabularySetSourceFunctions
+import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.jaegerapps.malmali.chat.data.ChatRepoImpl
 import com.jaegerapps.malmali.chat.domain.ChatRepo
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
@@ -8,23 +8,22 @@ import com.jaegerapps.malmali.grammar.data.RootComponentUseCasesImpl
 import com.jaegerapps.malmali.grammar.domain.RootComponentUseCases
 import com.jaegerapps.malmali.login.data.SignInDataSourceImpl
 import com.jaegerapps.malmali.login.domain.SignInDataSource
-import com.jaegerapps.malmali.practice.data.PracticeDataSourceImpl
-import com.jaegerapps.malmali.practice.domain.PracticeDataSource
-import com.jaegerapps.malmali.vocabulary.data.VocabularySetSourceFunctionsImpl
+import com.jaegerapps.malmali.practice.data.repo.PracticeRepoImpl
+import com.jaegerapps.malmali.practice.domain.repo.PracticeRepo
+import com.jaegerapps.malmali.vocabulary.data.repo.VocabularyRepoImpl
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.Settings
 import core.data.DatabaseDriverFactory
 import core.data.KtorClient
 import core.data.supabase.SupabaseClient
 import core.data.supabase.signin.SupabaseSignInFunctionsImpl
-import core.data.supabase.account.SupabaseUserFunctionsImpl
+import core.data.supabase.account.UserRepoImpl
 import core.data.gpt.ChatGptApiImpl
-import core.data.settings.SettingFunctionsImpl
+import core.data.settings.SettingsDataSourceImpl
 import core.domain.ChatGptApi
-import core.domain.supabase.grammar.GrammarDataSource
-import core.domain.SettingFunctions
-import core.domain.supabase.signin.SupabaseSignInFunctions
-import core.domain.supabase.account.SupabaseUserFunctions
+import core.domain.SettingsDataSource
+import core.domain.supabase.signin.SignInRepo
+import core.domain.supabase.account.UserRepo
 import platform.Foundation.NSUserDefaults
 
 actual class AppModule: AppModuleInterface {
@@ -44,31 +43,31 @@ actual class AppModule: AppModuleInterface {
     )
     actual override val signInRepo: SignInDataSource by lazy {
         SignInDataSourceImpl(
-            settings = settingFunctions,
+            settings = settingsDataSource,
             signInFunctions = supabaseSignInFunctions
         )
     }
-    actual override val vocabFunctions: VocabularySetSourceFunctions by lazy {
-        VocabularySetSourceFunctionsImpl(
-            database = database
-        )
-    }
-    actual override val settingFunctions: SettingFunctions by lazy {
-        SettingFunctionsImpl(
-            settings = settings
-        )
-    }
-    actual override val userFunctions: SupabaseUserFunctions by lazy {
-        SupabaseUserFunctionsImpl(
+    actual override val vocabularyRepo: VocabularyRepo by lazy {
+        VocabularyRepoImpl(
             client = supabaseClient
         )
     }
-    actual override val supabaseSignInFunctions: SupabaseSignInFunctions by lazy {
+    actual override val settingsDataSource: SettingsDataSource by lazy {
+        SettingsDataSourceImpl(
+            settings = settings
+        )
+    }
+    actual override val userRepo: UserRepo by lazy {
+        UserRepoImpl(
+            client = supabaseClient
+        )
+    }
+    actual override val supabaseSignInFunctions: SignInRepo by lazy {
         SupabaseSignInFunctionsImpl(
             client = supabaseClient
         )
     }
-    actual override val chatFunctions: ChatRepo by lazy {
+    actual override val chatRepo: ChatRepo by lazy {
         ChatRepoImpl(
             client = supabaseClient,
             api = chatGptApi
@@ -80,15 +79,9 @@ actual class AppModule: AppModuleInterface {
         )
     }
 
-    actual override val practiceFunctions: PracticeDataSource by lazy {
-        PracticeDataSourceImpl(
+    actual override val practiceRepo: PracticeRepo by lazy {
+        PracticeRepoImpl(
             client = supabaseClient,
-            database = database
-        )
-    }
-
-    actual override val grammarFunctions: GrammarDataSource by lazy {
-        GrammarDataSourceImpl(
             database = database
         )
     }

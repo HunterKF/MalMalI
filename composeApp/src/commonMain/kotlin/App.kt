@@ -4,7 +4,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.jaegerapps.malmali.grammar.presentation.GrammarScreen
@@ -19,11 +18,10 @@ import com.jaegerapps.malmali.onboarding.completion.CompletionScreen
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
 import com.jaegerapps.malmali.onboarding.intro.IntroScreen
 import com.jaegerapps.malmali.practice.presentation.PracticeScreen
-import com.jaegerapps.malmali.vocabulary.create_set.presentation.CreateSetScreen
-import com.jaegerapps.malmali.vocabulary.folders.presentation.FolderScreen
-import com.jaegerapps.malmali.vocabulary.study_flashcards.StudyFlashcardsScreen
+import com.jaegerapps.malmali.vocabulary.presentation.create_set.CreateSetScreen
+import com.jaegerapps.malmali.vocabulary.presentation.folders.presentation.FolderScreen
+import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.StudyFlashcardsScreen
 import core.presentation.MalMalITheme
-import kotlinx.coroutines.flow.subscribe
 
 @Composable
 fun App(

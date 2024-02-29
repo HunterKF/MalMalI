@@ -39,7 +39,7 @@ import com.jaegerapps.malmali.components.SettingsAndModal
 import com.jaegerapps.malmali.components.TopBarLogo
 import com.jaegerapps.malmali.grammar.presentation.GrammarUiEvent
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarListContainer
-import com.jaegerapps.malmali.vocabulary.components.MultiFloatingActionButtons
+import com.jaegerapps.malmali.vocabulary.presentation.components.MultiFloatingActionButtons
 import dev.icerock.moko.resources.compose.painterResource
 import kotlinx.coroutines.launch
 

@@ -1,6 +1,6 @@
 package com.jaegerapps.malmali.vocabulary.mappers
 
-import com.jaegerapps.malmali.vocabulary.mapper.createCards
+import com.jaegerapps.malmali.vocabulary.domain.mapper.createCards
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

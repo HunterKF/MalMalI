@@ -1,7 +1,6 @@
 package com.jaegerapps.malmali.practice.mappers
 
 import com.jaegerapps.malmali.composeApp.database.History
-import com.jaegerapps.malmali.grammar.mapper.toGrammarLevels
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.grammar.models.GrammarPoint
 import com.jaegerapps.malmali.practice.models.HistoryDTO
@@ -10,8 +9,8 @@ import com.jaegerapps.malmali.practice.models.UiHistoryItem
 import com.jaegerapps.malmali.practice.models.UiPracticeGrammar
 import com.jaegerapps.malmali.practice.models.UiPracticeGrammarLevel
 import com.jaegerapps.malmali.practice.models.UiPracticeVocab
-import com.jaegerapps.malmali.vocabulary.models.VocabSet
-import com.jaegerapps.malmali.vocabulary.models.VocabularyCard
+import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 import kotlinx.datetime.Clock
 
 fun UiHistoryItem.toHistoryDTO(): HistoryDTO {
@@ -93,11 +92,11 @@ fun GrammarPoint.toUiPracticeGrammar(): UiPracticeGrammar {
     )
 }
 
-fun VocabSet.toUiPracticeVocabList(): List<UiPracticeVocab> {
+fun VocabSetModel.toUiPracticeVocabList(): List<UiPracticeVocab> {
     return this.cards.map { it.toUiPracticeVocab() }
 }
 
-fun VocabularyCard.toUiPracticeVocab(): UiPracticeVocab {
+fun VocabularyCardModel.toUiPracticeVocab(): UiPracticeVocab {
     return UiPracticeVocab(
         word = this.word,
         definition = this.definition

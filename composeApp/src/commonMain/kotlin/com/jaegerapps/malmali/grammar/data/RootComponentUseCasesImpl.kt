@@ -5,7 +5,7 @@ import com.jaegerapps.malmali.grammar.mapper.toGrammarLevels
 import com.jaegerapps.malmali.grammar.mapper.toGrammarPoint
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.grammar.models.GrammarPointDTO
-import com.jaegerapps.malmali.vocabulary.models.FlashSetEntity
+import com.jaegerapps.malmali.vocabulary.domain.models.FlashSetEntity
 import core.Knower
 import core.Knower.d
 import core.Knower.e

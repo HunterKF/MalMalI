@@ -4,7 +4,7 @@ import com.jaegerapps.malmali.login.data.UserDTO
 import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.login.domain.UserEntity
 import com.jaegerapps.malmali.login.domain.toUserData
-import core.domain.supabase.signin.SupabaseSignInFunctions
+import core.domain.supabase.signin.SignInRepo
 import core.util.Resource
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.RestException
@@ -12,7 +12,7 @@ import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 
-class SupabaseSignInFunctionsImpl(private val client: SupabaseClient) : SupabaseSignInFunctions {
+class SupabaseSignInFunctionsImpl(private val client: SupabaseClient) : SignInRepo {
     override suspend fun createUserGoogle(newUser: UserDTO): Resource<UserData> {
         return try {
             val user = client.from("users").insert(newUser) {

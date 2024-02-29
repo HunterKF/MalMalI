@@ -1,8 +1,8 @@
 package com.jaegerapps.malmali.onboarding.personalization
 
 import com.arkivanov.decompose.ComponentContext
-import core.domain.SettingFunctions
-import core.domain.supabase.account.SupabaseUserFunctions
+import core.domain.SettingsDataSource
+import core.domain.supabase.account.UserRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 class PersonalizationComponent(
     componentContext: ComponentContext,
     private val onNavigate: () -> Unit,
-    private val handleUser: SupabaseUserFunctions,
-    private val settings: SettingFunctions,
+    private val handleUser: UserRepo,
+    private val settings: SettingsDataSource,
 ) : ComponentContext by componentContext {
 
 

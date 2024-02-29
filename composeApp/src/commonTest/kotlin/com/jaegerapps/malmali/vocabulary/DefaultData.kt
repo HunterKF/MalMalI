@@ -1,16 +1,13 @@
 package com.jaegerapps.malmali.vocabulary
 
-import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.grammar.models.GrammarPoint
-import com.jaegerapps.malmali.vocabulary.create_set.presentation.SetMode
-import com.jaegerapps.malmali.vocabulary.models.UiFlashcard
-import com.jaegerapps.malmali.vocabulary.models.VocabSet
-import com.jaegerapps.malmali.vocabulary.models.VocabularyCard
+import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 
-val exampleVocabSetList = listOf(
-    VocabSet(
+val exampleVocabSetModelLists = listOf(
+    VocabSetModel(
         setId = 1,
         title = "Fruits",
         icon = IconResource.resourceFromTag("bear 1"),
@@ -18,11 +15,11 @@ val exampleVocabSetList = listOf(
         tags = listOf("Food", "Nature"),
         dateCreated = "2024-02-28",
         cards = listOf(
-            VocabularyCard(word = "Apple", definition = "A round fruit with red, yellow, or green skin."),
-            VocabularyCard(word = "Banana", definition = "A long curved fruit with a yellow skin.")
+            VocabularyCardModel(word = "Apple", definition = "A round fruit with red, yellow, or green skin."),
+            VocabularyCardModel(word = "Banana", definition = "A long curved fruit with a yellow skin.")
         )
     ),
-    VocabSet(
+    VocabSetModel(
         setId = 2,
         title = "Vegetables",
         icon = IconResource.resourceFromTag("bear 1"),
@@ -30,11 +27,11 @@ val exampleVocabSetList = listOf(
         tags = listOf("Food", "Healthy"),
         dateCreated = "2024-02-27",
         cards = listOf(
-            VocabularyCard(word = "Carrot", definition = "A long pointed orange vegetable."),
-            VocabularyCard(word = "Tomato", definition = "A red or yellowish fruit with a juicy pulp.")
+            VocabularyCardModel(word = "Carrot", definition = "A long pointed orange vegetable."),
+            VocabularyCardModel(word = "Tomato", definition = "A red or yellowish fruit with a juicy pulp.")
         )
     ),
-    VocabSet(
+    VocabSetModel(
         setId = 3,
         title = "Tech Terms",
         icon = IconResource.resourceFromTag("bear 1"),
@@ -42,57 +39,57 @@ val exampleVocabSetList = listOf(
         tags = listOf("Technology", "Modern"),
         dateCreated = "2024-02-26",
         cards = listOf(
-            VocabularyCard(word = "Computer", definition = "An electronic device for storing and processing data."),
-            VocabularyCard(word = "Internet", definition = "A global computer network providing a variety of information.")
+            VocabularyCardModel(word = "Computer", definition = "An electronic device for storing and processing data."),
+            VocabularyCardModel(word = "Internet", definition = "A global computer network providing a variety of information.")
         )
     )
 )
 
-val exampleUiFlashcardList = listOf<UiFlashcard>(
-    UiFlashcard(
+val exampleUiFlashcardList = listOf<VocabularyCardModel>(
+    VocabularyCardModel(
         word = "먹다",
         def = "to eat",
         error = false
     ),
-    UiFlashcard(
+    VocabularyCardModel(
         word = "가다",
         def = "to go",
         error = false
     ),
-    UiFlashcard(
+    VocabularyCardModel(
         word = "마시다",
         def = "to drink",
         error = false
     ),
-    UiFlashcard(
+    VocabularyCardModel(
         word = "재밌다",
         def = "to be fun",
         error = false
     ),
-    UiFlashcard(
+    VocabularyCardModel(
         word = "성공하다",
         def = "to succeed",
         error = false
     )
 )
-val exampleVocabularyCardList = listOf<VocabularyCard>(
-    VocabularyCard(
+val exampleVocabularyCardModelLists = listOf<VocabularyCardModel>(
+    VocabularyCardModel(
         word = "먹다",
         definition = "to eat",
     ),
-    VocabularyCard(
+    VocabularyCardModel(
         word = "가다",
         definition = "to go",
     ),
-    VocabularyCard(
+    VocabularyCardModel(
         word = "마시다",
         definition = "to drink",
     ),
-    VocabularyCard(
+    VocabularyCardModel(
         word = "재밌다",
         definition = "to be fun",
     ),
-    VocabularyCard(
+    VocabularyCardModel(
         word = "성공하다",
         definition = "to succeed",
     )

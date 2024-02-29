@@ -1,4 +1,62 @@
+CREATE TABLE flashcards(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    card_word TEXT NOT NULL,
+    card_definition TEXT NOT NULL,
+    linked_set INTEGER NOT NULL
+);
 
+insertFlashCard:
+INSERT OR REPLACE INTO flashcards(id, card_word, card_definition, linked_set)
+VALUES(?, ?, ?, ?);
+
+selectSetCards:
+SELECT * FROM flashcards
+WHERE linked_set=:setId;
+
+updateCard:
+UPDATE flashcards
+SET card_word=:word, card_definition=:meaning
+WHERE id=:id;
+
+deleteSingleCard:
+DELETE FROM flashcards
+WHERE id=:id;
+
+deleteSetCards:
+DELETE FROM flashcards
+WHERE linked_set=:setId;
+
+CREATE TABLE flashcardSets (
+    set_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    public_id INTEGER NOT NULL,
+    set_title TEXT NOT NULL,
+    tags TEXT,
+    date_created TEXT NOT NULL,
+    is_public INTEGER NOT NULL,
+    is_author INTEGER NOT NULL,
+    set_icon TEXT NOT NULL
+);
+insertSet:
+INSERT OR REPLACE INTO flashcardSets(set_id, public_id, set_title, tags, date_created, is_public, is_author, set_icon)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+
+selectAllSets:
+SELECT * FROM flashcardSets;
+
+selectOneSet:
+SELECT *
+FROM flashcardSets
+WHERE public_id=:publicId;
+
+deleteSet:
+DELETE FROM flashcardSets
+WHERE set_id=:setId;
+
+updateSet:
+UPDATE flashcardSets
+SET set_title=:setTitle, tags=:tags, is_public=:isPublic
+WHERE set_id = :id;
 
 CREATE TABLE history (
     set_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -22,3 +80,29 @@ WHERE set_id=:setId;
 
 selectHistory:
 SELECT * FROM history;
+
+CREATE TABLE grammar (
+    set_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    grammar_category INTEGER NOT NULL,
+    grammar_title TEXT NOT NULL,
+    grammar_definition_1 TEXT NOT NULL,
+    grammar_definition_2 TEXT,
+    example_eng_1 TEXT NOT NULL,
+    example_eng_2 TEXT NOT NULL,
+    example_kor_1 TEXT NOT NULL,
+    example_kor_2 TEXT NOT NULL
+);
+
+insertGrammar:
+INSERT INTO grammar(set_id, grammar_category, grammar_title, grammar_definition_1, grammar_definition_2, example_eng_1, example_eng_2, example_kor_1, example_kor_2)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateGrammar:
+UPDATE grammar
+SET grammar_category=:category,  grammar_title=:grammar_title,  grammar_definition_1=:grammar_definition_1,  grammar_definition_2=:grammar_definition_2,  example_eng_1=:example_eng_1,  example_eng_2=:example_eng_2,  example_kor_1=:example_kor_1, example_kor_2=:example_kor_2
+WHERE grammar_title =:title;
+getAllGrammar:
+SELECT * FROM grammar;
+
+countGrammar:
+SELECT COUNT(*) FROM grammar;
