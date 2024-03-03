@@ -17,21 +17,21 @@ class FakeVocabularyRepo : VocabularyRepo {
         VocabSetModel(
             title = "",
             icon = IconResource.resourceFromTag("bear 1"),
-            setId = -20,
+            localId = -20,
             isPublic = false,
             dateCreated = ""
         )
     )
 
-    override suspend fun addSet(vocabSetModel: VocabSetModel) {
+    override suspend fun createSet(vocabSetModel: VocabSetModel) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getSet(setId: Int, setTitle: String): Resource<VocabSetModel> {
+    override suspend fun getLocalSet(setId: Int, setTitle: String): Resource<VocabSetModel> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getAllSets(): Resource<List<VocabSetModel>> {
+    override suspend fun getAllLocalSets(): Resource<List<VocabSetModel>> {
         TODO("Not yet implemented")
     }
 

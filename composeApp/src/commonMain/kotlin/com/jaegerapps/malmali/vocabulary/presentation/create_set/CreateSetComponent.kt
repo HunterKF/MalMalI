@@ -4,8 +4,6 @@ import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.login.domain.UserData
-import com.jaegerapps.malmali.vocabulary.domain.mapper.toUiFlashcard
-import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabCardList
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import core.util.Resource
@@ -40,7 +38,7 @@ class CreateSetComponent(
         if (setId != null && setTitle != null && date != null) {
             scope.launch {
                 _state.update { it.copy(isLoading = true) }
-                when (val result = async { vocabFunctions.getSet(setId, setTitle) }.await()) {
+                when (val result = async { vocabFunctions.getLocalSet(setId, setTitle) }.await()) {
                     is Resource.Error -> _state.update { it.copy(error = UiError.UNKNOWN_ERROR) }
                     is Resource.Success -> {
                         if (result.data != null) {
@@ -48,7 +46,7 @@ class CreateSetComponent(
                             _state.update {
                                 it.copy(
                                     title = set.title,
-                                    vocabularyCardModels = set.toUiFlashcard(),
+                                    vocabularyCardModels = set.cards,
                                     icon = set.icon,
                                     isPublic = set.isPublic,
                                     isLoading = false
@@ -66,7 +64,7 @@ class CreateSetComponent(
                         VocabularyCardModel(
                             uiId = id,
                             word = "",
-                            def = "",
+                            definition = "",
                             error = false
                         )
                     }
@@ -87,7 +85,7 @@ class CreateSetComponent(
                             VocabularyCardModel(
                                 uiId = if (id != null) id + 1 else 1,
                                 word = "",
-                                def = "",
+                                definition = "",
                                 error = false
                             )
                         )
@@ -195,11 +193,13 @@ class CreateSetComponent(
                         val vocabSetModel = VocabSetModel(
                             title = _state.value.title,
                             icon = _state.value.icon ?: IconResource.resourceFromTag("bear 1"),
-                            setId = 0,
+                            localId = 0,
                             isPublic = _state.value.isPublic,
                             tags = _state.value.tags,
-                            dateCreated = "",
-                            cards = _state.value.vocabularyCardModels.toVocabCardList()
+                            dateCreated = null,
+                            cards = _state.value.vocabularyCardModels,
+                            isAuthor = true,
+                            remoteId = 0
                         )
                         scope.launch {
 
@@ -207,16 +207,15 @@ class CreateSetComponent(
                                 //this means we are editing a set, so we just update it based on this
                                 vocabFunctions.updateSet(
                                     set = vocabSetModel.copy(
-                                        setId = setId,
+                                        localId = setId,
                                         title = setTitle,
                                         dateCreated = date
                                     )
                                 )
                             } else {
                                 //Adding a set
-                                vocabFunctions.addSet(
-                                    vocabSetModel,
-                                    username = userData.nickname
+                                vocabFunctions.createSet(
+                                    vocabSetModel
                                 )
                             }
 
@@ -274,7 +273,7 @@ class CreateSetComponent(
                             vocabularyCardModels = it.vocabularyCardModels.updateFlashcard(
                                 id = card.uiId!!,
                                 word = event.text,
-                                def = card.def
+                                def = card.definition
                             )
                         )
                     }
@@ -306,7 +305,7 @@ class CreateSetComponent(
                 VocabularyCardModel(
                     uiId = if (id != null) id + i else 1,
                     word = "",
-                    def = "",
+                    definition = "",
                     error = false
                 )
             )
@@ -320,7 +319,7 @@ class CreateSetComponent(
         var hasError = false
         var index = 0
         val checkList = state.value.vocabularyCardModels.map {
-            if (it.def.isBlank() || it.word.isBlank()) {
+            if (it.definition.isBlank() || it.word.isBlank()) {
                 it.copy(
                     error = true
                 )
@@ -349,7 +348,7 @@ class CreateSetComponent(
         word: String,
         def: String,
     ): List<VocabularyCardModel> =
-        this.map { card -> if (card.uiId == id) card.copy(word = word, def = def) else card }
+        this.map { card -> if (card.uiId == id) card.copy(word = word, definition = def) else card }
 
 }
 

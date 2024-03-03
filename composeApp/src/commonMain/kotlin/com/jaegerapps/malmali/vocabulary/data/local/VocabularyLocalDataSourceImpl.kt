@@ -1,5 +1,7 @@
 package com.jaegerapps.malmali.vocabulary.data.local
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
 import com.jaegerapps.malmali.vocabulary.data.models.FlashcardEntity
 import com.jaegerapps.malmali.vocabulary.data.models.SetEntity
@@ -9,6 +11,11 @@ import com.jaegerapps.malmali.vocabulary.domain.mapper.toSetEntity
 import core.Knower
 import core.Knower.e
 import core.util.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.supervisorScope
 
 class VocabularyLocalDataSourceImpl(
     database: MalMalIDatabase,
@@ -20,11 +27,11 @@ class VocabularyLocalDataSourceImpl(
     ): Resource<Boolean> {
         return try {
             queries.insertSet(
-                set_id = setEntity.set_id,
+                set_id = null,
                 public_id = setEntity.linked_set,
                 set_title = setEntity.set_title,
                 tags = setEntity.tags,
-                date_created = setEntity.date_created,
+                date_created = setEntity.date_created!!,
                 is_public = setEntity.is_public,
                 is_author = setEntity.is_author,
                 set_icon = setEntity.set_icon
@@ -75,16 +82,17 @@ class VocabularyLocalDataSourceImpl(
         }
     }
 
-    override suspend fun readAllSets(): Resource<List<SetEntity>> {
-        return try {
-            val cards = queries.selectAllSets().executeAsList().map { it.toSetEntity() }
-
-            Resource.Success(cards)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Knower.e("InsertHistorySql", "An error has occurred here. ${e.message}")
-            Resource.Error(e)
-        }
+    override fun readAllSets(): Flow<List<SetEntity>> {
+        return queries.selectAllSets()
+            .asFlow()
+            .mapToList(Dispatchers.IO)
+            .map { hey ->
+                supervisorScope {
+                    hey.map {
+                        it.toSetEntity()
+                    }
+                }
+            }
     }
 
     override suspend fun updateSet(setEntity: SetEntity): Resource<Boolean> {
@@ -96,7 +104,7 @@ class VocabularyLocalDataSourceImpl(
                 isPublic = setEntity.is_public,
             )
             Resource.Success(true)
-        } catch(e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             Knower.e("InsertHistorySql", "An error has occurred here. ${e.message}")
             Resource.Error(e)
@@ -113,21 +121,20 @@ class VocabularyLocalDataSourceImpl(
                 )
             }
             Resource.Success(true)
-        } catch(e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             Knower.e("InsertHistorySql", "An error has occurred here. ${e.message}")
             Resource.Error(e)
         }
     }
 
-    override suspend fun deleteSet(setEntity: SetEntity): Resource<Boolean> {
+    override suspend fun deleteSet(remoteId: Long): Resource<Boolean> {
         return try {
-            setEntity.set_id?.let {
-                queries.deleteSet(it)
-                queries.deleteSetCards(it)
-            }
-            Resource.Success(setEntity.set_id != null)
-        }  catch(e:Exception){
+
+            queries.deleteSet(remoteId)
+            queries.deleteSetCards(remoteId)
+            Resource.Success(true)
+        } catch (e: Exception) {
             e.printStackTrace()
             Knower.e("InsertHistorySql", "An error has occurred here. ${e.message}")
             Resource.Error(e)

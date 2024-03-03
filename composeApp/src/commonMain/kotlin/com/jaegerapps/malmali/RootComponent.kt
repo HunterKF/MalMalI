@@ -27,7 +27,6 @@ import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.StudyFlas
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
 import com.jaegerapps.malmali.practice.presentation.PracticeComponent
-import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSet
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import core.Knower
 import core.Knower.e
@@ -147,7 +146,7 @@ class RootComponent(
                 Child.FlashcardHomeScreen(
                     FlashcardHomeComponent(
                         componentContext = context,
-                        database = appModule.vocabularyRepo,
+                        repo = appModule.vocabularyRepo,
                         sets = _state.value.sets,
                         onNavigateBack = {
                             navigation.pop()
@@ -199,7 +198,7 @@ class RootComponent(
                             modalNavigate(route)
                         },
                         onCompleteNavigate = { navigation.pop() },
-                        set = _state.value.sets.first { it.title == config.title && it.setId == config.setId },
+                        set = _state.value.sets.first { it.title == config.title && it.localId == config.setId },
                         onEditNavigate = { title, id, date ->
                             navigation.pushNew(
                                 Configuration.CreateSetScreen(
@@ -463,7 +462,7 @@ class RootComponent(
     }
 
     private suspend fun getFlashcards(user: String) {
-        when (val sets = appModule.rootComponentUseCases.getSets(user)) {
+        /*when (val sets = appModule.rootComponentUseCases.getSets(user)) {
             is Resource.Error -> {
                 Knower.e(
                     "getDefaultFlashcards",
@@ -475,12 +474,12 @@ class RootComponent(
                 if (sets.data != null) {
                     _state.update {
                         it.copy(
-                            sets = sets.data.map { it.toVocabSet() }
+                            sets = sets.data.map { it }
                         )
                     }
                 }
             }
-        }
+        }*/
     }
 
     private suspend fun getGrammar() {

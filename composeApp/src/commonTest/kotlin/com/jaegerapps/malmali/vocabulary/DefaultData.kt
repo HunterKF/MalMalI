@@ -8,7 +8,7 @@ import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 
 val exampleVocabSetModelLists = listOf(
     VocabSetModel(
-        setId = 1,
+        localId = 1,
         title = "Fruits",
         icon = IconResource.resourceFromTag("bear 1"),
         isPublic = true,
@@ -20,7 +20,7 @@ val exampleVocabSetModelLists = listOf(
         )
     ),
     VocabSetModel(
-        setId = 2,
+        localId = 2,
         title = "Vegetables",
         icon = IconResource.resourceFromTag("bear 1"),
         isPublic = false,
@@ -32,7 +32,7 @@ val exampleVocabSetModelLists = listOf(
         )
     ),
     VocabSetModel(
-        setId = 3,
+        localId = 3,
         title = "Tech Terms",
         icon = IconResource.resourceFromTag("bear 1"),
         isPublic = true,
@@ -48,27 +48,27 @@ val exampleVocabSetModelLists = listOf(
 val exampleUiFlashcardList = listOf<VocabularyCardModel>(
     VocabularyCardModel(
         word = "먹다",
-        def = "to eat",
+        definition = "to eat",
         error = false
     ),
     VocabularyCardModel(
         word = "가다",
-        def = "to go",
+        definition = "to go",
         error = false
     ),
     VocabularyCardModel(
         word = "마시다",
-        def = "to drink",
+        definition = "to drink",
         error = false
     ),
     VocabularyCardModel(
         word = "재밌다",
-        def = "to be fun",
+        definition = "to be fun",
         error = false
     ),
     VocabularyCardModel(
         word = "성공하다",
-        def = "to succeed",
+        definition = "to succeed",
         error = false
     )
 )

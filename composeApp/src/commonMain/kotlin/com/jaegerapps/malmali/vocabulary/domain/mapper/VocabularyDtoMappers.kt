@@ -2,12 +2,13 @@ package com.jaegerapps.malmali.vocabulary.domain.mapper
 
 import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTO
+import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTOWithoutData
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 
 fun VocabSetModel.toVocabSetDTO(): VocabSetDTO {
     return VocabSetDTO(
-        id = publicId?.toInt(),
+        id = remoteId?.toInt(),
         tags = tags.toTypedArray(),
         is_public = isPublic,
         subscribed_users = emptyArray(),
@@ -16,14 +17,25 @@ fun VocabSetModel.toVocabSetDTO(): VocabSetDTO {
         set_title = title,
         set_icon = icon.tag,
         vocabulary_word = cards.map { it.word }.toTypedArray(),
-        vocabulary_definition = cards.map { it.def }.toTypedArray()
+        vocabulary_definition = cards.map { it.definition }.toTypedArray()
+    )
+}
+fun VocabSetModel.toVocabSetDTOWithoutData(): VocabSetDTOWithoutData {
+    return VocabSetDTOWithoutData(
+        tags = tags.toTypedArray(),
+        is_public = isPublic,
+        subscribed_users = emptyArray(),
+        set_title = title,
+        set_icon = icon.tag,
+        vocabulary_word = cards.map { it.word }.toTypedArray(),
+        vocabulary_definition = cards.map { it.definition }.toTypedArray()
     )
 }
 
 fun VocabSetDTO.toVocabSetModel(isAuthor: Boolean): VocabSetModel {
     return VocabSetModel(
-        setId = null,
-        publicId = id,
+        localId = null,
+        remoteId = id,
         title = set_title,
         icon = IconResource.resourceFromTag(set_icon),
         isAuthor = isAuthor,
@@ -45,7 +57,7 @@ private fun createVocabularyCardModel(
             VocabularyCardModel(
                 uiId = index,
                 word = word[index],
-                def = definition[index],
+                definition = definition[index],
                 dbId = null
             )
         )

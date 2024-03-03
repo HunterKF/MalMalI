@@ -146,7 +146,7 @@ class CreateSetComponentTest {
             activeChild.onEvent(CreateSetUiEvent.AddCard)
             val addedCardState = awaitItem()
             assertEquals("", addedCardState.vocabularyCardModels.last().word)
-            assertEquals("", addedCardState.vocabularyCardModels.last().def)
+            assertEquals("", addedCardState.vocabularyCardModels.last().definition)
             assertEquals(11, addedCardState.vocabularyCardModels.last().uiId)
         }
     }
@@ -231,7 +231,7 @@ class CreateSetComponentTest {
                 assertEquals("Word $i", wordChangedState.vocabularyCardModels[i - 1].word)
                 activeChild.onEvent(CreateSetUiEvent.EditDef(i, "Def $i"))
                 val defChangedState = awaitItem()
-                assertEquals("Def $i", defChangedState.vocabularyCardModels[i - 1].def)
+                assertEquals("Def $i", defChangedState.vocabularyCardModels[i - 1].definition)
             }
 
 
@@ -261,7 +261,7 @@ class CreateSetComponentTest {
                 assertEquals("Word $i", wordChangedState.vocabularyCardModels[i - 1].word)
                 activeChild.onEvent(CreateSetUiEvent.EditDef(i, "Def $i"))
                 val defChangedState = awaitItem()
-                assertEquals("Def $i", defChangedState.vocabularyCardModels[i - 1].def)
+                assertEquals("Def $i", defChangedState.vocabularyCardModels[i - 1].definition)
             }
 
 

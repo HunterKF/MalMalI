@@ -5,6 +5,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -28,13 +29,20 @@ class StudyFlashcardsComponent(
 
     init {
         lifecycle.doOnCreate {
-            _state.update {
-                it.copy(
-                    loading = false,
-                    set = set,
-                    currentCard = set.cards.first(),
-                    currentIndex = 0
-                )
+            scope.launch {
+                when (val result =database.getLocalSet(set.localId!!, set.title)) {
+                    is Resource.Error -> TODO()
+                    is Resource.Success -> {
+                        _state.update {
+                            it.copy(
+                                loading = false,
+                                set = result.data,
+                                currentCard = set.cards.first(),
+                                currentIndex = 0
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -162,7 +170,7 @@ class StudyFlashcardsComponent(
 
             StudyFlashcardsUiEvent.OnSetEditClick -> {
                 _state.value.set?.let { set ->
-                    set.setId?.let { onEditNavigate(set.title, it, set.dateCreated) }
+                    set.localId?.let { onEditNavigate(set.title, it, set.dateCreated!!) }
 
                 }
             }

@@ -1,6 +1,7 @@
 package com.jaegerapps.malmali.vocabulary.data.remote
 
 import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTO
+import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTOWithoutData
 import core.Knower
 import core.Knower.d
 import core.data.supabase.SupabaseKeys
@@ -14,10 +15,12 @@ class VocabularyRemoteDataSourceImpl(
     private val client: SupabaseClient,
 ) : VocabularyRemoteDataSource {
 
-    override suspend fun createSet(vocabSet: VocabSetDTO): Resource<VocabSetDTO> {
+    override suspend fun createSet(vocabSet: VocabSetDTOWithoutData): Resource<VocabSetDTO> {
         return try {
-            val result = client.from(SupabaseKeys.SETS).insert(vocabSet).decodeSingle<VocabSetDTO>()
-            Knower.d("createSet", "Here is the result: $result")
+            val result = client.from(SupabaseKeys.SETS).insert(vocabSet) {
+                select()
+            }.decodeSingle<VocabSetDTO>()
+            Knower.d("createSet", "Here is the result: ${result}")
             Resource.Success(result)
         } catch (e: RestException) {
             e.printStackTrace()
@@ -55,7 +58,7 @@ class VocabularyRemoteDataSourceImpl(
         return try {
             val result = client.from(SupabaseKeys.SETS).update(vocabSet) {
                 filter {
-                    eq("id", vocabSet.id)
+                    eq("id", vocabSet.id!!)
                 }
             }.decodeAs<VocabSetDTO>()
             Resource.Success(result)
@@ -65,11 +68,11 @@ class VocabularyRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun deleteSet(vocabSet: VocabSetDTO): Resource<Boolean> {
+    override suspend fun deleteSet(remoteId: Int): Resource<Boolean> {
         return try {
             client.from(SupabaseKeys.SETS).delete {
                 filter {
-                    eq("id", vocabSet.id)
+                    eq("id", remoteId)
                 }
             }
             Resource.Success(true)

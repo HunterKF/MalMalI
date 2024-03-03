@@ -10,8 +10,16 @@ import com.jaegerapps.malmali.grammar.data.RootComponentUseCasesImpl
 import com.jaegerapps.malmali.grammar.domain.RootComponentUseCases
 import com.jaegerapps.malmali.login.data.SignInDataSourceImpl
 import com.jaegerapps.malmali.login.domain.SignInDataSource
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSource
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSourceImpl
+import com.jaegerapps.malmali.practice.data.rempote.PracticeRemoteDataSource
+import com.jaegerapps.malmali.practice.data.rempote.PracticeRemoteDataSourceImpl
 import com.jaegerapps.malmali.practice.data.repo.PracticeRepoImpl
 import com.jaegerapps.malmali.practice.domain.repo.PracticeRepo
+import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSource
+import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSourceImpl
+import com.jaegerapps.malmali.vocabulary.data.remote.VocabularyRemoteDataSource
+import com.jaegerapps.malmali.vocabulary.data.remote.VocabularyRemoteDataSourceImpl
 import com.jaegerapps.malmali.vocabulary.data.repo.VocabularyRepoImpl
 import com.russhwolf.settings.SharedPreferencesSettings
 import core.data.DatabaseDriverFactory
@@ -38,6 +46,28 @@ actual class AppModule(
     )
 
 
+    actual override val vocabularyRemoteDataSource: VocabularyRemoteDataSource by lazy {
+        VocabularyRemoteDataSourceImpl(
+            client = supabaseClient
+        )
+    }
+    actual override val vocabularyLocalDataSource: VocabularyLocalDataSource by lazy {
+        VocabularyLocalDataSourceImpl(
+            database = database
+        )
+    }
+
+    actual override val practiceRemoteDataSource: PracticeRemoteDataSource by lazy {
+        PracticeRemoteDataSourceImpl(
+            client = supabaseClient
+        )
+    }
+    actual override val practiceLocalDataSource: PracticeLocalDataSource by lazy {
+        PracticeLocalDataSourceImpl(
+            database = database
+        )
+    }
+
     actual override val rootComponentUseCases: RootComponentUseCases by lazy {
         RootComponentUseCasesImpl(client = supabaseClient)
     }
@@ -49,7 +79,8 @@ actual class AppModule(
     }
     actual override val vocabularyRepo: VocabularyRepo by lazy {
         VocabularyRepoImpl(
-            client = supabaseClient
+            remote = vocabularyRemoteDataSource,
+            local = vocabularyLocalDataSource
         )
     }
     actual override val settingsDataSource: SettingsDataSource by lazy {
@@ -82,8 +113,8 @@ actual class AppModule(
 
     actual override val practiceRepo: PracticeRepo by lazy {
         PracticeRepoImpl(
-            client = supabaseClient,
-            database = database
+            remote = practiceRemoteDataSource,
+            local = practiceLocalDataSource
         )
     }
 }

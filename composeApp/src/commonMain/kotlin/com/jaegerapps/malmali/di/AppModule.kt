@@ -4,7 +4,11 @@ import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.jaegerapps.malmali.chat.domain.ChatRepo
 import com.jaegerapps.malmali.grammar.domain.RootComponentUseCases
 import com.jaegerapps.malmali.login.domain.SignInDataSource
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSource
+import com.jaegerapps.malmali.practice.data.rempote.PracticeRemoteDataSource
 import com.jaegerapps.malmali.practice.domain.repo.PracticeRepo
+import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSource
+import com.jaegerapps.malmali.vocabulary.data.remote.VocabularyRemoteDataSource
 import core.domain.ChatGptApi
 import core.domain.SettingsDataSource
 import core.domain.supabase.signin.SignInRepo
@@ -15,6 +19,11 @@ expect class AppModule: AppModuleInterface {
     //Chat Gpt functions
     override val chatGptApi: ChatGptApi
     override val settingsDataSource: SettingsDataSource
+    override val vocabularyRemoteDataSource: VocabularyRemoteDataSource
+    override val vocabularyLocalDataSource: VocabularyLocalDataSource
+
+    override val practiceRemoteDataSource: PracticeRemoteDataSource
+    override val practiceLocalDataSource: PracticeLocalDataSource
 
 
     //Used in sign in screen
@@ -41,6 +50,11 @@ interface AppModuleInterface {
     //Data sources - The data sources are put in manually inside the implementations
     val chatGptApi: ChatGptApi
     val settingsDataSource: SettingsDataSource
+    val vocabularyRemoteDataSource: VocabularyRemoteDataSource
+    val vocabularyLocalDataSource: VocabularyLocalDataSource
+
+    val practiceRemoteDataSource: PracticeRemoteDataSource
+    val practiceLocalDataSource: PracticeLocalDataSource
 
 
     //Used in grammar screen

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -153,12 +152,12 @@ fun FolderScreen(
                         expanded = isExpanded == index
                     ) {
                         TextButton(onClick = {
-                            grammarSet.setId?.let { id ->
+                            grammarSet.localId?.let { id ->
                                 component.onEvent(
                                     FolderUiEvent.OnStudyClick(
                                         id,
                                         grammarSet.title,
-                                        grammarSet.dateCreated
+                                        grammarSet.dateCreated!!
                                     )
                                 )
                             }
@@ -173,23 +172,13 @@ fun FolderScreen(
                             component.onEvent(
                                 FolderUiEvent.OnEditClick(
                                     grammarSet.title,
-                                    grammarSet.setId,
-                                    grammarSet.dateCreated
+                                    grammarSet.localId!!,
+                                    grammarSet.dateCreated!!
                                 )
                             )
                         }) {
                             Text(
                                 text = "Edit",
-                                color = MaterialTheme.colorScheme.background
-                            )
-                        }
-                        TextButton(onClick = {
-                            grammarSet.setId.let { id ->
-                                component.onEvent(FolderUiEvent.OnShareClick(id))
-                            }
-                        }) {
-                            Text(
-                                text = "Share",
                                 color = MaterialTheme.colorScheme.background
                             )
                         }

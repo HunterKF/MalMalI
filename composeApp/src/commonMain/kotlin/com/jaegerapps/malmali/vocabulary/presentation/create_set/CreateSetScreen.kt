@@ -182,7 +182,7 @@ fun CreateSetScreen(
                     card.uiId?.let {
                         EditVocabContainer(
                             word = card.word,
-                            def = card.def,
+                            def = card.definition,
                             isError = card.error,
                             onWordChange = {
                                 component.onEvent(CreateSetUiEvent.EditWord(card.uiId, text = it))

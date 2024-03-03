@@ -6,7 +6,7 @@ data class SetEntity(
     val linked_set: Long,
     val set_title: String,
     val tags: String?,
-    val date_created: String,
+    val date_created: String?,
     val is_author: Long,
     val is_public: Long,
     val set_icon: String

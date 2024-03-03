@@ -45,15 +45,15 @@ fun List<FlashcardEntity>.toVocabularyCardModelList(): List<VocabularyCardModel>
     return this.map {
         VocabularyCardModel(
             word = it.word,
-            def = it.definition,
+            definition = it.definition,
             dbId = it.id
         )
     }
 }
 fun toVocabSetModel(setEntity: SetEntity, cards: List<FlashcardEntity>): VocabSetModel {
     return VocabSetModel(
-        setId = setEntity.set_id?.toInt(),
-        publicId = setEntity.linked_set.toInt(),
+        localId = setEntity.set_id?.toInt(),
+        remoteId = setEntity.linked_set.toInt(),
         title = setEntity.set_title,
         icon = IconResource.resourceFromTag(setEntity.set_icon),
         isAuthor = setEntity.is_author == 1L,
@@ -86,4 +86,38 @@ fun List<Flashcards>.toFlashcardEntityList(): List<FlashcardEntity> {
             linked_set = it.linked_set
         )
     }
+}
+
+fun SetEntity.toVocabSet(): VocabSetModel{
+    return VocabSetModel(
+        localId = this.set_id?.toInt(),
+        remoteId = this.linked_set.toInt(),
+        title = this.set_title,
+        icon = IconResource.resourceFromTag(this.set_icon),
+        isAuthor = this.is_author == 1L,
+        isPublic = this.is_public == 1L,
+        tags =this.tags?.split(" ") ?: emptyList() ,
+        dateCreated = this.date_created,
+    )
+}
+fun VocabSetModel.toSetEntity(): SetEntity{
+    return SetEntity(
+        set_id = localId!!.toLong(),
+        linked_set = remoteId!!.toLong(),
+        set_title = title,
+        tags = tags.toString(),
+        date_created = dateCreated,
+        is_author = if (!isAuthor) 0L else 1L,
+        is_public = if (!isPublic) 0L else 1L,
+        set_icon = icon.tag
+    )
+}
+
+fun VocabularyCardModel.toFlashcardEntity(remoteId: Long): FlashcardEntity {
+    return FlashcardEntity(
+        id = null,
+        word = word,
+        definition = definition,
+        linked_set = remoteId
+    )
 }
