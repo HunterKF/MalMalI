@@ -11,12 +11,12 @@ import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 
 /*Entities will only be taken from DTOs.
 * This is designed so that the entity is only ever used after a set has been placed in Supabase*/
-fun VocabSetDTO.toVocabSetEntity(isAuthor: Boolean): SetEntity {
+fun VocabSetDTO.toSetEntity(isAuthor: Boolean): SetEntity {
     return SetEntity(
         set_id = null,
         linked_set = id!!.toLong(),
         set_title = set_title,
-        tags = this.tags.toString(),
+        tags = this.tags.joinToString(", "),
         date_created = created_at,
         is_author = if (!isAuthor) 0 else 1,
         is_public = if (!is_public) 0 else 1,

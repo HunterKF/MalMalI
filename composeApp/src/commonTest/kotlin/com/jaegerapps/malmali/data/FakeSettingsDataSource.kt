@@ -17,70 +17,51 @@ class FakeSettingsDataSource : SettingsDataSource {
     )
 
     override suspend fun updateUser(user: UserData) {
-        userState.value = user
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateUserName(name: String) {
-        userState.value = userState.value.copy(
-            nickname = name
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateUserEmail(email: String) {
-        userState.value = userState.value.copy(
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateUserId(id: String) {
-        userState.value = userState.value.copy(
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateUserExperience(experience: Int) {
-        userState.value = userState.value.copy(
-            experience = experience
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateUserCurrentLevel(currentLevel: Int) {
-        userState.value = userState.value.copy(
-            currentLevel = currentLevel
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateUserIcon(icon: String) {
-        userState.value = userState.value.copy(
-            icon = IconResource.resourceFromTag(icon)
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateUserAchievements(achievements: List<String>) {
-        userState.value = userState.value.copy(
-            achievements = achievements
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateUserSelectedLevels(levels: List<Int>) {
-        userState.value = userState.value.copy(
-            selectedLevels = levels
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateUserSets(sets: List<String>) {
-        userState.value = userState.value.copy(
-            sets = sets
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun logoutUser() {
-        userState.value = userState.value.copy(
-            nickname = ""
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun createUser(email: String, id: String) {
-        userState.value = userState.value.copy(
-        )
+        TODO("Not yet implemented")
     }
 
     override suspend fun getUser(): UserData {
@@ -92,7 +73,7 @@ class FakeSettingsDataSource : SettingsDataSource {
     }
 
     override suspend fun changeOnboardingBoolean() {
-        onboardingState.value = !onboardingState.value
+        TODO("Not yet implemented")
     }
 
     override suspend fun saveToken(token: String) {
@@ -102,4 +83,6 @@ class FakeSettingsDataSource : SettingsDataSource {
     override suspend fun getToken(): String? {
         TODO("Not yet implemented")
     }
+
+
 }

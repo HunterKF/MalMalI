@@ -1,7 +1,7 @@
 package com.jaegerapps.malmali.core
 
-import com.jaegerapps.malmali.chat.models.ConversationEntity
-import com.jaegerapps.malmali.chat.models.TopicPromptDTO
+import com.jaegerapps.malmali.chat.data.models.ConversationEntity
+import com.jaegerapps.malmali.chat.data.models.TopicPromptDTO
 import core.Knower
 import core.Knower.d
 import core.Knower.e

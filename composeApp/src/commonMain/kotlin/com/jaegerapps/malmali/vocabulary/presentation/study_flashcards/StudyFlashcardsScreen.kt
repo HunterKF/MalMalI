@@ -133,16 +133,6 @@ fun StudyFlashcardsScreen(
                                     color = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
-                            TextButton(
-                                onClick = {
-                                    component.onEvent(StudyFlashcardsUiEvent.OnSetShareClick)
-                                }
-                            ) {
-                                Text(
-                                    text = stringResource(MR.strings.prompt_share),
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
                         }
                     }
                 }

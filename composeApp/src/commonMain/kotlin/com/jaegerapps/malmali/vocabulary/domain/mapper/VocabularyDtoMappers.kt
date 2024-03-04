@@ -8,8 +8,8 @@ import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 
 fun VocabSetModel.toVocabSetDTO(): VocabSetDTO {
     return VocabSetDTO(
-        id = remoteId?.toInt(),
-        tags = tags.toTypedArray(),
+        id = remoteId,
+        tags = this.tags.toTypedArray(),
         is_public = isPublic,
         subscribed_users = emptyArray(),
         author_id = null,

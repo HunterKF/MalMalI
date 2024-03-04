@@ -3,7 +3,6 @@ package com.jaegerapps.malmali.vocabulary.presentation.study_flashcards
 sealed interface StudyFlashcardsUiEvent {
     //Folder interactions
     data class OnFolderClick(val onClick: () -> Unit): StudyFlashcardsUiEvent
-    data object OnSetShareClick: StudyFlashcardsUiEvent
     data object OnSetEditClick: StudyFlashcardsUiEvent
     //Card interactions
     data object OnGotItClick: StudyFlashcardsUiEvent

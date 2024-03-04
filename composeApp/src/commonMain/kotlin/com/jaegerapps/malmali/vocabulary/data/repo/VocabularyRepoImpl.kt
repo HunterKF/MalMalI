@@ -8,7 +8,6 @@ import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSet
 import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetDTO
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetDTOWithoutData
-import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetEntity
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import core.Knower
@@ -30,7 +29,7 @@ class VocabularyRepoImpl(
             val result = remote.createSet(dto)
             if (result.data != null) {
                 local.createSet(
-                    result.data.toVocabSetEntity(true),
+                    result.data.toSetEntity(true),
                     result.data.toFlashcardEntity()
                 )
             }

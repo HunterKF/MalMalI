@@ -1,45 +1,36 @@
 package com.jaegerapps.malmali.data
 
 import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
-import com.jaegerapps.malmali.components.models.IconResource
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
-import com.jaegerapps.malmali.vocabulary.exampleVocabSetModelLists
 import core.util.Resource
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.Flow
 
 class FakeVocabularyRepo : VocabularyRepo {
-    private val uiCardsState = MutableStateFlow(listOf<VocabularyCardModel>(
-
-    ))
-    private val vocabList = MutableStateFlow(exampleVocabSetModelLists)
-    private val stateSet = MutableStateFlow(
-        VocabSetModel(
-            title = "",
-            icon = IconResource.resourceFromTag("bear 1"),
-            localId = -20,
-            isPublic = false,
-            dateCreated = ""
-        )
-    )
-
-    override suspend fun createSet(vocabSetModel: VocabSetModel) {
+    override suspend fun createSet(vocabSetModel: VocabSetModel): Resource<Boolean> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getLocalSet(setId: Int, setTitle: String): Resource<VocabSetModel> {
+    override suspend fun insertSetLocally(vocabSetModel: VocabSetModel): Resource<Boolean> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getAllLocalSets(): Resource<List<VocabSetModel>> {
+    override suspend fun getLocalSet(setId: Int, remoteId: Int): Resource<VocabSetModel> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteSet(setId: Int) {
+    override fun getAllLocalSets(): Flow<List<VocabSetModel>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateSet(set: VocabSetModel) {
+    override suspend fun getAllRemotePublicSets(): Resource<List<VocabSetModel>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteSet(setId: Int): Resource<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateSet(set: VocabSetModel): Resource<Boolean> {
         TODO("Not yet implemented")
     }
 

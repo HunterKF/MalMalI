@@ -186,10 +186,6 @@ class StudyFlashcardsComponent(
                 }
             }
 
-            StudyFlashcardsUiEvent.OnSetShareClick -> {
-                /*TODO - Navigate to share*/
-            }
-
             StudyFlashcardsUiEvent.OnSettingsClick -> {
                 /*TODO - Navigate to settings*/
             }

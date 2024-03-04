@@ -1,8 +1,8 @@
 package core.domain
 
-import com.jaegerapps.malmali.chat.models.ConversationDTO
-import com.jaegerapps.malmali.chat.models.ConversationEntity
-import com.jaegerapps.malmali.chat.models.TopicPromptDTO
+import com.jaegerapps.malmali.chat.data.models.ConversationDTO
+import com.jaegerapps.malmali.chat.data.models.ConversationEntity
+import com.jaegerapps.malmali.chat.data.models.TopicPromptDTO
 import com.jaegerapps.malmali.information.models.GradedSentenceDTO
 import core.util.Resource
 import io.ktor.client.statement.HttpResponse

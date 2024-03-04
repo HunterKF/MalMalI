@@ -34,10 +34,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatAwaitAnimation
-import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatBubble
-import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatPopUpAlert
-import com.jaegerapps.malmali.chat.conversation.presentation.components.ChatTextField
+import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatAwaitAnimation
+import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatBubble
+import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatPopUpAlert
+import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatTextField
 import com.jaegerapps.malmali.components.ActionButton
 import com.jaegerapps.malmali.components.TopBarLogo
 import com.jaegerapps.malmali.components.CustomTextFieldWithBlackBorder

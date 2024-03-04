@@ -2,9 +2,9 @@ package core.data.gpt
 
 import co.touchlab.kermit.Logger
 import com.jaegerapps.malmali.BuildKonfig
-import com.jaegerapps.malmali.chat.models.ConversationDTO
-import com.jaegerapps.malmali.chat.models.ConversationEntity
-import com.jaegerapps.malmali.chat.models.TopicPromptDTO
+import com.jaegerapps.malmali.chat.data.models.ConversationDTO
+import com.jaegerapps.malmali.chat.data.models.ConversationEntity
+import com.jaegerapps.malmali.chat.data.models.TopicPromptDTO
 import com.jaegerapps.malmali.information.models.GradedSentenceDTO
 import core.Knower
 import core.Knower.d

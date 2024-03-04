@@ -1,13 +1,13 @@
 package com.jaegerapps.malmali.chat.data
 
 import com.jaegerapps.malmali.chat.domain.ChatRepo
-import com.jaegerapps.malmali.chat.mappers.toConversationEntity
-import com.jaegerapps.malmali.chat.mappers.toConversationUi
-import com.jaegerapps.malmali.chat.mappers.toTopicPrompt
-import com.jaegerapps.malmali.chat.mappers.toTopicPromptDTO
-import com.jaegerapps.malmali.chat.models.ConversationUi
-import com.jaegerapps.malmali.chat.models.UiTopicPrompt
-import com.jaegerapps.malmali.chat.models.TopicPromptDTO
+import com.jaegerapps.malmali.chat.domain.mappers.toConversationEntity
+import com.jaegerapps.malmali.chat.domain.mappers.toConversationUi
+import com.jaegerapps.malmali.chat.domain.mappers.toTopicPrompt
+import com.jaegerapps.malmali.chat.domain.mappers.toTopicPromptDTO
+import com.jaegerapps.malmali.chat.domain.models.ConversationUi
+import com.jaegerapps.malmali.chat.domain.models.UiTopicPrompt
+import com.jaegerapps.malmali.chat.data.models.TopicPromptDTO
 import core.Knower
 import core.Knower.e
 import core.domain.ChatGptApi
@@ -73,5 +73,13 @@ class ChatRepoImpl(private val client: SupabaseClient, private val api: ChatGptA
         } catch (e: Exception) {
             Resource.Error(e)
         }
+    }
+
+    override suspend fun saveConversationLocally() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun saveConversationRemotely() {
+        TODO("Not yet implemented")
     }
 }

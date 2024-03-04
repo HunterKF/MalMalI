@@ -10,8 +10,8 @@ import com.arkivanov.decompose.router.stack.popTo
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.jaegerapps.malmali.chat.conversation.presentation.ConversationComponent
-import com.jaegerapps.malmali.chat.home.presentation.ChatHomeComponent
+import com.jaegerapps.malmali.chat.presentation.conversation.ConversationComponent
+import com.jaegerapps.malmali.chat.presentation.home.ChatHomeComponent
 import com.jaegerapps.malmali.components.models.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
 import com.jaegerapps.malmali.grammar.GrammarScreenComponent

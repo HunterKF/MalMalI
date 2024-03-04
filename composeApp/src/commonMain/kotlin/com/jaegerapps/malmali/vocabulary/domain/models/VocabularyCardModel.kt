@@ -4,6 +4,6 @@ data class VocabularyCardModel(
     val uiId: Int? = null,
     val word: String,
     val definition: String,
-    val error: Boolean = false,
+    val error: Boolean = true,
     val dbId: Long? = null
 )

@@ -1,9 +1,7 @@
 package com.jaegerapps.malmali.chat.domain
 
-import com.jaegerapps.malmali.chat.models.ConversationDTO
-import com.jaegerapps.malmali.chat.models.ConversationUi
-import com.jaegerapps.malmali.chat.models.TopicPromptDTO
-import com.jaegerapps.malmali.chat.models.UiTopicPrompt
+import com.jaegerapps.malmali.chat.domain.models.ConversationUi
+import com.jaegerapps.malmali.chat.domain.models.UiTopicPrompt
 import core.util.Resource
 
 interface ChatRepo {
@@ -17,4 +15,7 @@ interface ChatRepo {
         topicPrompt: UiTopicPrompt,
         userName: String,
     ): Resource<ConversationUi>
+
+    suspend fun saveConversationLocally()
+    suspend fun saveConversationRemotely()
 }

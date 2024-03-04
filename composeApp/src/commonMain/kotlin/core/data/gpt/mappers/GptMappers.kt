@@ -1,8 +1,8 @@
 package core.data.gpt.mappers
 
-import com.jaegerapps.malmali.chat.models.ConversationDTO
-import com.jaegerapps.malmali.chat.models.ConversationEntity
-import com.jaegerapps.malmali.chat.models.TopicPromptDTO
+import com.jaegerapps.malmali.chat.data.models.ConversationDTO
+import com.jaegerapps.malmali.chat.data.models.ConversationEntity
+import com.jaegerapps.malmali.chat.data.models.TopicPromptDTO
 import com.jaegerapps.travelplanner.data.remote.dto.ResponseDto
 import core.Knower
 import core.Knower.d
