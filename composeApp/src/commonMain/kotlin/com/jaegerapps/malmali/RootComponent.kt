@@ -126,9 +126,8 @@ class RootComponent(
             is Configuration.CreateSetScreen -> {
                 Child.CreateSetScreen(
                     CreateSetComponent(
-                        setTitle = config.title,
-                        setId = config.id,
-                        date = config.date,
+                        remoteId = config.remoteId,
+                        setId = config.localId,
                         componentContext = context,
                         vocabFunctions = appModule.vocabularyRepo,
                         userData = _state.value.user!!,
@@ -157,28 +156,25 @@ class RootComponent(
                                     appModule.vocabularyRepo,
                                     null,
                                     null,
-                                    null
                                 )
                             )
                         },
-                        onNavigateToStudyCard = { setId, title, date ->
+                        onNavigateToStudyCard = { localId, remoteId->
                             navigation.pushNew(
                                 Configuration.StudyFlashcardsScreen(
                                     appModule.vocabularyRepo,
-                                    setId,
-                                    title,
-                                    date
+                                    localId,
+                                    remoteId
                                 )
                             )
 
                         },
-                        onNavigateToEdit = { title, setId, date ->
+                        onNavigateToEdit = { setId, remoteId ->
                             navigation.pushNew(
                                 Configuration.CreateSetScreen(
                                     appModule.vocabularyRepo,
-                                    title,
                                     setId,
-                                    date
+                                    remoteId
                                 )
                             )
                         },
@@ -190,6 +186,7 @@ class RootComponent(
             }
 
             is Configuration.StudyFlashcardsScreen -> {
+                Knower.e("pushStudy screen", "Current value of state sets it: ${state.value.sets}")
                 Child.StudyFlashcardsScreen(
                     StudyFlashcardsComponent(
                         componentContext = context,
@@ -198,14 +195,14 @@ class RootComponent(
                             modalNavigate(route)
                         },
                         onCompleteNavigate = { navigation.pop() },
-                        set = _state.value.sets.first { it.title == config.title && it.localId == config.setId },
-                        onEditNavigate = { title, id, date ->
+                        remoteId = config.remoteId,
+                        setId = config.localId,
+                        onEditNavigate = { localId, remoteId ->
                             navigation.pushNew(
                                 Configuration.CreateSetScreen(
                                     appModule.vocabularyRepo,
-                                    title = title,
-                                    id = id,
-                                    date = date
+                                    localId = localId,
+                                    remoteId = remoteId
                                 )
                             )
                         }
@@ -409,9 +406,8 @@ class RootComponent(
         @Serializable
         data class CreateSetScreen(
             val vocabFunctions: VocabularyRepo,
-            val title: String?,
-            val id: Int?,
-            val date: String?,
+            val localId: Int?,
+            val remoteId: Int?,
         ) : Configuration()
 
         @Serializable
@@ -421,9 +417,8 @@ class RootComponent(
         @Serializable
         data class StudyFlashcardsScreen(
             val vocabFunctions: VocabularyRepo,
-            val setId: Int,
-            val title: String,
-            val date: String,
+            val localId: Int,
+            val remoteId: Int,
         ) : Configuration()
 
         @Serializable

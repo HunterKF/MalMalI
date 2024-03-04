@@ -35,7 +35,6 @@ class VocabularyLocalDataSourceImpl(
                 is_public = setEntity.is_public,
                 is_author = setEntity.is_author,
                 set_icon = setEntity.set_icon
-
             )
             cards.forEach {
                 queries.insertFlashCard(
@@ -73,8 +72,12 @@ class VocabularyLocalDataSourceImpl(
             val cards = queries.selectSetCards(
                 setId
             ).executeAsList().toFlashcardEntityList()
-
-            Resource.Success(cards)
+            Knower.e("readSingleSetCards", "Set id.")
+            if (cards.isNotEmpty()) {
+                Resource.Success(cards)
+            } else {
+                Resource.Error(Throwable(message = "Cards were empty."))
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             Knower.e("InsertHistorySql", "An error has occurred here. ${e.message}")

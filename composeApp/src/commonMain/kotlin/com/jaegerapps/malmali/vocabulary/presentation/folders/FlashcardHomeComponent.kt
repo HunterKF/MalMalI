@@ -6,6 +6,8 @@ import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.jaegerapps.malmali.vocabulary.presentation.folders.presentation.FolderUiEvent
 import com.jaegerapps.malmali.vocabulary.presentation.folders.presentation.VocabHomeUiState
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import core.Knower
+import core.Knower.e
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -21,8 +23,8 @@ class FlashcardHomeComponent(
     private val repo: VocabularyRepo,
     private val onNavigateBack: () -> Unit,
     private val onNavigateToCreateScreen: () -> Unit,
-    private val onNavigateToStudyCard: (Int, String, String) -> Unit,
-    private val onNavigateToEdit: (String, Int, String) -> Unit,
+    private val onNavigateToStudyCard: (Int, Int) -> Unit,
+    private val onNavigateToEdit: (Int, Int) -> Unit,
     private val onModalNavigate: (String) -> Unit,
     sets: List<VocabSetModel>,
 ) : ComponentContext by componentContext {
@@ -62,7 +64,7 @@ class FlashcardHomeComponent(
     fun onEvent(event: FolderUiEvent) {
         when (event) {
             is FolderUiEvent.OnEditClick -> {
-                onNavigateToEdit(event.setTitle, event.setId, event.date)
+                onNavigateToEdit(event.localId, event.remoteId)
             }
 
             is FolderUiEvent.OnNavigateToCreateClick -> {
@@ -74,7 +76,11 @@ class FlashcardHomeComponent(
             }
 
             is FolderUiEvent.OnStudyClick -> {
-                onNavigateToStudyCard(event.setId, event.title, event.date)
+                Knower.e(
+                    "OnStudyClick",
+                    "id: ${event.localId}.remote id: ${event.remoteId}"
+                )
+                onNavigateToStudyCard(event.localId, event.remoteId)
             }
 
             is FolderUiEvent.OnModalNavigate -> {

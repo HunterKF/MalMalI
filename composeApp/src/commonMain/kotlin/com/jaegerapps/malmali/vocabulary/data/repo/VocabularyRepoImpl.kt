@@ -12,6 +12,7 @@ import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetEntity
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import core.Knower
+import core.Knower.d
 import core.Knower.e
 import core.util.Resource
 import kotlinx.coroutines.flow.Flow
@@ -58,12 +59,13 @@ class VocabularyRepoImpl(
         }
     }
 
-    override suspend fun getLocalSet(setId: Int, setTitle: String): Resource<VocabSetModel> {
+    override suspend fun getLocalSet(setId: Int, remoteId: Int): Resource<VocabSetModel> {
         return try {
             val set = local.readSingleSet(setId.toLong())
-            val cards = local.readSingleSetCards(setId.toLong())
+            val cards = local.readSingleSetCards(remoteId.toLong())
             if (set.data != null && cards.data != null) {
                 val model = toVocabSetModel(set.data, cards.data)
+                Knower.d("getLocalSet", "This is the local set: $model. Here are the cards ${model.cards}")
                 Resource.Success(model)
             } else {
                 Resource.Error(Throwable(message = "Unknown error."))

@@ -36,6 +36,7 @@ CREATE TABLE flashcardSets (
     is_author INTEGER NOT NULL,
     set_icon TEXT NOT NULL
 );
+
 insertSet:
 INSERT OR REPLACE INTO flashcardSets(set_id, public_id, set_title, tags, date_created, is_public, is_author, set_icon)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?);
@@ -47,7 +48,10 @@ SELECT * FROM flashcardSets;
 selectOneSet:
 SELECT *
 FROM flashcardSets
-WHERE public_id=:publicId;
+WHERE set_id=:setId;
+
+lastInsertRowId:
+SELECT last_insert_rowid();
 
 deleteSet:
 DELETE FROM flashcardSets

@@ -152,12 +152,11 @@ fun FolderScreen(
                         expanded = isExpanded == index
                     ) {
                         TextButton(onClick = {
-                            grammarSet.localId?.let { id ->
+                            grammarSet.localId?.let { localId ->
                                 component.onEvent(
                                     FolderUiEvent.OnStudyClick(
-                                        id,
-                                        grammarSet.title,
-                                        grammarSet.dateCreated!!
+                                        localId,
+                                        grammarSet.remoteId!!
                                     )
                                 )
                             }
@@ -171,9 +170,8 @@ fun FolderScreen(
                         TextButton(onClick = {
                             component.onEvent(
                                 FolderUiEvent.OnEditClick(
-                                    grammarSet.title,
                                     grammarSet.localId!!,
-                                    grammarSet.dateCreated!!
+                                    grammarSet.remoteId!!
                                 )
                             )
                         }) {

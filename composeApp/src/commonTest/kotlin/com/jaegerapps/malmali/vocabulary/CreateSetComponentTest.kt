@@ -302,7 +302,7 @@ class CreateSetComponentTest {
             appModule = FakeAppModule()
         )
         component = CreateSetComponent(
-            setTitle = title,
+            remoteId = title,
             setId = setId,
             componentContext = root,
             vocabFunctions = FakeVocabularyRepo(),

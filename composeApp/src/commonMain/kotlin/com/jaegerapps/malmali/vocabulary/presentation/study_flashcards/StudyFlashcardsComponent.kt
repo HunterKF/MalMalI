@@ -5,6 +5,8 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import core.Knower
+import core.Knower.e
 import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +20,9 @@ class StudyFlashcardsComponent(
     private val database: VocabularyRepo,
     private val onCompleteNavigate: () -> Unit,
     private val onNavigate: (String) -> Unit,
-    private val onEditNavigate: (String, Int, String) -> Unit,
-    private val set: VocabSetModel,
+    private val onEditNavigate: (Int, Int) -> Unit,
+    private val remoteId: Int,
+    private val setId: Int,
 ) : ComponentContext by componentContext {
 
     private val _state = MutableStateFlow(StudyFlashcardsUiState())
@@ -30,16 +33,24 @@ class StudyFlashcardsComponent(
     init {
         lifecycle.doOnCreate {
             scope.launch {
-                when (val result =database.getLocalSet(set.localId!!, set.title)) {
-                    is Resource.Error -> TODO()
+                when (val result = database.getLocalSet(setId, remoteId)) {
+                    is Resource.Error -> {
+                        Knower.e(
+                            "StudyFlashCards init",
+                            "An error occurred: ${result.throwable?.message}"
+                        )
+                    }
+
                     is Resource.Success -> {
-                        _state.update {
-                            it.copy(
-                                loading = false,
-                                set = result.data,
-                                currentCard = set.cards.first(),
-                                currentIndex = 0
-                            )
+                        if (result.data != null) {
+                            _state.update {
+                                it.copy(
+                                    loading = false,
+                                    set = result.data,
+                                    currentCard = result.data.cards.first(),
+                                    currentIndex = 0
+                                )
+                            }
                         }
                     }
                 }
@@ -170,7 +181,7 @@ class StudyFlashcardsComponent(
 
             StudyFlashcardsUiEvent.OnSetEditClick -> {
                 _state.value.set?.let { set ->
-                    set.localId?.let { onEditNavigate(set.title, it, set.dateCreated!!) }
+                    set.localId?.let { onEditNavigate( it,set.remoteId!!) }
 
                 }
             }

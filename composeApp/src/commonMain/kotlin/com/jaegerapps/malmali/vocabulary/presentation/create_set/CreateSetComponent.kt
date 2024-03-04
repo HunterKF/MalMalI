@@ -6,6 +6,8 @@ import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import core.Knower
+import core.Knower.d
 import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +19,7 @@ import kotlinx.coroutines.launch
 
 class CreateSetComponent(
     componentContext: ComponentContext,
-    val setTitle: String?,
-    val date: String?,
+    val remoteId: Int?,
     val setId: Int?,
     private val vocabFunctions: VocabularyRepo,
     private val userData: UserData,
@@ -35,23 +36,26 @@ class CreateSetComponent(
     init {
         //If we are going to edit a set, we check it here. In order to get a set, we need the id, title, and date.
         //The date is used to check for a single set, so the names could be duplicates, but with the date, it returns one set.
-        if (setId != null && setTitle != null && date != null) {
+        if (setId != null && remoteId != null) {
             scope.launch {
                 _state.update { it.copy(isLoading = true) }
-                when (val result = async { vocabFunctions.getLocalSet(setId, setTitle) }.await()) {
+                when (val result = async { vocabFunctions.getLocalSet(setId, remoteId) }.await()) {
                     is Resource.Error -> _state.update { it.copy(error = UiError.UNKNOWN_ERROR) }
                     is Resource.Success -> {
                         if (result.data != null) {
                             val set = result.data
+                            Knower.d("createSet init", "This is the result ${result.data}")
                             _state.update {
                                 it.copy(
                                     title = set.title,
-                                    vocabularyCardModels = set.cards,
+                                    vocabularyCardModels = addUiIds(set.cards),
                                     icon = set.icon,
                                     isPublic = set.isPublic,
                                     isLoading = false
                                 )
                             }
+                            Knower.d("createSet init", "This is the state ${_state.value}")
+
                         }
                     }
                 }
@@ -203,13 +207,12 @@ class CreateSetComponent(
                         )
                         scope.launch {
 
-                            if (setId != null && setTitle != null && date != null) {
+                            if (setId != null && remoteId != null) {
                                 //this means we are editing a set, so we just update it based on this
                                 vocabFunctions.updateSet(
                                     set = vocabSetModel.copy(
                                         localId = setId,
-                                        title = setTitle,
-                                        dateCreated = date
+                                        remoteId = remoteId,
                                     )
                                 )
                             } else {
@@ -349,6 +352,16 @@ class CreateSetComponent(
         def: String,
     ): List<VocabularyCardModel> =
         this.map { card -> if (card.uiId == id) card.copy(word = word, definition = def) else card }
+
+    private fun addUiIds(list: List<VocabularyCardModel>): List<VocabularyCardModel> {
+        var updatedList = emptyList<VocabularyCardModel>()
+        var index = 0
+        while (index < list.size) {
+            updatedList = updatedList.plus(list[index].copy(uiId = index))
+            index ++
+        }
+        return updatedList
+    }
 
 }
 
