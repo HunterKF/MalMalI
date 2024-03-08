@@ -21,7 +21,7 @@ class VocabularyHomeComponent(
     repo: VocabularyRepo,
     private val onNavigateToCreateScreen: () -> Unit,
     private val onNavigateToStudyCard: (Int, Int) -> Unit,
-    private val onNavigateToEdit: (Int, Int) -> Unit,
+    private val onNavigateToEdit: (Int, Int, Boolean) -> Unit,
     private val onModalNavigate: (String) -> Unit,
     sets: List<VocabSetModel>,
     private val onNavigateSearch: () -> Unit,
@@ -62,7 +62,7 @@ class VocabularyHomeComponent(
     fun onEvent(event: VocabHomeUiEvent) {
         when (event) {
             is VocabHomeUiEvent.OnEditClick -> {
-                onNavigateToEdit(event.localId, event.remoteId)
+                onNavigateToEdit(event.localId, event.remoteId, event.isAuthor)
             }
 
             is VocabHomeUiEvent.OnNavigateToCreateClick -> {

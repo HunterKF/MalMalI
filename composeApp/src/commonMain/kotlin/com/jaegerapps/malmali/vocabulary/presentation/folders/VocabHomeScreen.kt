@@ -136,10 +136,10 @@ fun VocabHomeScreen(
                         }
                     )
                 }
-                itemsIndexed(state.value.setList) { index, grammarSet ->
+                itemsIndexed(state.value.setList) { index, set ->
                     FolderContainer(
-                        title = grammarSet.title,
-                        icon = painterResource(grammarSet.icon.resource),
+                        title = set.title,
+                        icon = painterResource(set.icon.resource),
                         onEvent = {
                             isExpanded = if (isExpanded != index) {
                                 index
@@ -150,15 +150,15 @@ fun VocabHomeScreen(
                         expanded = isExpanded == index
                     ) {
                         TextButton(onClick = {
-                            grammarSet.localId?.let { localId ->
+                            set.localId?.let { localId ->
                                 component.onEvent(
                                     VocabHomeUiEvent.OnStudyClick(
                                         localId,
-                                        grammarSet.remoteId!!
+                                        set.remoteId!!
                                     )
                                 )
                             }
-                            println(grammarSet)
+                            println(set)
                         }) {
                             Text(
                                 text = "Study",
@@ -168,8 +168,9 @@ fun VocabHomeScreen(
                         TextButton(onClick = {
                             component.onEvent(
                                 VocabHomeUiEvent.OnEditClick(
-                                    grammarSet.localId!!,
-                                    grammarSet.remoteId!!
+                                    set.localId!!,
+                                    set.remoteId!!,
+                                    set.isAuthor
                                 )
                             )
                         }) {

@@ -20,7 +20,7 @@ class StudySetComponent(
     private val database: VocabularyRepo,
     private val onCompleteNavigate: () -> Unit,
     private val onNavigate: (String) -> Unit,
-    private val onEditNavigate: (Int, Int) -> Unit,
+    private val onEditNavigate: (Int, Int, Boolean) -> Unit,
     private val remoteId: Int,
     private val setId: Int,
 ) : ComponentContext by componentContext {
@@ -181,7 +181,7 @@ class StudySetComponent(
 
             StudySetUiEvent.OnSetEditClick -> {
                 _state.value.set?.let { set ->
-                    set.localId?.let { onEditNavigate( it,set.remoteId!!) }
+                    set.localId?.let { onEditNavigate( it,set.remoteId!!, set.isAuthor) }
 
                 }
             }

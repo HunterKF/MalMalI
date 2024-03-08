@@ -193,6 +193,7 @@ class RootComponent(
                     CreateSetComponent(
                         remoteId = config.remoteId,
                         localId = config.localId,
+                        isAuthor = config.isAuthor,
                         componentContext = context,
                         repo = appModule.vocabularyRepo,
                         userData = _state.value.user!!,
@@ -218,6 +219,7 @@ class RootComponent(
                                     appModule.vocabularyRepo,
                                     null,
                                     null,
+                                    null
                                 )
                             )
                         },
@@ -231,12 +233,13 @@ class RootComponent(
                             )
 
                         },
-                        onNavigateToEdit = { setId, remoteId ->
+                        onNavigateToEdit = { setId, remoteId, isAuthor ->
                             navigation.pushNew(
                                 Configuration.CreateSetScreen(
-                                    appModule.vocabularyRepo,
-                                    setId,
-                                    remoteId
+                                    vocabFunctions = appModule.vocabularyRepo,
+                                    localId = setId,
+                                    remoteId = remoteId,
+                                    isAuthor = isAuthor
                                 )
                             )
                         },
@@ -262,12 +265,13 @@ class RootComponent(
                         onCompleteNavigate = { navigation.pop() },
                         remoteId = config.remoteId,
                         setId = config.localId,
-                        onEditNavigate = { localId, remoteId ->
+                        onEditNavigate = { localId, remoteId, isAuthor ->
                             navigation.pushNew(
                                 Configuration.CreateSetScreen(
                                     appModule.vocabularyRepo,
                                     localId = localId,
-                                    remoteId = remoteId
+                                    remoteId = remoteId,
+                                    isAuthor = isAuthor
                                 )
                             )
                         }
@@ -483,6 +487,7 @@ class RootComponent(
             val vocabFunctions: VocabularyRepo,
             val localId: Int?,
             val remoteId: Int?,
+            val isAuthor: Boolean?
         ) : Configuration()
 
         @Serializable

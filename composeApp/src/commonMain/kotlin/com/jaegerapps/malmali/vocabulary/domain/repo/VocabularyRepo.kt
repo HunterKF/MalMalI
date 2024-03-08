@@ -15,6 +15,6 @@ interface VocabularyRepo {
      fun getAllLocalSets(): Flow<List<VocabSetModel>>
     suspend fun getAllRemotePublicSets(start: Long, end: Long): Resource<List<VocabSetModel>>
     suspend fun searchPublicSets(title: String, start: Long, end: Long): Resource<List<VocabSetModel>>
-    suspend fun deleteSet(setId: Int, remoteId: Int): Resource<Boolean>
+    suspend fun deleteSet(setId: Int, remoteId: Int, isAuthor: Boolean): Resource<Boolean>
     suspend fun updateSet(set: VocabSetModel): Resource<Boolean>
 }

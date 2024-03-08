@@ -23,6 +23,7 @@ class CreateSetComponent(
     componentContext: ComponentContext,
     val remoteId: Int?,
     val localId: Int?,
+    val isAuthor: Boolean?,
     private val repo: VocabularyRepo,
     private val userData: UserData,
     private val onComplete: () -> Unit,
@@ -184,10 +185,10 @@ class CreateSetComponent(
                 when (_state.value.mode) {
                     PopUpMode.DELETE -> {
                         scope.launch {
-                            if (localId != null && remoteId != null) {
+                            if (localId != null && remoteId != null && isAuthor != null) {
                                 //If we have a set that was being edited, all will be erased. then we go to home screen
                                 Knower.e("CreateSetComponent Delte", "Here is the localId $localId and remoteId $remoteId")
-                                async { repo.deleteSet(localId, remoteId) }.await()
+                                async { repo.deleteSet(localId, remoteId, isAuthor) }.await()
                                 withContext(Dispatchers.Main) { onComplete() }
                             } else {
                                 //There is no set, we go to home screen

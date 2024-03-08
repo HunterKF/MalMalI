@@ -110,9 +110,15 @@ class VocabularyRepoImpl(
     }
 
 
-    override suspend fun deleteSet(setId: Int, remoteId: Int): Resource<Boolean> {
+    override suspend fun deleteSet(setId: Int, remoteId: Int, isAuthor: Boolean): Resource<Boolean> {
         return try {
-            if (remote.deleteSet(remoteId).data == true) {
+            if (isAuthor) {
+                if (remote.deleteSet(remoteId).data == true) {
+                    if (local.deleteSet(setId.toLong()).data == true) {
+                        Resource.Success(true)
+                    }
+                }
+            } else {
                 if (local.deleteSet(setId.toLong()).data == true) {
                     Resource.Success(true)
                 }
