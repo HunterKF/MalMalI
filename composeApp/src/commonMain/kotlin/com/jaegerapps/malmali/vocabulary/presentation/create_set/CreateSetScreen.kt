@@ -39,6 +39,8 @@ import com.jaegerapps.malmali.vocabulary.presentation.components.EditVocabContai
 import com.jaegerapps.malmali.vocabulary.presentation.components.SelectIcon
 import com.jaegerapps.malmali.vocabulary.presentation.components.SelectableButton
 import com.jaegerapps.malmali.vocabulary.presentation.components.TitleBox
+import core.Knower
+import core.Knower.d
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
@@ -54,6 +56,7 @@ fun CreateSetScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     LaunchedEffect(key1 = state.value.error) {
+        Knower.d("CreateSetScreen", "The LaunchedEffect is being called.")
         val message = when (state.value.error) {
             UiError.MISSING_WORD -> "Some of the words are blank..."
             UiError.UNKNOWN_ERROR -> "Whoops, not sure what went wrong."
@@ -178,26 +181,24 @@ fun CreateSetScreen(
                         )
                     }
                 }
-                itemsIndexed(state.value.vocabularyCardModels) { index, card ->
-                    card.uiId?.let {
-                        EditVocabContainer(
-                            word = card.word,
-                            def = card.definition,
-                            isError = card.error,
-                            onWordChange = {
-                                component.onEvent(CreateSetUiEvent.EditWord(card.uiId, text = it))
-                            },
-                            onDefChange = {
-                                component.onEvent(CreateSetUiEvent.EditDef(card.uiId, it))
-                            },
-                            onDelete = {
-                                component.onEvent(CreateSetUiEvent.DeleteWord(index))
-                            },
-                            onClearError = {
-                                component.onEvent(CreateSetUiEvent.OnClearErrorVocab(card.uiId))
-                            }
-                        )
-                    }
+                itemsIndexed(state.value.vocabularyCardModels.filter { it.uiId != null }) { index, card ->
+                    EditVocabContainer(
+                        word = card.word,
+                        def = card.definition,
+                        isError = card.error,
+                        onWordChange = {
+                            component.onEvent(CreateSetUiEvent.EditWord(card.uiId!!, text = it))
+                        },
+                        onDefChange = {
+                            component.onEvent(CreateSetUiEvent.EditDef(card.uiId!!, it))
+                        },
+                        onDelete = {
+                            component.onEvent(CreateSetUiEvent.DeleteWord(index))
+                        },
+                        onClearError = {
+                            component.onEvent(CreateSetUiEvent.OnClearErrorVocab(card.uiId!!))
+                        }
+                    )
                 }
                 item {
                     AddCardButton(

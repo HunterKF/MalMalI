@@ -6,7 +6,7 @@ import core.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface VocabularyLocalDataSource {
-    suspend fun createSet(setEntity: SetEntity, cards: List<FlashcardEntity>): Resource<Boolean>
+    suspend fun createSet(setEntity: SetEntity): Resource<Boolean>
     suspend fun readSingleSet(setId: Long): Resource<SetEntity>
     fun readAllSets(): Flow<List<SetEntity>>
     suspend fun updateSet(setEntity: SetEntity, cardEntityList: List<FlashcardEntity>): Resource<Boolean>

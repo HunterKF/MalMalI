@@ -21,7 +21,6 @@ class VocabularyLocalDataSourceImpl(
     private val queries = database.flashCardsQueries
     override suspend fun createSet(
         setEntity: SetEntity,
-        cards: List<FlashcardEntity>,
     ): Resource<Boolean> {
         return try {
             queries.insertSet(
@@ -35,8 +34,7 @@ class VocabularyLocalDataSourceImpl(
                 vocabulary_word = setEntity.vocabulary_word,
                 vocabulary_definition = setEntity.vocabulary_definition,
                 set_icon = setEntity.set_icon,
-
-                )
+            )
 
             Resource.Success(true)
         } catch (e: Exception) {

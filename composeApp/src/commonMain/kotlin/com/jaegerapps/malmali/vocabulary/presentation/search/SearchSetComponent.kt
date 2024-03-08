@@ -199,6 +199,17 @@ class SearchSetComponent(
                 _state.update {
                     it.copy(
                         selectedSet = event.set,
+                        showPopUp = true
+                    )
+                }
+            }
+
+            SearchUiEvent.TogglePopUp -> {
+
+                _state.update {
+                    it.copy(
+                        showPopUp = !it.showPopUp,
+                        selectedSet = if (it.showPopUp) null else it.selectedSet
                     )
                 }
             }

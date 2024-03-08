@@ -30,7 +30,6 @@ class VocabularyRepoImpl(
             if (result.data != null) {
                 local.createSet(
                     result.data.toSetEntity(true),
-                    result.data.toFlashcardEntity()
                 )
             }
             Resource.Success(true)
@@ -44,8 +43,8 @@ class VocabularyRepoImpl(
     override suspend fun insertSetLocally(vocabSetModel: VocabSetModel): Resource<Boolean> {
         return try {
             val result = local.createSet(
-                vocabSetModel.toSetEntity(),
-                vocabSetModel.cards.map { it.toFlashcardEntity(vocabSetModel.remoteId!!.toLong()) })
+                vocabSetModel.toSetEntity(null)
+            )
             if (result.data == true) {
                 Resource.Success(true)
             } else {
@@ -131,7 +130,7 @@ class VocabularyRepoImpl(
             Knower.d("updateSet", "Here is the set: $set")
             if (remote.updateSet(set.toVocabSetDTO()).data != null) {
                 if (local.updateSet(
-                        setEntity = set.toSetEntity(),
+                        setEntity = set.toSetEntity(set.localId!!.toLong()),
                         cardEntityList = set.cards.map { it.toFlashcardEntity(set.remoteId!!.toLong()) }).data == true
                 ) {
                     Resource.Success(true)

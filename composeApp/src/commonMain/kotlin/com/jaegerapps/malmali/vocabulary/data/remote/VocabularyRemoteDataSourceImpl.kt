@@ -22,7 +22,6 @@ class VocabularyRemoteDataSourceImpl(
             val result = client.from(SupabaseKeys.SETS).insert(vocabSet) {
                 select()
             }.decodeSingle<VocabSetDTO>()
-            Knower.d("createSet", "Here is the result: ${result}")
             Resource.Success(result)
         } catch (e: RestException) {
             e.printStackTrace()

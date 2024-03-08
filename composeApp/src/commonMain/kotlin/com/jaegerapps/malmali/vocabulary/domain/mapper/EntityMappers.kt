@@ -115,9 +115,9 @@ fun SetEntity.toVocabSet(): VocabSetModel{
         dateCreated = this.date_created,
     )
 }
-fun VocabSetModel.toSetEntity(): SetEntity{
+fun VocabSetModel.toSetEntity(localId: Long?): SetEntity{
     return SetEntity(
-        set_id = localId!!.toLong(),
+        set_id = localId,
         linked_set = remoteId!!.toLong(),
         set_title = title,
         tags = tags.toString(),
