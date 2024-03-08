@@ -11,6 +11,7 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Order
 
 class VocabularyRemoteDataSourceImpl(
     private val client: SupabaseClient,
@@ -43,10 +44,14 @@ class VocabularyRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun readAllSets(): Resource<List<VocabSetDTO>> {
+    override suspend fun readAllSets(start: Long, end: Long): Resource<List<VocabSetDTO>> {
         return try {
             val result = client.from(SupabaseKeys.SETS).select {
-
+                filter {
+                    eq("is_public", true)
+                }
+                order("set_title", order = Order.ASCENDING)
+                range(start, end)
             }.decodeList<VocabSetDTO>()
             Resource.Success(result)
         } catch (e: RestException) {

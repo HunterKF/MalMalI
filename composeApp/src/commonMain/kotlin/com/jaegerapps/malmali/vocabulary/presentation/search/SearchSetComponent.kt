@@ -2,6 +2,8 @@ package com.jaegerapps.malmali.vocabulary.presentation.search
 
 import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
+import core.Knower
+import core.Knower.t
 import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,19 +24,34 @@ class SearchSetComponent(
     val state = _state.asStateFlow()
 
     private val scope = CoroutineScope(Dispatchers.IO)
+    private val increment = 10
 
     init {
         scope.launch {
             _state.update {
                 it.copy(loading = true)
             }
-            when (val result = async { repo.getAllRemotePublicSets() }.await()) {
+            when (val result = async { repo.getAllRemotePublicSets(_state.value.startPageRange, _state.value.endPageRange) }.await()) {
                 is Resource.Error -> {
                     _state.update {
-                        it.copy(loading = true)
+                        it.copy(loading = false, error = result.throwable?.message)
                     }
                 }
-                is Resource.Success -> TODO()
+
+                is Resource.Success -> {
+                    if (result.data != null) {
+                        _state.update {
+                            it.copy(
+                                sets = it.sets.plus(result.data),
+                                loading = false
+                            )
+                        }
+                    } else {
+                        _state.update {
+                            it.copy(loading = false, error = result.throwable?.message)
+                        }
+                    }
+                }
             }
 
         }
@@ -51,11 +68,48 @@ class SearchSetComponent(
             }
 
             SearchUiEvent.LoadMore -> {
-                /*TODO*/
-                _state.update {
-                    it.copy(
-                        error = null
-                    )
+                if (_state.value.endOfRange) {
+                    _state.update {
+                        it.copy(
+                            error = "End of range."
+                        )
+                    }
+                } else {
+
+                    _state.update {
+                        it.copy(
+                            loadingMore = true,
+                            startPageRange = it.startPageRange + increment,
+                            endPageRange = it.endPageRange + increment
+                        )
+                    }
+                    scope.launch {
+                        when (val result = async {
+                            repo.getAllRemotePublicSets(
+                                _state.value.startPageRange,
+                                _state.value.endPageRange
+                            )
+                        }.await()) {
+                            is Resource.Error -> _state.update { it.copy(error = result.throwable?.message) }
+                            is Resource.Success -> {
+                                if (!result.data.isNullOrEmpty()) {
+                                    _state.update {
+                                        it.copy(
+                                            sets = it.sets.plus(result.data),
+                                            loadingMore = false,
+                                        )
+                                    }
+                                } else {
+                                    _state.update {
+                                        it.copy(
+                                            endOfRange = true,
+                                            loadingMore = false,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

@@ -22,12 +22,13 @@ import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.login.presentation.SignInComponent
 import com.jaegerapps.malmali.onboarding.intro.IntroComponent
 import com.jaegerapps.malmali.vocabulary.presentation.create_set.CreateSetComponent
-import com.jaegerapps.malmali.vocabulary.presentation.folders.FlashcardHomeComponent
+import com.jaegerapps.malmali.vocabulary.presentation.folders.VocabularyHomeComponent
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.StudySetComponent
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
 import com.jaegerapps.malmali.practice.presentation.PracticeComponent
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import com.jaegerapps.malmali.vocabulary.presentation.search.SearchSetComponent
 import core.Knower
 import core.Knower.e
 import core.util.Resource
@@ -59,9 +60,7 @@ class RootComponent(
     )
 
     init {
-        println("HEY YOU GUYS~~~")
         scope.launch {
-            println("HEY YOU GUYS~~~3")
 
             getGrammar()
             val result = async { appModule.userRepo.retrieveAccessToken() }.await()
@@ -76,7 +75,6 @@ class RootComponent(
 
                     if (result != null) {
                         val user = async { appModule.settingsDataSource.getUser() }.await()
-                        getFlashcards(user.nickname)
 
                         withContext(Dispatchers.Main) {
                             _state.update {
@@ -138,7 +136,6 @@ class RootComponent(
 
                         if (result != null) {
                             val user = async { appModule.settingsDataSource.getUser() }.await()
-                            getFlashcards(user.nickname)
 
                             withContext(Dispatchers.Main) {
                                 _state.update {
@@ -211,13 +208,10 @@ class RootComponent(
 
             is Configuration.FlashcardHomeScreen -> {
                 Child.FlashcardHomeScreen(
-                    FlashcardHomeComponent(
+                    VocabularyHomeComponent(
                         componentContext = context,
                         repo = appModule.vocabularyRepo,
                         sets = _state.value.sets,
-                        onNavigateBack = {
-                            navigation.pop()
-                        },
                         onNavigateToCreateScreen = {
                             navigation.pushNew(
                                 Configuration.CreateSetScreen(
@@ -245,6 +239,9 @@ class RootComponent(
                                     remoteId
                                 )
                             )
+                        },
+                        onNavigateSearch = {
+                            navigation.pushNew(Configuration.SearchScreen)
                         },
                         onModalNavigate = {
                             modalNavigate(it)
@@ -429,12 +426,21 @@ class RootComponent(
                     )
                 )
             }
+
+            Configuration.SearchScreen -> {
+                Child.SearchScreen(
+                    SearchSetComponent(
+                        repo = appModule.vocabularyRepo,
+                        componentContext = context
+                    )
+                )
+            }
         }
     }
 
     sealed class Child {
         data class CreateSetScreen(val component: CreateSetComponent) : Child()
-        data class FlashcardHomeScreen(val component: FlashcardHomeComponent) : Child()
+        data class FlashcardHomeScreen(val component: VocabularyHomeComponent) : Child()
         data class StudyFlashcardsScreen(val component: StudySetComponent) : Child()
         data class HomeScreen(val component: HomeScreenComponent) : Child()
         data class GrammarScreen(val component: GrammarScreenComponent) : Child()
@@ -446,6 +452,7 @@ class RootComponent(
         data class ChatHomeScreen(val component: ChatHomeComponent) : Child()
         data class ConversationScreen(val component: ConversationComponent) : Child()
         data class PracticeScreen(val component: PracticeComponent) : Child()
+        data class SearchScreen(val component: SearchSetComponent) : Child()
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -491,6 +498,8 @@ class RootComponent(
 
         @Serializable
         data object HomeScreen : Configuration()
+        @Serializable
+        data object SearchScreen : Configuration()
 
         @Serializable
         data object LoadingScreen : Configuration()
@@ -524,26 +533,6 @@ class RootComponent(
         data object PracticeScreen : Configuration()
     }
 
-    private suspend fun getFlashcards(user: String) {
-        /*when (val sets = appModule.rootComponentUseCases.getSets(user)) {
-            is Resource.Error -> {
-                Knower.e(
-                    "getDefaultFlashcards",
-                    "An error has occurred here: ${sets.throwable?.message}"
-                )
-
-            }
-            is Resource.Success -> {
-                if (sets.data != null) {
-                    _state.update {
-                        it.copy(
-                            sets = sets.data.map { it }
-                        )
-                    }
-                }
-            }
-        }*/
-    }
 
     private suspend fun getGrammar() {
         when (val result = appModule.rootComponentUseCases.getGrammar()) {

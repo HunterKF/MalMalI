@@ -46,9 +46,13 @@ class FakeVocabularyRepo: VocabularyRepo {
         return localFlow
     }
 
-    override suspend fun getAllRemotePublicSets(): Resource<List<VocabSetModel>> {
-        TODO("Not yet implemented")
+    override suspend fun getAllRemotePublicSets(
+        start: Long,
+        end: Long,
+    ): Resource<List<VocabSetModel>> {
+        return Resource.Success(localFlow.value.slice(start.toInt()..end.toInt()))
     }
+
 
     override suspend fun deleteSet(setId: Int, remoteId: Int): Resource<Boolean> {
         TODO("Not yet implemented")

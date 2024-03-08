@@ -43,8 +43,8 @@ import dev.icerock.moko.resources.compose.painterResource
 import kotlinx.coroutines.launch
 
 @Composable
-fun FolderScreen(
-    component: FlashcardHomeComponent,
+fun VocabHomeScreen(
+    component: VocabularyHomeComponent,
     backgroundColor: Color = MaterialTheme.colorScheme.outline,
     foregroundColor: Color = MaterialTheme.colorScheme.onPrimary,
 ) {
@@ -58,7 +58,7 @@ fun FolderScreen(
     CustomNavigationDrawer(
         drawerState = drawerState,
         onNavigate = { route ->
-            component.onEvent(FolderUiEvent.OnModalNavigate(route))
+            component.onEvent(VocabHomeUiEvent.OnModalNavigate(route))
         }
     ) {
         Scaffold(
@@ -71,7 +71,6 @@ fun FolderScreen(
                     },
                     buttonContent = {
                         Column {
-
                             IconButton(
                                 modifier = Modifier.size(48.dp).clip(
                                     CircleShape
@@ -81,7 +80,7 @@ fun FolderScreen(
                                     contentColor = foregroundColor
                                 ),
                                 onClick = {
-                                    component.onEvent(FolderUiEvent.OnNavigateToCreateClick)
+                                    component.onEvent(VocabHomeUiEvent.OnNavigateToCreateClick)
                                 }
                             ) {
                                 Icon(
@@ -100,7 +99,7 @@ fun FolderScreen(
                                     contentColor = foregroundColor
                                 ),
                                 onClick = {
-
+                                    component.onEvent(VocabHomeUiEvent.OnNavigateToSearchClick)
                                 }
                             ) {
                                 Icon(
@@ -153,7 +152,7 @@ fun FolderScreen(
                         TextButton(onClick = {
                             grammarSet.localId?.let { localId ->
                                 component.onEvent(
-                                    FolderUiEvent.OnStudyClick(
+                                    VocabHomeUiEvent.OnStudyClick(
                                         localId,
                                         grammarSet.remoteId!!
                                     )
@@ -168,7 +167,7 @@ fun FolderScreen(
                         }
                         TextButton(onClick = {
                             component.onEvent(
-                                FolderUiEvent.OnEditClick(
+                                VocabHomeUiEvent.OnEditClick(
                                     grammarSet.localId!!,
                                     grammarSet.remoteId!!
                                 )

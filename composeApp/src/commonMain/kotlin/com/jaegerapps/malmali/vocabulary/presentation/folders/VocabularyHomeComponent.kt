@@ -16,15 +16,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class FlashcardHomeComponent(
+class VocabularyHomeComponent(
     componentContext: ComponentContext,
-    private val repo: VocabularyRepo,
-    private val onNavigateBack: () -> Unit,
+    repo: VocabularyRepo,
     private val onNavigateToCreateScreen: () -> Unit,
     private val onNavigateToStudyCard: (Int, Int) -> Unit,
     private val onNavigateToEdit: (Int, Int) -> Unit,
     private val onModalNavigate: (String) -> Unit,
     sets: List<VocabSetModel>,
+    private val onNavigateSearch: () -> Unit,
 ) : ComponentContext by componentContext {
     private val _state = MutableStateFlow(VocabHomeUiState())
     val scope = CoroutineScope(Dispatchers.IO)
@@ -59,21 +59,21 @@ class FlashcardHomeComponent(
         }
     }
 
-    fun onEvent(event: FolderUiEvent) {
+    fun onEvent(event: VocabHomeUiEvent) {
         when (event) {
-            is FolderUiEvent.OnEditClick -> {
+            is VocabHomeUiEvent.OnEditClick -> {
                 onNavigateToEdit(event.localId, event.remoteId)
             }
 
-            is FolderUiEvent.OnNavigateToCreateClick -> {
+            is VocabHomeUiEvent.OnNavigateToCreateClick -> {
                 onNavigateToCreateScreen()
             }
 
-            is FolderUiEvent.OnShareClick -> {
+            is VocabHomeUiEvent.OnShareClick -> {
 
             }
 
-            is FolderUiEvent.OnStudyClick -> {
+            is VocabHomeUiEvent.OnStudyClick -> {
                 Knower.e(
                     "OnStudyClick",
                     "id: ${event.localId}.remote id: ${event.remoteId}"
@@ -81,8 +81,11 @@ class FlashcardHomeComponent(
                 onNavigateToStudyCard(event.localId, event.remoteId)
             }
 
-            is FolderUiEvent.OnModalNavigate -> {
+            is VocabHomeUiEvent.OnModalNavigate -> {
                 onModalNavigate(event.route)
+            }
+            is VocabHomeUiEvent.OnNavigateToSearchClick -> {
+                onNavigateSearch()
             }
         }
     }

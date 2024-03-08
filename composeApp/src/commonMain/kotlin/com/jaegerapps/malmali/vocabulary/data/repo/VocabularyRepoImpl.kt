@@ -79,9 +79,9 @@ class VocabularyRepoImpl(
         return local.readAllSets().map { it.map { it.toVocabSet() } }
     }
 
-    override suspend fun getAllRemotePublicSets(): Resource<List<VocabSetModel>> {
+    override suspend fun getAllRemotePublicSets(start: Long, end: Long): Resource<List<VocabSetModel>> {
         return try {
-            val result = remote.readAllSets()
+            val result = remote.readAllSets(start, end)
             if (result.data != null) {
                 Resource.Success(result.data.map { it.toVocabSetModel(false) })
             } else {

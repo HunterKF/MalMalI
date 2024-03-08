@@ -19,7 +19,8 @@ import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
 import com.jaegerapps.malmali.onboarding.intro.IntroScreen
 import com.jaegerapps.malmali.practice.presentation.PracticeScreen
 import com.jaegerapps.malmali.vocabulary.presentation.create_set.CreateSetScreen
-import com.jaegerapps.malmali.vocabulary.presentation.folders.FolderScreen
+import com.jaegerapps.malmali.vocabulary.presentation.folders.VocabHomeScreen
+import com.jaegerapps.malmali.vocabulary.presentation.search.SearchScreen
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.StudySetScreen
 import core.presentation.MalMalITheme
 
@@ -47,7 +48,7 @@ fun App(
         ) { child ->
             when (val instance = child.instance) {
                 is RootComponent.Child.CreateSetScreen -> CreateSetScreen(component = instance.component)
-                is RootComponent.Child.FlashcardHomeScreen -> FolderScreen(component = instance.component)
+                is RootComponent.Child.FlashcardHomeScreen -> VocabHomeScreen(component = instance.component)
                 is RootComponent.Child.StudyFlashcardsScreen -> StudySetScreen(component = instance.component)
                 is RootComponent.Child.HomeScreen -> HomeScreen(component = instance.component)
                 is RootComponent.Child.GrammarScreen -> GrammarScreen(component = instance.component)
@@ -63,6 +64,7 @@ fun App(
                     )
                 }
                 is RootComponent.Child.PracticeScreen -> PracticeScreen(component = instance.component)
+                is RootComponent.Child.SearchScreen -> SearchScreen(component = instance.component)
             }
 
         }
