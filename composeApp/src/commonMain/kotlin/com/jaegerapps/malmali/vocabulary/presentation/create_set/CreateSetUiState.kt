@@ -2,6 +2,7 @@ package com.jaegerapps.malmali.vocabulary.presentation.create_set
 
 import androidx.compose.ui.graphics.painter.Painter
 import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 
 data class CreateSetUiState(
@@ -15,7 +16,8 @@ data class CreateSetUiState(
     val isPublic: Boolean = true,
     val error: UiError? = null,
     val mode: PopUpMode? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val dateCreated: String? = null
 )
 
 enum class SetMode {

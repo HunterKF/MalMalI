@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.components
+package com.jaegerapps.malmali.vocabulary.presentation.study_set.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.components.blackBorder
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
-import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.StudyFlashcardsUiEvent
+import com.jaegerapps.malmali.vocabulary.presentation.study_set.StudySetUiEvent
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
@@ -30,7 +30,7 @@ fun VocabularyContainer(
     currentIndex: Int,
     card: VocabularyCardModel,
     showBack: Boolean,
-    onClick: (StudyFlashcardsUiEvent) -> Unit,
+    onClick: (StudySetUiEvent) -> Unit,
 ) {
     Box(
         modifier = modifier.fillMaxHeight(0.4f).blackBorder(20.dp).padding(0.dp)
@@ -40,7 +40,7 @@ fun VocabularyContainer(
 
             Box(
                 modifier = Modifier.fillMaxWidth().weight(1f).clickable {
-                    onClick(StudyFlashcardsUiEvent.OnCardFlipClick)
+                    onClick(StudySetUiEvent.OnCardFlipClick)
                 }, contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -69,7 +69,7 @@ fun VocabularyContainer(
             ) {
                 Box(
                     modifier = Modifier.weight(1f)
-                        .clickable { onClick(StudyFlashcardsUiEvent.OnGotItClick) }
+                        .clickable { onClick(StudySetUiEvent.OnGotItClick) }
                         .background(MaterialTheme.colorScheme.primary)
                         .padding(12.dp),
                     contentAlignment = Alignment.Center
@@ -81,7 +81,7 @@ fun VocabularyContainer(
                 }
                 Box(
                     modifier = Modifier.weight(1f)
-                        .clickable { onClick(StudyFlashcardsUiEvent.OnDontKnowClick) }
+                        .clickable { onClick(StudySetUiEvent.OnDontKnowClick) }
                         .background(MaterialTheme.colorScheme.secondary)
                         .padding(12.dp),
                     contentAlignment = Alignment.Center) {

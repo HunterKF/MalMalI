@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.vocabulary.presentation.folders.presentation
+package com.jaegerapps.malmali.vocabulary.presentation.folders
 
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 

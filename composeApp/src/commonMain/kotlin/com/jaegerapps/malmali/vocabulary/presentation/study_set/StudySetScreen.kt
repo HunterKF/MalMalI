@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.vocabulary.presentation.study_flashcards
+package com.jaegerapps.malmali.vocabulary.presentation.study_set
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,15 +29,15 @@ import com.jaegerapps.malmali.components.CustomNavigationDrawer
 import com.jaegerapps.malmali.components.SettingsAndModal
 import com.jaegerapps.malmali.components.TopBarLogo
 import com.jaegerapps.malmali.vocabulary.presentation.components.FolderContainer
-import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.components.VocabularyButtons
-import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.components.VocabularyContainer
+import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyButtons
+import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyContainer
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 
 @Composable
-fun StudyFlashcardsScreen(
-    component: StudyFlashcardsComponent,
+fun StudySetScreen(
+    component: StudySetComponent,
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -49,7 +49,7 @@ fun StudyFlashcardsScreen(
     CustomNavigationDrawer(
         drawerState = drawerState,
         onNavigate = { route ->
-            component.onEvent(StudyFlashcardsUiEvent.OnModalNavigate(route))
+            component.onEvent(StudySetUiEvent.OnModalNavigate(route))
         }
     ) {
         if (state.value.isComplete) {
@@ -68,14 +68,14 @@ fun StudyFlashcardsScreen(
             ) {
                 TextButton(
                     onClick = {
-                        component.onEvent(StudyFlashcardsUiEvent.OnRepeatClick)
+                        component.onEvent(StudySetUiEvent.OnRepeatClick)
                     }
                 ) {
                     Text(stringResource(MR.strings.prompt_repeat))
                 }
                 TextButton(
                     onClick = {
-                        component.onEvent(StudyFlashcardsUiEvent.OnCompleteClick)
+                        component.onEvent(StudySetUiEvent.OnCompleteClick)
                     }
                 ) {
                     Text(stringResource(MR.strings.prompt_back))
@@ -113,7 +113,7 @@ fun StudyFlashcardsScreen(
                         title = state.value.set?.title ?: "error",
                         icon = painterResource(it.icon.resource),
                         onEvent = {
-                            component.onEvent(StudyFlashcardsUiEvent.OnFolderClick(onClick = {
+                            component.onEvent(StudySetUiEvent.OnFolderClick(onClick = {
                                 expanded = !expanded
                             }))
                         },
@@ -125,7 +125,7 @@ fun StudyFlashcardsScreen(
                         ) {
                             TextButton(
                                 onClick = {
-                                    component.onEvent(StudyFlashcardsUiEvent.OnSetEditClick)
+                                    component.onEvent(StudySetUiEvent.OnSetEditClick)
                                 }
                             ) {
                                 Text(

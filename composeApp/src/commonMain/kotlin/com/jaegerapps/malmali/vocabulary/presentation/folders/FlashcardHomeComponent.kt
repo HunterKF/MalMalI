@@ -3,8 +3,6 @@ package com.jaegerapps.malmali.vocabulary.presentation.folders
 import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.jaegerapps.malmali.vocabulary.presentation.folders.presentation.FolderUiEvent
-import com.jaegerapps.malmali.vocabulary.presentation.folders.presentation.VocabHomeUiState
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import core.Knower
 import core.Knower.e

@@ -68,8 +68,8 @@ import com.jaegerapps.malmali.vocabulary.presentation.components.SelectIcon
 import com.jaegerapps.malmali.vocabulary.presentation.components.SelectableButton
 import com.jaegerapps.malmali.vocabulary.presentation.components.TitleBox
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
-import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.components.VocabularyButtons
-import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.components.VocabularyContainer
+import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyButtons
+import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyContainer
 import core.presentation.MalMalITheme
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource

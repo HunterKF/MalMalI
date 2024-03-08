@@ -1,9 +1,9 @@
-package com.jaegerapps.malmali.vocabulary.presentation.study_flashcards
+package com.jaegerapps.malmali.vocabulary.presentation.study_set
 
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 
-data class StudyFlashcardsUiState(
+data class StudySetUiState(
     val set: VocabSetModel? = null,
     val currentCard: VocabularyCardModel? = null,
     val currentIndex: Int = -1,

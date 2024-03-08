@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.vocabulary.presentation.folders.presentation
+package com.jaegerapps.malmali.vocabulary.presentation.folders
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.components.CustomNavigationDrawer
 import com.jaegerapps.malmali.components.SettingsAndModal
 import com.jaegerapps.malmali.components.TopBarLogo
-import com.jaegerapps.malmali.vocabulary.presentation.folders.FlashcardHomeComponent
 import com.jaegerapps.malmali.vocabulary.presentation.components.MultiFloatingActionButtons
 import com.jaegerapps.malmali.vocabulary.presentation.components.FolderContainer
 import dev.icerock.moko.resources.compose.painterResource
@@ -190,4 +189,6 @@ fun FolderScreen(
         }
     }
 }
+
+
 

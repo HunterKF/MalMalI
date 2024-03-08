@@ -23,7 +23,7 @@ import com.jaegerapps.malmali.login.presentation.SignInComponent
 import com.jaegerapps.malmali.onboarding.intro.IntroComponent
 import com.jaegerapps.malmali.vocabulary.presentation.create_set.CreateSetComponent
 import com.jaegerapps.malmali.vocabulary.presentation.folders.FlashcardHomeComponent
-import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.StudyFlashcardsComponent
+import com.jaegerapps.malmali.vocabulary.presentation.study_set.StudySetComponent
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
 import com.jaegerapps.malmali.practice.presentation.PracticeComponent
@@ -33,7 +33,6 @@ import core.Knower.e
 import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -46,7 +45,7 @@ class RootComponent(
     private val appModule: AppModuleInterface,
 ) : ComponentContext by componentContext {
     private val navigation = StackNavigation<Configuration>()
-    private val scope = CoroutineScope(Dispatchers.IO)
+    private val scope = CoroutineScope(Dispatchers.Default)
 
 
     private val _state = MutableStateFlow(RootState())
@@ -60,17 +59,83 @@ class RootComponent(
     )
 
     init {
+        println("HEY YOU GUYS~~~")
+        scope.launch {
+            println("HEY YOU GUYS~~~3")
+
+            getGrammar()
+            val result = async { appModule.userRepo.retrieveAccessToken() }.await()
+            when {
+                appModule.settingsDataSource.getOnboardingBoolean() -> {
+                    Knower.e("getOnboardingBoolean", "Returned success here.")
+                    navigation.replaceAll(Configuration.IntroScreen)
+                }
+
+                appModule.settingsDataSource.getToken() != null -> {
+                    Knower.e("getOnboardingBoolean", "getToken not null")
+
+                    if (result != null) {
+                        val user = async { appModule.settingsDataSource.getUser() }.await()
+                        getFlashcards(user.nickname)
+
+                        withContext(Dispatchers.Main) {
+                            _state.update {
+                                it.copy(
+                                    user = user,
+                                    loggedIn = true
+                                )
+                            }
+
+                            navigation.replaceAll(Configuration.HomeScreen)
+
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            _state.update {
+                                it.copy(
+                                    user = null,
+                                    loggedIn = false
+                                )
+                            }
+
+                            navigation.replaceAll(Configuration.SignInScreen)
+                        }
+
+                    }
+
+                }
+
+                appModule.settingsDataSource.getToken() == null -> {
+                    Knower.e("getOnboardingBoolean", "getToken null")
+
+                    _state.update {
+                        it.copy(
+                            user = null,
+                            loggedIn = false
+                        )
+                    }
+                    navigation.replaceAll(Configuration.SignInScreen)
+                }
+            }
+
+        }
         lifecycle.doOnCreate {
+            println("HEY YOU GUYS~~~2")
 
             scope.launch {
+                println("HEY YOU GUYS~~~3")
+
                 getGrammar()
                 val result = async { appModule.userRepo.retrieveAccessToken() }.await()
                 when {
                     appModule.settingsDataSource.getOnboardingBoolean() -> {
+                        Knower.e("getOnboardingBoolean", "Returned success here.")
                         navigation.replaceAll(Configuration.IntroScreen)
                     }
 
                     appModule.settingsDataSource.getToken() != null -> {
+                        Knower.e("getOnboardingBoolean", "getToken not null")
+
                         if (result != null) {
                             val user = async { appModule.settingsDataSource.getUser() }.await()
                             getFlashcards(user.nickname)
@@ -103,6 +168,8 @@ class RootComponent(
                     }
 
                     appModule.settingsDataSource.getToken() == null -> {
+                        Knower.e("getOnboardingBoolean", "getToken null")
+
                         _state.update {
                             it.copy(
                                 user = null,
@@ -114,6 +181,7 @@ class RootComponent(
                 }
             }
         }
+        println("HEY YOU GUYS END~~~")
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -127,9 +195,9 @@ class RootComponent(
                 Child.CreateSetScreen(
                     CreateSetComponent(
                         remoteId = config.remoteId,
-                        setId = config.localId,
+                        localId = config.localId,
                         componentContext = context,
-                        vocabFunctions = appModule.vocabularyRepo,
+                        repo = appModule.vocabularyRepo,
                         userData = _state.value.user!!,
                         onComplete = {
                             navigation.pop()
@@ -188,7 +256,7 @@ class RootComponent(
             is Configuration.StudyFlashcardsScreen -> {
                 Knower.e("pushStudy screen", "Current value of state sets it: ${state.value.sets}")
                 Child.StudyFlashcardsScreen(
-                    StudyFlashcardsComponent(
+                    StudySetComponent(
                         componentContext = context,
                         database = config.vocabFunctions,
                         onNavigate = { route ->
@@ -367,7 +435,7 @@ class RootComponent(
     sealed class Child {
         data class CreateSetScreen(val component: CreateSetComponent) : Child()
         data class FlashcardHomeScreen(val component: FlashcardHomeComponent) : Child()
-        data class StudyFlashcardsScreen(val component: StudyFlashcardsComponent) : Child()
+        data class StudyFlashcardsScreen(val component: StudySetComponent) : Child()
         data class HomeScreen(val component: HomeScreenComponent) : Child()
         data class GrammarScreen(val component: GrammarScreenComponent) : Child()
         data class IntroScreen(val component: IntroComponent) : Child()

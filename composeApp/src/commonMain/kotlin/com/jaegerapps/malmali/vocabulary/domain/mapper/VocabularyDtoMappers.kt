@@ -5,10 +5,13 @@ import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTO
 import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTOWithoutData
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import core.Knower
+import core.Knower.e
 
 fun VocabSetModel.toVocabSetDTO(): VocabSetDTO {
+    Knower.e("toVocabSetDTO", "Here is the result coming in: $this")
     return VocabSetDTO(
-        id = remoteId,
+        id = this.remoteId,
         tags = this.tags.toTypedArray(),
         is_public = isPublic,
         subscribed_users = emptyArray(),

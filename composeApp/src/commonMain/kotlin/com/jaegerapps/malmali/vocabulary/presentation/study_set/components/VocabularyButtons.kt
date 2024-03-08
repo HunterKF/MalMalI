@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.components
+package com.jaegerapps.malmali.vocabulary.presentation.study_set.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.vocabulary.presentation.study_flashcards.StudyFlashcardsUiEvent
+import com.jaegerapps.malmali.vocabulary.presentation.study_set.StudySetUiEvent
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
@@ -25,7 +25,7 @@ fun VocabularyButtons(
     modifier: Modifier = Modifier,
     size: Dp = 32.dp,
     tint: Color = MaterialTheme.colorScheme.outline,
-    onClick: (StudyFlashcardsUiEvent) -> Unit
+    onClick: (StudySetUiEvent) -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -33,7 +33,7 @@ fun VocabularyButtons(
     ) {
         IconButton(
             onClick = {
-                onClick(StudyFlashcardsUiEvent.OnPrevious)
+                onClick(StudySetUiEvent.OnPrevious)
             }
         ) {
             Icon(
@@ -45,7 +45,7 @@ fun VocabularyButtons(
         }
         IconButton(
             onClick = {
-                onClick(StudyFlashcardsUiEvent.OnCardFlipClick)
+                onClick(StudySetUiEvent.OnCardFlipClick)
             }
         ) {
             Icon(
@@ -57,7 +57,7 @@ fun VocabularyButtons(
         }
         IconButton(
             onClick = {
-                onClick(StudyFlashcardsUiEvent.OnForward)
+                onClick(StudySetUiEvent.OnForward)
             }
         ) {
             Icon(

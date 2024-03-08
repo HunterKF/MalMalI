@@ -2,7 +2,6 @@ package com.jaegerapps.malmali.vocabulary.domain.mapper
 
 import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.composeApp.database.FlashcardSets
-import com.jaegerapps.malmali.composeApp.database.Flashcards
 import com.jaegerapps.malmali.vocabulary.data.models.FlashcardEntity
 import com.jaegerapps.malmali.vocabulary.data.models.SetEntity
 import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTO
@@ -20,8 +19,20 @@ fun VocabSetDTO.toSetEntity(isAuthor: Boolean): SetEntity {
         date_created = created_at,
         is_author = if (!isAuthor) 0 else 1,
         is_public = if (!is_public) 0 else 1,
+        vocabulary_word = this.vocabulary_word.toSetEntityString(),
+        vocabulary_definition = this.vocabulary_definition.toSetEntityString(),
         set_icon = this.set_icon
     )
+}
+
+private fun Array<String>.toSetEntityString(): String {
+    return this.joinToString("|&|")
+}
+private fun List<String>.toSetEntityString(): String {
+    return this.joinToString("|&|")
+}
+private fun String.toArrayOfString(): Array<String> {
+    return this.split("|&|").toTypedArray()
 }
 
 fun VocabSetDTO.toFlashcardEntity(): List<FlashcardEntity> {
@@ -41,16 +52,8 @@ fun VocabSetDTO.toFlashcardEntity(): List<FlashcardEntity> {
     return list
 }
 
-fun List<FlashcardEntity>.toVocabularyCardModelList(): List<VocabularyCardModel> {
-    return this.map {
-        VocabularyCardModel(
-            word = it.word,
-            definition = it.definition,
-            dbId = it.id
-        )
-    }
-}
-fun toVocabSetModel(setEntity: SetEntity, cards: List<FlashcardEntity>): VocabSetModel {
+
+fun toVocabSetModel(setEntity: SetEntity): VocabSetModel {
     return VocabSetModel(
         localId = setEntity.set_id?.toInt(),
         remoteId = setEntity.linked_set.toInt(),
@@ -60,10 +63,29 @@ fun toVocabSetModel(setEntity: SetEntity, cards: List<FlashcardEntity>): VocabSe
         isPublic = setEntity.is_public == 1L,
         tags =setEntity.tags?.split(" ") ?: emptyList() ,
         dateCreated = setEntity.date_created,
-        cards = cards.toVocabularyCardModelList()
+        cards = createCards(setEntity.vocabulary_word, setEntity.vocabulary_definition)
     )
 }
 
+private fun createCards(words: String, definitions: String): List<VocabularyCardModel> {
+    if (words.isBlank() || definitions.isBlank()) {
+        return emptyList()
+    }
+    val splitWords = words.toArrayOfString()
+    val splitDefinitions = definitions.toArrayOfString()
+    var index = 0
+    var list = emptyList<VocabularyCardModel>()
+    while (index < splitWords.size) {
+        list = list.plus(
+            VocabularyCardModel(
+                word = splitWords[index],
+                definition = splitDefinitions[index]
+            )
+        )
+        index++
+    }
+    return list
+}
 fun FlashcardSets.toSetEntity(): SetEntity {
     return SetEntity(
         set_id = set_id,
@@ -73,20 +95,13 @@ fun FlashcardSets.toSetEntity(): SetEntity {
         date_created = date_created,
         is_author = is_author,
         is_public = is_public,
+        vocabulary_word = vocabulary_word,
+        vocabulary_definition = vocabulary_definition,
         set_icon = this.set_icon
     )
 }
 
-fun List<Flashcards>.toFlashcardEntityList(): List<FlashcardEntity> {
-    return this.map {
-        FlashcardEntity(
-            id = it.id,
-            word = it.card_word,
-            definition = it.card_definition,
-            linked_set = it.linked_set
-        )
-    }
-}
+
 
 fun SetEntity.toVocabSet(): VocabSetModel{
     return VocabSetModel(
@@ -109,6 +124,8 @@ fun VocabSetModel.toSetEntity(): SetEntity{
         date_created = dateCreated,
         is_author = if (!isAuthor) 0L else 1L,
         is_public = if (!isPublic) 0L else 1L,
+        vocabulary_word = this.cards.map { it.word }.toSetEntityString(),
+        vocabulary_definition =this.cards.map { it.definition }.toSetEntityString() ,
         set_icon = icon.tag
     )
 }

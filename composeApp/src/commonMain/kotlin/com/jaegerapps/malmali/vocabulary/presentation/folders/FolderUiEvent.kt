@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.vocabulary.presentation.folders.presentation
+package com.jaegerapps.malmali.vocabulary.presentation.folders
 
 sealed interface FolderUiEvent {
     data class OnShareClick(val setId: Int): FolderUiEvent

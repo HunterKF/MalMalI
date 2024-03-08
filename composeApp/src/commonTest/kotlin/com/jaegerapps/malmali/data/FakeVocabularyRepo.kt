@@ -26,9 +26,10 @@ class FakeVocabularyRepo : VocabularyRepo {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteSet(setId: Int): Resource<Boolean> {
+    override suspend fun deleteSet(setId: Int, remoteId: Int): Resource<Boolean> {
         TODO("Not yet implemented")
     }
+
 
     override suspend fun updateSet(set: VocabSetModel): Resource<Boolean> {
         TODO("Not yet implemented")

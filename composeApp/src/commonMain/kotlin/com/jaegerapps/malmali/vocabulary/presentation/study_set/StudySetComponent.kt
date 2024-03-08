@@ -1,9 +1,8 @@
-package com.jaegerapps.malmali.vocabulary.presentation.study_flashcards
+package com.jaegerapps.malmali.vocabulary.presentation.study_set
 
 import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 import core.Knower
 import core.Knower.e
@@ -12,10 +11,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class StudyFlashcardsComponent(
+class StudySetComponent(
     componentContext: ComponentContext,
     private val database: VocabularyRepo,
     private val onCompleteNavigate: () -> Unit,
@@ -25,10 +25,10 @@ class StudyFlashcardsComponent(
     private val setId: Int,
 ) : ComponentContext by componentContext {
 
-    private val _state = MutableStateFlow(StudyFlashcardsUiState())
+    private val _state = MutableStateFlow(StudySetUiState())
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    val state = _state
+    val state = _state.asStateFlow()
 
     init {
         lifecycle.doOnCreate {
@@ -59,9 +59,9 @@ class StudyFlashcardsComponent(
     }
 
 
-    fun onEvent(event: StudyFlashcardsUiEvent) {
+    fun onEvent(event: StudySetUiEvent) {
         when (event) {
-            StudyFlashcardsUiEvent.OnFlipCard -> {
+            StudySetUiEvent.OnFlipCard -> {
                 _state.update {
                     it.copy(
                         showBack = !it.showBack
@@ -69,7 +69,7 @@ class StudyFlashcardsComponent(
                 }
             }
 
-            StudyFlashcardsUiEvent.OnPrevious -> {
+            StudySetUiEvent.OnPrevious -> {
                 if (_state.value.currentIndex >= 1) {
                     println(_state.value)
                     val newIndex = _state.value.currentIndex - 1
@@ -89,7 +89,7 @@ class StudyFlashcardsComponent(
             }
 
 
-            StudyFlashcardsUiEvent.OnCardFlipClick -> {
+            StudySetUiEvent.OnCardFlipClick -> {
                 _state.update {
                     it.copy(
                         showBack = !it.showBack
@@ -97,7 +97,7 @@ class StudyFlashcardsComponent(
                 }
             }
 
-            is StudyFlashcardsUiEvent.OnDontKnowClick -> {
+            is StudySetUiEvent.OnDontKnowClick -> {
 
                 val newList = moveCardToEnd(
                     _state.value.currentIndex,
@@ -116,7 +116,7 @@ class StudyFlashcardsComponent(
                 }
             }
 
-            is StudyFlashcardsUiEvent.OnGotItClick -> {
+            is StudySetUiEvent.OnGotItClick -> {
                 scope.launch {
 
                     //size = 5, current index is 4
@@ -141,17 +141,17 @@ class StudyFlashcardsComponent(
 
             }
 
-            is StudyFlashcardsUiEvent.OnModalClick -> {
+            is StudySetUiEvent.OnModalClick -> {
                 event.openModal()
             }
 
-            is StudyFlashcardsUiEvent.OnModalNavigate -> {
+            is StudySetUiEvent.OnModalNavigate -> {
                 /*TODO - navigate*/
                 onNavigate(event.route)
 
             }
 
-            StudyFlashcardsUiEvent.OnForward -> {
+            StudySetUiEvent.OnForward -> {
                 _state.update { currentState ->
                     val newIndex = currentState.currentIndex + 1
 
@@ -169,7 +169,7 @@ class StudyFlashcardsComponent(
 
             }
 
-            StudyFlashcardsUiEvent.OnRepeatClick -> {
+            StudySetUiEvent.OnRepeatClick -> {
                 _state.update {
                     it.copy(
                         currentIndex = 0,
@@ -179,22 +179,22 @@ class StudyFlashcardsComponent(
                 }
             }
 
-            StudyFlashcardsUiEvent.OnSetEditClick -> {
+            StudySetUiEvent.OnSetEditClick -> {
                 _state.value.set?.let { set ->
                     set.localId?.let { onEditNavigate( it,set.remoteId!!) }
 
                 }
             }
 
-            StudyFlashcardsUiEvent.OnSettingsClick -> {
+            StudySetUiEvent.OnSettingsClick -> {
                 /*TODO - Navigate to settings*/
             }
 
-            is StudyFlashcardsUiEvent.OnFolderClick -> {
+            is StudySetUiEvent.OnFolderClick -> {
                 event.onClick()
             }
 
-            StudyFlashcardsUiEvent.OnCompleteClick -> {
+            StudySetUiEvent.OnCompleteClick -> {
                 onCompleteNavigate()
             }
 

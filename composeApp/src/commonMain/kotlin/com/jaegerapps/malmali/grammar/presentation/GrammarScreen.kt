@@ -1,19 +1,13 @@
 package com.jaegerapps.malmali.grammar.presentation
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,7 +34,6 @@ import com.jaegerapps.malmali.components.TopBarLogo
 import com.jaegerapps.malmali.grammar.GrammarScreenComponent
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarListContainer
 import com.jaegerapps.malmali.vocabulary.presentation.components.MultiFloatingActionButtons
-import com.jaegerapps.malmali.vocabulary.presentation.folders.presentation.FolderUiEvent
 import kotlinx.coroutines.launch
 
 @Composable

@@ -1,16 +1,12 @@
 package com.jaegerapps.malmali.vocabulary.domain.mappers
 
 import com.jaegerapps.malmali.composeApp.database.FlashcardSets
-import com.jaegerapps.malmali.composeApp.database.Flashcards
-import com.jaegerapps.malmali.vocabulary.data.models.FlashcardEntity
 import com.jaegerapps.malmali.vocabulary.data.models.SetEntity
 import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTO
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toFlashcardEntity
-import com.jaegerapps.malmali.vocabulary.domain.mapper.toFlashcardEntityList
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toSetEntity
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSet
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetModel
-import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabularyCardModelList
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -49,6 +45,8 @@ class EntityMappersTest {
         assertEquals(1L, entity.is_author)
         assertEquals(1L, entity.is_public)
         assertEquals("icon_path", entity.set_icon)
+        assertEquals("word1|&|word2", entity.vocabulary_word)
+        assertEquals("definition1|&|definition2", entity.vocabulary_definition)
     }
 
     @Test
@@ -103,37 +101,6 @@ class EntityMappersTest {
         assertTrue(flashcardEntities.isEmpty())
     }
 
-    @Test
-    fun `toVocabularyCardModelList correctly maps list of FlashcardEntity to VocabularyCardModelList`() {
-        // Arrange
-        val flashcardEntities = listOf(
-            FlashcardEntity(id = 1L, word = "word1", definition = "definition1", linked_set = 10L),
-            FlashcardEntity(id = 2L, word = "word2", definition = "definition2", linked_set = 10L)
-        )
-
-        // Act
-        val vocabularyCardModels = flashcardEntities.toVocabularyCardModelList()
-
-        // Assert
-        assertEquals(flashcardEntities.size, vocabularyCardModels.size)
-        vocabularyCardModels.forEachIndexed { index, vocabularyCardModel ->
-            assertEquals(flashcardEntities[index].id, vocabularyCardModel.dbId)
-            assertEquals(flashcardEntities[index].word, vocabularyCardModel.word)
-            assertEquals(flashcardEntities[index].definition, vocabularyCardModel.definition)
-        }
-    }
-
-    @Test
-    fun `toVocabularyCardModelList handles empty FlashcardEntity list`() {
-        // Arrange
-        val flashcardEntities = emptyList<FlashcardEntity>()
-
-        // Act
-        val vocabularyCardModels = flashcardEntities.toVocabularyCardModelList()
-
-        // Assert
-        assertTrue(vocabularyCardModels.isEmpty())
-    }
 
     @Test
     fun `toVocabSetModel correctly maps SetEntity and FlashcardEntity list to VocabSetModel`() {
@@ -146,16 +113,14 @@ class EntityMappersTest {
             date_created = "2022-01-01",
             is_author = 1L,
             is_public = 1L,
-            set_icon = "icon123"
+            set_icon = "icon123",
+            vocabulary_word = "태국어|&|중국어",
+            vocabulary_definition = "Thai|&|Chinese"
         )
 
-        val flashcardEntities = listOf(
-            FlashcardEntity(id = 1L, word = "word1", definition = "definition1", linked_set = 456L),
-            FlashcardEntity(id = 2L, word = "word2", definition = "definition2", linked_set = 456L)
-        )
 
         // Act
-        val vocabSetModel = toVocabSetModel(setEntity, flashcardEntities)
+        val vocabSetModel = toVocabSetModel(setEntity)
 
         // Assert
         assertEquals(setEntity.set_id?.toInt(), vocabSetModel.localId)
@@ -167,7 +132,11 @@ class EntityMappersTest {
         assertEquals(setEntity.is_public == 1L, vocabSetModel.isPublic)
         assertEquals(setEntity.tags?.split(" "), vocabSetModel.tags)
         assertEquals(setEntity.date_created, vocabSetModel.dateCreated)
-        assertEquals(flashcardEntities.size, vocabSetModel.cards.size)
+
+        assertEquals("태국어", vocabSetModel.cards[0].word)
+        assertEquals("중국어", vocabSetModel.cards[1].word)
+        assertEquals("Thai", vocabSetModel.cards[0].definition)
+        assertEquals("Chinese", vocabSetModel.cards[1].definition)
         // Additional assertions can be made to check the correctness of each card in the model list
     }
 
@@ -182,14 +151,16 @@ class EntityMappersTest {
             date_created = "2022-01-01",
             is_author = 1L,
             is_public = 1L,
-            set_icon = "icon123"
+            set_icon = "icon123",
+            vocabulary_word = "",
+            vocabulary_definition = ""
         )
-        val flashcardEntities = emptyList<FlashcardEntity>()
 
         // Act
-        val vocabSetModel = toVocabSetModel(setEntity, flashcardEntities)
+        val vocabSetModel = toVocabSetModel(setEntity)
 
         // Assert
+        println(vocabSetModel)
         assertTrue(vocabSetModel.cards.isEmpty())
     }
 
@@ -204,7 +175,9 @@ class EntityMappersTest {
             date_created = "2022-01-01",
             is_author = 1L,
             is_public = 1L,
-            set_icon = "icon_path"
+            set_icon = "icon_path",
+            vocabulary_word = "태국어|&|중국어",
+            vocabulary_definition = "Thai|&|Chinese"
         )
 
         // Act
@@ -221,48 +194,6 @@ class EntityMappersTest {
         assertEquals(flashcardSets.set_icon, setEntity.set_icon)
     }
 
-    @Test
-    fun `toFlashcardEntityList correctly maps list of Flashcards to FlashcardEntityList`() {
-        // Arrange
-        val flashcards = listOf(
-            Flashcards(
-                id = 1L,
-                card_word = "word1",
-                card_definition = "definition1",
-                linked_set = 10L
-            ),
-            Flashcards(
-                id = 2L,
-                card_word = "word2",
-                card_definition = "definition2",
-                linked_set = 10L
-            )
-        )
-
-        // Act
-        val flashcardEntities = flashcards.toFlashcardEntityList()
-
-        // Assert
-        assertEquals(flashcards.size, flashcardEntities.size)
-        flashcardEntities.forEachIndexed { index, flashcardEntity ->
-            assertEquals(flashcards[index].id, flashcardEntity.id)
-            assertEquals(flashcards[index].card_word, flashcardEntity.word)
-            assertEquals(flashcards[index].card_definition, flashcardEntity.definition)
-            assertEquals(flashcards[index].linked_set, flashcardEntity.linked_set)
-        }
-    }
-
-    @Test
-    fun `toFlashcardEntityList handles empty Flashcards list`() {
-        // Arrange
-        val flashcards = emptyList<Flashcards>()
-
-        // Act
-        val flashcardEntities = flashcards.toFlashcardEntityList()
-
-        // Assert
-        assertTrue(flashcardEntities.isEmpty())
-    }
 
     @Test
     fun `toVocabSet correctly maps SetEntity to VocabSetModel`() {
@@ -275,7 +206,9 @@ class EntityMappersTest {
             date_created = "2022-01-01",
             is_author = 1L,
             is_public = 1L,
-            set_icon = "icon123"
+            set_icon = "icon123",
+            vocabulary_word = "태국어|&|중국어",
+            vocabulary_definition = "Thai|&|Chinese"
         )
 
         // Act
@@ -304,7 +237,9 @@ class EntityMappersTest {
             date_created = null,
             is_author = 0L,
             is_public = 0L,
-            set_icon = "icon123"
+            set_icon = "icon123",
+            vocabulary_word = "태국어|&|중국어",
+            vocabulary_definition = "Thai|&|Chinese"
         )
 
         // Act

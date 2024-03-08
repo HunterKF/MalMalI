@@ -61,10 +61,8 @@ class VocabularyRepoImpl(
     override suspend fun getLocalSet(setId: Int, remoteId: Int): Resource<VocabSetModel> {
         return try {
             val set = local.readSingleSet(setId.toLong())
-            val cards = local.readSingleSetCards(remoteId.toLong())
-            if (set.data != null && cards.data != null) {
-                val model = toVocabSetModel(set.data, cards.data)
-                Knower.d("getLocalSet", "This is the local set: $model. Here are the cards ${model.cards}")
+            if (set.data != null) {
+                val model = toVocabSetModel(set.data)
                 Resource.Success(model)
             } else {
                 Resource.Error(Throwable(message = "Unknown error."))
@@ -76,7 +74,7 @@ class VocabularyRepoImpl(
         }
     }
 
-    override  fun getAllLocalSets(): Flow<List<VocabSetModel>> {
+    override fun getAllLocalSets(): Flow<List<VocabSetModel>> {
         //This function will be called in the folder screen. It will display all local sets, not the cards yet.
         return local.readAllSets().map { it.map { it.toVocabSet() } }
     }
@@ -97,9 +95,9 @@ class VocabularyRepoImpl(
     }
 
 
-    override suspend fun deleteSet(setId: Int): Resource<Boolean> {
+    override suspend fun deleteSet(setId: Int, remoteId: Int): Resource<Boolean> {
         return try {
-            if (remote.deleteSet(setId).data == true) {
+            if (remote.deleteSet(remoteId).data == true) {
                 if (local.deleteSet(setId.toLong()).data == true) {
                     Resource.Success(true)
                 }
@@ -114,8 +112,12 @@ class VocabularyRepoImpl(
 
     override suspend fun updateSet(set: VocabSetModel): Resource<Boolean> {
         return try {
+            Knower.d("updateSet", "Here is the set: $set")
             if (remote.updateSet(set.toVocabSetDTO()).data != null) {
-                if (local.updateSet(set.toSetEntity()).data == true) {
+                if (local.updateSet(
+                        setEntity = set.toSetEntity(),
+                        cardEntityList = set.cards.map { it.toFlashcardEntity(set.remoteId!!.toLong()) }).data == true
+                ) {
                     Resource.Success(true)
                 }
             }

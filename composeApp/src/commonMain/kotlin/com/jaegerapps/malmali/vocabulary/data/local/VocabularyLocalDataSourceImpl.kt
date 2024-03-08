@@ -5,8 +5,6 @@ import app.cash.sqldelight.coroutines.mapToList
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
 import com.jaegerapps.malmali.vocabulary.data.models.FlashcardEntity
 import com.jaegerapps.malmali.vocabulary.data.models.SetEntity
-import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTO
-import com.jaegerapps.malmali.vocabulary.domain.mapper.toFlashcardEntityList
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toSetEntity
 import core.Knower
 import core.Knower.e
@@ -34,16 +32,11 @@ class VocabularyLocalDataSourceImpl(
                 date_created = setEntity.date_created!!,
                 is_public = setEntity.is_public,
                 is_author = setEntity.is_author,
-                set_icon = setEntity.set_icon
-            )
-            cards.forEach {
-                queries.insertFlashCard(
-                    null,
-                    card_word = it.word,
-                    card_definition = it.definition,
-                    linked_set = it.linked_set
+                vocabulary_word = setEntity.vocabulary_word,
+                vocabulary_definition = setEntity.vocabulary_definition,
+                set_icon = setEntity.set_icon,
+
                 )
-            }
 
             Resource.Success(true)
         } catch (e: Exception) {
@@ -67,23 +60,6 @@ class VocabularyLocalDataSourceImpl(
         }
     }
 
-    override suspend fun readSingleSetCards(setId: Long): Resource<List<FlashcardEntity>> {
-        return try {
-            val cards = queries.selectSetCards(
-                setId
-            ).executeAsList().toFlashcardEntityList()
-            Knower.e("readSingleSetCards", "Set id.")
-            if (cards.isNotEmpty()) {
-                Resource.Success(cards)
-            } else {
-                Resource.Error(Throwable(message = "Cards were empty."))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Knower.e("InsertHistorySql", "An error has occurred here. ${e.message}")
-            Resource.Error(e)
-        }
-    }
 
     override fun readAllSets(): Flow<List<SetEntity>> {
         return queries.selectAllSets()
@@ -98,13 +74,18 @@ class VocabularyLocalDataSourceImpl(
             }
     }
 
-    override suspend fun updateSet(setEntity: SetEntity): Resource<Boolean> {
+    override suspend fun updateSet(
+        setEntity: SetEntity,
+        cardEntityList: List<FlashcardEntity>,
+    ): Resource<Boolean> {
         return try {
             queries.updateSet(
                 id = setEntity.set_id!!,
                 setTitle = setEntity.set_title,
                 tags = setEntity.tags,
                 isPublic = setEntity.is_public,
+                words = setEntity.vocabulary_word,
+                definitions = setEntity.vocabulary_definition,
             )
             Resource.Success(true)
         } catch (e: Exception) {
@@ -116,13 +97,7 @@ class VocabularyLocalDataSourceImpl(
 
     override suspend fun updateSetCards(cards: List<FlashcardEntity>): Resource<Boolean> {
         return try {
-            cards.forEach {
-                queries.updateCard(
-                    word = it.word,
-                    meaning = it.definition,
-                    id = it.id!!
-                )
-            }
+
             Resource.Success(true)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -133,9 +108,7 @@ class VocabularyLocalDataSourceImpl(
 
     override suspend fun deleteSet(remoteId: Long): Resource<Boolean> {
         return try {
-
             queries.deleteSet(remoteId)
-            queries.deleteSetCards(remoteId)
             Resource.Success(true)
         } catch (e: Exception) {
             e.printStackTrace()

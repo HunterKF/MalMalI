@@ -9,5 +9,8 @@ data class SetEntity(
     val date_created: String?,
     val is_author: Long,
     val is_public: Long,
-    val set_icon: String
+    val vocabulary_word: String,
+    val vocabulary_definition: String,
+    val set_icon: String,
+
 )

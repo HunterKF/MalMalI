@@ -8,6 +8,7 @@ import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import core.Knower
 import core.Knower.d
+import core.Knower.e
 import core.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,12 +17,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CreateSetComponent(
     componentContext: ComponentContext,
     val remoteId: Int?,
-    val setId: Int?,
-    private val vocabFunctions: VocabularyRepo,
+    val localId: Int?,
+    private val repo: VocabularyRepo,
     private val userData: UserData,
     private val onComplete: () -> Unit,
     private val onModalNavigate: (String) -> Unit,
@@ -36,10 +38,10 @@ class CreateSetComponent(
     init {
         //If we are going to edit a set, we check it here. In order to get a set, we need the id, title, and date.
         //The date is used to check for a single set, so the names could be duplicates, but with the date, it returns one set.
-        if (setId != null && remoteId != null) {
+        if (localId != null && remoteId != null) {
             scope.launch {
                 _state.update { it.copy(isLoading = true) }
-                when (val result = async { vocabFunctions.getLocalSet(setId, remoteId) }.await()) {
+                when (val result = async { repo.getLocalSet(localId, remoteId) }.await()) {
                     is Resource.Error -> _state.update { it.copy(error = UiError.UNKNOWN_ERROR) }
                     is Resource.Success -> {
                         if (result.data != null) {
@@ -51,7 +53,8 @@ class CreateSetComponent(
                                     vocabularyCardModels = addUiIds(set.cards),
                                     icon = set.icon,
                                     isPublic = set.isPublic,
-                                    isLoading = false
+                                    isLoading = false,
+                                    dateCreated = set.dateCreated
                                 )
                             }
                             Knower.d("createSet init", "This is the state ${_state.value}")
@@ -181,43 +184,55 @@ class CreateSetComponent(
                 when (_state.value.mode) {
                     PopUpMode.DELETE -> {
                         scope.launch {
-                            if (setId != null) {
+                            if (localId != null && remoteId != null) {
                                 //If we have a set that was being edited, all will be erased. then we go to home screen
-                                async { vocabFunctions.deleteSet(setId) }.await()
-                                onComplete()
+                                Knower.e("CreateSetComponent Delte", "Here is the localId $localId and remoteId $remoteId")
+                                async { repo.deleteSet(localId, remoteId) }.await()
+                                withContext(Dispatchers.Main) { onComplete() }
                             } else {
                                 //There is no set, we go to home screen
-                                onComplete()
+                                withContext(Dispatchers.Main) { onComplete() }
+
                             }
                         }
                     }
 
                     PopUpMode.SAVE -> {
-                        //Made a vocab set to bring all the elements of the UI together. This is where we set the date stamp for this.
-                        val vocabSetModel = VocabSetModel(
-                            title = _state.value.title,
-                            icon = _state.value.icon ?: IconResource.resourceFromTag("bear 1"),
-                            localId = 0,
-                            isPublic = _state.value.isPublic,
-                            tags = _state.value.tags,
-                            dateCreated = null,
-                            cards = _state.value.vocabularyCardModels,
-                            isAuthor = true,
-                            remoteId = 0
-                        )
+                        //Made a vocab set to bring all the elements of the UI together.
+
+
                         scope.launch {
 
-                            if (setId != null && remoteId != null) {
+                            if (localId != null && remoteId != null) {
                                 //this means we are editing a set, so we just update it based on this
-                                vocabFunctions.updateSet(
-                                    set = vocabSetModel.copy(
-                                        localId = setId,
-                                        remoteId = remoteId,
-                                    )
+                                val vocabSetModel = VocabSetModel(
+                                    title = _state.value.title,
+                                    icon = _state.value.icon ?: IconResource.resourceFromTag("bear 1"),
+                                    localId = localId,
+                                    isPublic = _state.value.isPublic,
+                                    tags = _state.value.tags,
+                                    dateCreated = _state.value.dateCreated,
+                                    cards = _state.value.vocabularyCardModels,
+                                    isAuthor = true,
+                                    remoteId = remoteId
+                                )
+                                repo.updateSet(
+                                    set = vocabSetModel
                                 )
                             } else {
                                 //Adding a set
-                                vocabFunctions.createSet(
+                                val vocabSetModel = VocabSetModel(
+                                    title = _state.value.title,
+                                    icon = _state.value.icon ?: IconResource.resourceFromTag("bear 1"),
+                                    localId = 0,
+                                    isPublic = _state.value.isPublic,
+                                    tags = _state.value.tags,
+                                    dateCreated = _state.value.dateCreated,
+                                    cards = _state.value.vocabularyCardModels,
+                                    isAuthor = true,
+                                    remoteId = 0
+                                )
+                                repo.createSet(
                                     vocabSetModel
                                 )
                             }
@@ -291,8 +306,12 @@ class CreateSetComponent(
                 }
             }
 
-            CreateSetUiEvent.OpenIconSelection -> TODO()
-            is CreateSetUiEvent.SelectIcon -> TODO()
+            CreateSetUiEvent.OpenIconSelection -> {
+
+            }
+            is CreateSetUiEvent.SelectIcon -> {
+
+            }
             is CreateSetUiEvent.OnModalNavigate -> {
                 onModalNavigate(event.route)
             }
