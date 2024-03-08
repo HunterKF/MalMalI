@@ -60,6 +60,22 @@ class VocabularyRemoteDataSourceImpl(
         }
     }
 
+    override suspend fun readBySearch(title: String, start: Long, end: Long): Resource<List<VocabSetDTO>> {
+        return try {
+            val result = client.from(SupabaseKeys.SETS).select {
+                filter {
+                    imatch("set_title", title)
+                }
+                order("set_title", order = Order.ASCENDING)
+                range(start, end)
+            }.decodeList<VocabSetDTO>()
+            Resource.Success(result)
+        } catch (e: RestException) {
+            e.printStackTrace()
+            Resource.Error(e)
+        }
+    }
+
     override suspend fun updateSet(vocabSet: VocabSetDTO): Resource<VocabSetDTO> {
         return try {
 

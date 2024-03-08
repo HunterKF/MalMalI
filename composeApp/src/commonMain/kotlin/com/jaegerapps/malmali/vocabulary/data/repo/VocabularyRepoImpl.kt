@@ -94,6 +94,22 @@ class VocabularyRepoImpl(
         }
     }
 
+    override suspend fun searchPublicSets(title: String, start: Long, end: Long): Resource<List<VocabSetModel>> {
+        return try {
+            val result = remote.readBySearch(title, start, end)
+            if (result.data != null) {
+                Resource.Success(result.data.map { it.toVocabSetModel(false) })
+            } else {
+                Resource.Error(Throwable())
+
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Knower.e("searchPublicSets", "An error has occurred here: $e")
+            Resource.Error(e)
+        }
+    }
+
 
     override suspend fun deleteSet(setId: Int, remoteId: Int): Resource<Boolean> {
         return try {
