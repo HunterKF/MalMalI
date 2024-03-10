@@ -1,11 +1,11 @@
 package com.jaegerapps.malmali.grammar.domain.mapper
 
-import com.jaegerapps.malmali.grammar.models.GrammarPointDTO
-import com.jaegerapps.malmali.grammar.models.GrammarLevel
-import com.jaegerapps.malmali.grammar.models.GrammarPoint
+import com.jaegerapps.malmali.grammar.data.models.GrammarPointDTO
+import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
+import com.jaegerapps.malmali.grammar.domain.models.GrammarPointModel
 
-fun GrammarPointDTO.toGrammarPoint(): GrammarPoint {
-    return GrammarPoint(
+fun GrammarPointDTO.toGrammarPoint(): GrammarPointModel {
+    return GrammarPointModel(
         grammarCategory = grammar_level,
         grammarTitle = grammar_point,
         grammarDef1 = grammar_explanation_1,
@@ -17,14 +17,14 @@ fun GrammarPointDTO.toGrammarPoint(): GrammarPoint {
     )
 }
 
-fun List<GrammarPoint>.toGrammarLevels(): List<GrammarLevel> {
+fun List<GrammarPointModel>.toGrammarLevels(): List<GrammarLevelModel> {
     return (1..6).map { number ->
         val list = if (number == 1) {
             this.filter { it.grammarCategory == 1 }.map { it.copy(selected = true) }
         } else {
             this.filter { it.grammarCategory == number }
         }
-        GrammarLevel(
+        GrammarLevelModel(
             id = number,
             title = "Level $number",
             isUnlocked = number == 1,

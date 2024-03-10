@@ -3,12 +3,11 @@ package com.jaegerapps.malmali.practice.data.local
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
-import com.jaegerapps.malmali.practice.mappers.toHistoryEntity
-import com.jaegerapps.malmali.practice.models.HistoryDTO
-import com.jaegerapps.malmali.practice.models.HistoryEntity
+import com.jaegerapps.malmali.practice.domain.mappers.toHistoryEntity
+import com.jaegerapps.malmali.practice.data.models.HistoryDTO
+import com.jaegerapps.malmali.practice.data.models.HistoryEntity
 import core.Knower
 import core.Knower.e
-import core.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow

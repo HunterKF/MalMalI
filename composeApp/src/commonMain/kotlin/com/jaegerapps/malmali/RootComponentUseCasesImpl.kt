@@ -2,8 +2,8 @@ package com.jaegerapps.malmali
 
 import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarLevels
 import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarPoint
-import com.jaegerapps.malmali.grammar.models.GrammarLevel
-import com.jaegerapps.malmali.grammar.models.GrammarPointDTO
+import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
+import com.jaegerapps.malmali.grammar.data.models.GrammarPointDTO
 import com.jaegerapps.malmali.vocabulary.domain.models.FlashSetEntity
 import core.Knower
 import core.Knower.d
@@ -17,7 +17,7 @@ import io.github.jan.supabase.postgrest.from
 class RootComponentUseCasesImpl(
     private val client: SupabaseClient,
 ) : RootComponentUseCases {
-    override suspend fun getGrammar(): Resource<List<GrammarLevel>> {
+    override suspend fun getGrammar(): Resource<List<GrammarLevelModel>> {
 
         return try {
             val data = client.from("grammar").select()

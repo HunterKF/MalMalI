@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.practice.models
+package com.jaegerapps.malmali.practice.data.models
 
 data class HistoryDTO(
     val input_sentence: String,

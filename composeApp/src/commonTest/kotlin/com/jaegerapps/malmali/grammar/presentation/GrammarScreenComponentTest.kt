@@ -5,12 +5,10 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.resume
 import com.jaegerapps.malmali.RootComponent
-import com.jaegerapps.malmali.data.FakeVocabularyRepo
 import com.jaegerapps.malmali.di.FakeAppModule
 import com.jaegerapps.malmali.grammar.domain.FakeGrammarRepo
-import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
-import com.jaegerapps.malmali.grammar.models.GrammarLevel
-import com.jaegerapps.malmali.grammar.models.GrammarPoint
+import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
+import com.jaegerapps.malmali.grammar.domain.models.GrammarPointModel
 import core.Knower
 import core.Knower.t
 import kotlinx.coroutines.runBlocking
@@ -23,14 +21,14 @@ class GrammarScreenComponentTest {
 
     private lateinit var component: GrammarScreenComponent
     private val activeChild get() = component
-    private val grammarLevels = listOf(
-        GrammarLevel(
+    private val grammarLevelModels = listOf(
+        GrammarLevelModel(
             id = 1,
             title = "Basic Grammar",
             isSelected = false,
             isUnlocked = true,
             grammarList = listOf(
-                GrammarPoint(
+                GrammarPointModel(
                     grammarCategory = 1,
                     grammarTitle = "Nouns",
                     grammarDef1 = "Definition of Nouns",
@@ -43,13 +41,13 @@ class GrammarScreenComponentTest {
                 // Add more GrammarPoints as needed
             )
         ),
-        GrammarLevel(
+        GrammarLevelModel(
             id = 2,
             title = "Intermediate Grammar",
             isSelected = false,
             isUnlocked = false,
             grammarList = listOf(
-                GrammarPoint(
+                GrammarPointModel(
                     grammarCategory = 2,
                     grammarTitle = "Verbs",
                     grammarDef1 = "Definition of Verbs",
@@ -63,7 +61,7 @@ class GrammarScreenComponentTest {
             )
         ),
         // Repeat for levels 3 to 6
-        GrammarLevel(
+        GrammarLevelModel(
             id = 3,
             title = "Advanced Grammar",
             isSelected = false,
@@ -72,7 +70,7 @@ class GrammarScreenComponentTest {
                 // Add GrammarPoints
             )
         ),
-        GrammarLevel(
+        GrammarLevelModel(
             id = 4,
             title = "Professional Grammar",
             isSelected = false,
@@ -81,7 +79,7 @@ class GrammarScreenComponentTest {
                 // Add GrammarPoints
             )
         ),
-        GrammarLevel(
+        GrammarLevelModel(
             id = 5,
             title = "Expert Grammar",
             isSelected = false,
@@ -90,7 +88,7 @@ class GrammarScreenComponentTest {
                 // Add GrammarPoints
             )
         ),
-        GrammarLevel(
+        GrammarLevelModel(
             id = 6,
             title = "Master Grammar",
             isSelected = false,
@@ -109,7 +107,7 @@ class GrammarScreenComponentTest {
             val initialState = awaitItem()
             assertEquals(1, initialState.selectedLevels.first())
             assertTrue(initialState.selectedLevels.isNotEmpty())
-            assertTrue(initialState.grammarLevelList.isNotEmpty())
+            assertTrue(initialState.grammarLevelModelList.isNotEmpty())
         }
     }
 
@@ -120,7 +118,7 @@ class GrammarScreenComponentTest {
             val initialState = awaitItem()
             assertEquals(1, initialState.selectedLevels.first())
             assertTrue(initialState.selectedLevels.isNotEmpty())
-            assertTrue(initialState.grammarLevelList.isNotEmpty())
+            assertTrue(initialState.grammarLevelModelList.isNotEmpty())
             activeChild.onEvent(GrammarUiEvent.ToggleEditMode)
             val editState = awaitItem()
             assertEquals(true, editState.isEditing)
@@ -137,12 +135,12 @@ class GrammarScreenComponentTest {
             val initialState = awaitItem()
             assertEquals(1, initialState.selectedLevels.first())
             assertTrue(initialState.selectedLevels.isNotEmpty())
-            assertTrue(initialState.grammarLevelList.isNotEmpty())
-            activeChild.onEvent(GrammarUiEvent.ToggleLevelSelection(grammarLevels[1]))
+            assertTrue(initialState.grammarLevelModelList.isNotEmpty())
+            activeChild.onEvent(GrammarUiEvent.ToggleLevelSelection(grammarLevelModels[1]))
             val editState = awaitItem()
             assertEquals(2, editState.selectedLevels.size)
             Knower.t("Select Level 2", "Test state: $editState")
-            assertEquals(2, editState.grammarLevelList.filter { it.isSelected }.size)
+            assertEquals(2, editState.grammarLevelModelList.filter { it.isSelected }.size)
         }
     }
 
@@ -153,19 +151,19 @@ class GrammarScreenComponentTest {
             val initialState = awaitItem()
             assertEquals(1, initialState.selectedLevels.first())
             assertTrue(initialState.selectedLevels.isNotEmpty())
-            assertTrue(initialState.grammarLevelList.isNotEmpty())
-            activeChild.onEvent(GrammarUiEvent.ToggleLevelSelection(grammarLevels[1]))
+            assertTrue(initialState.grammarLevelModelList.isNotEmpty())
+            activeChild.onEvent(GrammarUiEvent.ToggleLevelSelection(grammarLevelModels[1]))
             val addedLevels = awaitItem()
             assertEquals(2, addedLevels.selectedLevels.size)
 
             Knower.t("Select Level 2", "Test state: $addedLevels")
-            assertEquals(2, addedLevels.grammarLevelList.filter { it.isSelected }.size)
+            assertEquals(2, addedLevels.grammarLevelModelList.filter { it.isSelected }.size)
             assertEquals(2, addedLevels.selectedLevels.size)
-            activeChild.onEvent(GrammarUiEvent.ToggleLevelSelection(grammarLevels[1]))
+            activeChild.onEvent(GrammarUiEvent.ToggleLevelSelection(grammarLevelModels[1]))
             val minusLevels = awaitItem()
             assertEquals(1, minusLevels.selectedLevels.size)
             Knower.t("Select Level 2", "Test state: $minusLevels")
-            assertEquals(1, minusLevels.grammarLevelList.filter { it.isSelected }.size)
+            assertEquals(1, minusLevels.grammarLevelModelList.filter { it.isSelected }.size)
         }
     }
 
@@ -180,7 +178,7 @@ class GrammarScreenComponentTest {
             componentContext = root,
             repo = FakeGrammarRepo(),
             isPro = false,
-            grammarLevels = grammarLevels,
+            grammarLevelModels = grammarLevelModels,
             onNavigate = {
 
             }

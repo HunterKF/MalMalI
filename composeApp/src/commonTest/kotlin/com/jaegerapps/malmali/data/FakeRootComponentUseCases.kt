@@ -1,20 +1,20 @@
 package com.jaegerapps.malmali.data
 
-import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
 import com.jaegerapps.malmali.RootComponentUseCases
-import com.jaegerapps.malmali.grammar.models.GrammarPoint
+import com.jaegerapps.malmali.grammar.domain.models.GrammarPointModel
 import com.jaegerapps.malmali.vocabulary.domain.models.FlashSetEntity
 import core.util.Resource
 
 class FakeRootComponentUseCases: RootComponentUseCases {
-    private val grammarLevels = listOf(
-        GrammarLevel(
+    private val grammarLevelModels = listOf(
+        GrammarLevelModel(
             id = 1,
             title = "Basic Grammar",
             isSelected = false,
             isUnlocked = true,
             grammarList = listOf(
-                GrammarPoint(
+                GrammarPointModel(
                     grammarCategory = 1,
                     grammarTitle = "Nouns",
                     grammarDef1 = "Definition of Nouns",
@@ -27,13 +27,13 @@ class FakeRootComponentUseCases: RootComponentUseCases {
                 // Add more GrammarPoints as needed
             )
         ),
-        GrammarLevel(
+        GrammarLevelModel(
             id = 2,
             title = "Intermediate Grammar",
             isSelected = false,
             isUnlocked = false,
             grammarList = listOf(
-                GrammarPoint(
+                GrammarPointModel(
                     grammarCategory = 2,
                     grammarTitle = "Verbs",
                     grammarDef1 = "Definition of Verbs",
@@ -47,7 +47,7 @@ class FakeRootComponentUseCases: RootComponentUseCases {
             )
         ),
         // Repeat for levels 3 to 6
-        GrammarLevel(
+        GrammarLevelModel(
             id = 3,
             title = "Advanced Grammar",
             isSelected = false,
@@ -56,7 +56,7 @@ class FakeRootComponentUseCases: RootComponentUseCases {
                 // Add GrammarPoints
             )
         ),
-        GrammarLevel(
+        GrammarLevelModel(
             id = 4,
             title = "Professional Grammar",
             isSelected = false,
@@ -65,7 +65,7 @@ class FakeRootComponentUseCases: RootComponentUseCases {
                 // Add GrammarPoints
             )
         ),
-        GrammarLevel(
+        GrammarLevelModel(
             id = 5,
             title = "Expert Grammar",
             isSelected = false,
@@ -74,7 +74,7 @@ class FakeRootComponentUseCases: RootComponentUseCases {
                 // Add GrammarPoints
             )
         ),
-        GrammarLevel(
+        GrammarLevelModel(
             id = 6,
             title = "Master Grammar",
             isSelected = false,
@@ -85,8 +85,8 @@ class FakeRootComponentUseCases: RootComponentUseCases {
         )
     )
 
-    override suspend fun getGrammar(): Resource<List<GrammarLevel>> {
-        return Resource.Success(grammarLevels)
+    override suspend fun getGrammar(): Resource<List<GrammarLevelModel>> {
+        return Resource.Success(grammarLevelModels)
     }
 
     override suspend fun getSets(name: String): Resource<List<FlashSetEntity>> {

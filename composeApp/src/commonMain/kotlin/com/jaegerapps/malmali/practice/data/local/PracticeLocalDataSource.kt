@@ -1,7 +1,7 @@
 package com.jaegerapps.malmali.practice.data.local
 
-import com.jaegerapps.malmali.practice.models.HistoryDTO
-import com.jaegerapps.malmali.practice.models.HistoryEntity
+import com.jaegerapps.malmali.practice.data.models.HistoryDTO
+import com.jaegerapps.malmali.practice.data.models.HistoryEntity
 import kotlinx.coroutines.flow.Flow
 
 interface PracticeLocalDataSource {

@@ -2,13 +2,13 @@ package com.jaegerapps.malmali.practice.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
 import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.practice.domain.repo.PracticeRepo
-import com.jaegerapps.malmali.practice.mappers.toUiHistoryItem
-import com.jaegerapps.malmali.practice.mappers.toUiPracticeGrammarList
-import com.jaegerapps.malmali.practice.mappers.toUiPracticeVocabList
-import com.jaegerapps.malmali.practice.models.UiHistoryItem
+import com.jaegerapps.malmali.practice.domain.mappers.toUiHistoryItem
+import com.jaegerapps.malmali.practice.domain.mappers.toUiPracticeGrammarList
+import com.jaegerapps.malmali.practice.domain.mappers.toUiPracticeVocabList
+import com.jaegerapps.malmali.practice.domain.models.HistoryItemModel
 import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
 import core.Knower
 import core.Knower.d
@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PracticeComponent(
-    private val grammarLevel: List<GrammarLevel>,
+    private val grammarLevelModel: List<GrammarLevelModel>,
     private val userData: UserData,
     private val vocabularySets: List<VocabSetModel>,
     private val onNavigate: (String) -> Unit,
@@ -56,7 +56,7 @@ class PracticeComponent(
 
     init {
         lifecycle.doOnCreate {
-            val filteredLevels = grammarLevel.toUiPracticeGrammarList()
+            val filteredLevels = grammarLevelModel.toUiPracticeGrammarList()
                 .filter { level -> level.title in userData.selectedLevels }
             val filteredSets = vocabularySets.first { set ->
                 set.title in userData.sets
@@ -68,7 +68,7 @@ class PracticeComponent(
                 )
                 Knower.d(
                     "PracticeComponent onCreate",
-                    "Here is the value for grammarLevel: ${grammarLevel}"
+                    "Here is the value for grammarLevel: ${grammarLevelModel}"
                 )
                 Knower.d(
                     "PracticeComponent onCreate", "Here is the value for vocabSets filtered: ${
@@ -79,7 +79,7 @@ class PracticeComponent(
                 )
                 Knower.d(
                     "PracticeComponent onCreate",
-                    "Here is the value for grammarLevel filtered: ${grammarLevel}.toUiPracticeGrammarList().filter { level -> level.title in userData.selectedLevels }"
+                    "Here is the value for grammarLevel filtered: ${grammarLevelModel}.toUiPracticeGrammarList().filter { level -> level.title in userData.selectedLevels }"
                 )
                 it.copy(
                     grammarList = filteredLevels,
@@ -117,11 +117,11 @@ class PracticeComponent(
 
             PracticeUiEvent.SavePractice -> {
                 if (_state.value.text.isNotBlank()) {
-                    val newHistory = UiHistoryItem(
+                    val newHistory = HistoryItemModel(
                         id = 0,
                         sentence = _state.value.text,
                         grammar = _state.value.currentGrammar!!,
-                        vocab = _state.value.currentVocabulary!!,
+                        set = _state.value.currentVocabulary!!,
                     )
                     scope.launch {
                         when (val result = practiceRepo.insertHistorySql(newHistory)) {

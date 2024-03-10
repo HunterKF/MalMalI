@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.ArrowDropUp
-import androidx.compose.material.icons.outlined.Minimize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,16 +23,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.components.blackBorder
-import com.jaegerapps.malmali.practice.models.UiPracticeGrammar
-import com.jaegerapps.malmali.practice.models.UiPracticeVocab
+import com.jaegerapps.malmali.practice.domain.models.PracticeGrammarModel
 import com.jaegerapps.malmali.practice.presentation.PracticeUiEvent
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun PracticeContainer(
     modifier: Modifier = Modifier,
-    vocab: UiPracticeVocab,
-    grammar: UiPracticeGrammar,
+    vocab: PracticeVocabularyModel,
+    grammar: PracticeGrammarModel,
     vocabExpanded: Boolean,
     grammarExpanded: Boolean,
     onClick: (PracticeUiEvent) -> Unit,

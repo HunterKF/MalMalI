@@ -17,12 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.components.ActionButton
-import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
 
 @Composable
 fun GrammarContainer(
     modifier: Modifier = Modifier,
-    grammarLevel: GrammarLevel,
+    grammarLevelModel: GrammarLevelModel,
     isEditingMode: Boolean,
     isExpanded: Boolean,
     onExpandClick: () -> Unit,
@@ -30,10 +30,10 @@ fun GrammarContainer(
 ) {
     Column(modifier = modifier.fillMaxWidth().animateContentSize()) {
         LevelHeader(
-            title = grammarLevel.title,
+            title = grammarLevelModel.title,
             isEditing = isEditingMode,
-            isUnlocked = grammarLevel.isUnlocked,
-            isSelected = grammarLevel.isSelected,
+            isUnlocked = grammarLevelModel.isUnlocked,
+            isSelected = grammarLevelModel.isSelected,
             onExpandClick = {
                 onExpandClick()
             },
@@ -47,7 +47,7 @@ fun GrammarContainer(
                 modifier = Modifier.padding(horizontal = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                grammarLevel.grammarList.forEach {
+                grammarLevelModel.grammarList.forEach {
                     var pointExpanded by remember {
                         mutableStateOf(false)
                     }
@@ -65,11 +65,11 @@ fun GrammarContainer(
                         }
                     )
                 }
-                if (!grammarLevel.isUnlocked) {
+                if (!grammarLevelModel.isUnlocked) {
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                         ActionButton(
 
-                            text = "Unlock ${grammarLevel.title}",
+                            text = "Unlock ${grammarLevelModel.title}",
                             onClick = {
 
                             }

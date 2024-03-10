@@ -1,9 +1,8 @@
 package com.jaegerapps.malmali.practice.data.rempote
 
-import com.jaegerapps.malmali.practice.models.HistoryDTO
+import com.jaegerapps.malmali.practice.data.models.HistoryDTO
 import core.Knower
 import core.Knower.e
-import core.util.Resource
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.postgrest.from

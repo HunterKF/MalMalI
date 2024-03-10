@@ -1,26 +1,16 @@
 package com.jaegerapps.malmali.practice.data.repo
 
-import app.cash.sqldelight.coroutines.asFlow
-import app.cash.sqldelight.coroutines.mapToList
-import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
 import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSource
 import com.jaegerapps.malmali.practice.data.rempote.PracticeRemoteDataSource
 import com.jaegerapps.malmali.practice.domain.repo.PracticeRepo
-import com.jaegerapps.malmali.practice.mappers.toHistoryDTO
-import com.jaegerapps.malmali.practice.mappers.toHistoryEntity
-import com.jaegerapps.malmali.practice.models.HistoryEntity
-import com.jaegerapps.malmali.practice.models.UiHistoryItem
+import com.jaegerapps.malmali.practice.domain.mappers.toHistoryDTO
+import com.jaegerapps.malmali.practice.data.models.HistoryEntity
+import com.jaegerapps.malmali.practice.domain.models.HistoryItemModel
 import core.Knower
 import core.Knower.e
 import core.util.Resource
-import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.RestException
-import io.github.jan.supabase.postgrest.from
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.supervisorScope
 
 class PracticeRepoImpl(
     private val remote: PracticeRemoteDataSource,
@@ -29,7 +19,7 @@ class PracticeRepoImpl(
 
 
 
-    override suspend fun insertHistorySql(history: UiHistoryItem): Resource<Boolean> {
+    override suspend fun insertHistorySql(history: HistoryItemModel): Resource<Boolean> {
 
         val dto = history.toHistoryDTO()
         return try {
@@ -42,7 +32,7 @@ class PracticeRepoImpl(
         }
     }
 
-    override suspend fun insertHistorySupabase(history: UiHistoryItem): Resource<Boolean> {
+    override suspend fun insertHistorySupabase(history: HistoryItemModel): Resource<Boolean> {
         val dto = history.toHistoryDTO()
         return try {
             remote.insertHistory(dto)

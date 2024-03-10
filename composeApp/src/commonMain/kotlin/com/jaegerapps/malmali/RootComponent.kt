@@ -15,7 +15,7 @@ import com.jaegerapps.malmali.chat.presentation.home.ChatHomeComponent
 import com.jaegerapps.malmali.components.models.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
 import com.jaegerapps.malmali.grammar.presentation.GrammarScreenComponent
-import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
 import com.jaegerapps.malmali.home.HomeScreenComponent
 import com.jaegerapps.malmali.loading.LoadingComponent
 import com.jaegerapps.malmali.login.domain.UserData
@@ -299,7 +299,7 @@ class RootComponent(
                         onNavigate = { route ->
                             modalNavigate(route)
                         },
-                        grammarLevels = _state.value.grammar,
+                        grammarLevelModels = _state.value.grammar,
                         isPro = true,
                         repo = appModule.grammarRepo
                     )
@@ -428,7 +428,7 @@ class RootComponent(
                         practiceRepo = appModule.practiceRepo,
                         componentContext = context,
                         userData = _state.value.user!!,
-                        grammarLevel = _state.value.grammar,
+                        grammarLevelModel = _state.value.grammar,
                         vocabularySets = _state.value.sets
                     )
                 )
@@ -569,6 +569,6 @@ data class RootState(
     val user: UserData? = null,
     val loggedIn: Boolean = false,
     val loading: Boolean = false,
-    val grammar: List<GrammarLevel> = emptyList(),
+    val grammar: List<GrammarLevelModel> = emptyList(),
     val sets: List<VocabSetModel> = emptyList(),
 )

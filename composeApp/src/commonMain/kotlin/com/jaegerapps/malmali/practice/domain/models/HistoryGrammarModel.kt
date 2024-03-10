@@ -1,6 +1,6 @@
-package com.jaegerapps.malmali.grammar.models
+package com.jaegerapps.malmali.practice.domain.models
 
-data class GrammarPoint(
+data class GrammarPointModel(
     val grammarCategory: Int,
     val grammarTitle: String,
     val grammarDef1: String,

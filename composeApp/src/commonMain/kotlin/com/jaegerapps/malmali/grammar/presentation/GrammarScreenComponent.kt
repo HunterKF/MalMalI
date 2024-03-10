@@ -2,7 +2,7 @@ package com.jaegerapps.malmali.grammar.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
-import com.jaegerapps.malmali.grammar.models.GrammarLevel
+import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
 import core.Knower
 import core.Knower.d
 import core.Knower.e
@@ -19,7 +19,7 @@ class GrammarScreenComponent(
     private val repo: GrammarRepo,
     private val onNavigate: (String) -> Unit,
     private val isPro: Boolean,
-    private val grammarLevels: List<GrammarLevel>,
+    private val grammarLevelModels: List<GrammarLevelModel>,
 ) : ComponentContext by componentContext {
 
     private val _state = MutableStateFlow(GrammarUiState())
@@ -44,9 +44,17 @@ class GrammarScreenComponent(
                     if (_state.value.selectedLevels.contains(event.level.id)) _state.value.selectedLevels.minus(
                         event.level.id
                     ) else _state.value.selectedLevels.plus(event.level.id)
-                Knower.d("ToggleLevelSelection", "Updated the list: $list")
-                scope.launch {
-                    updateLevel(list)
+                if (list.isEmpty()) {
+                    _state.update {
+                        it.copy(
+                            error = "Can't be empty. Please select something."
+                        )
+                    }
+                } else {
+                    Knower.d("ToggleLevelSelection", "Updated the list: $list")
+                    scope.launch {
+                        updateLevel(list)
+                    }
                 }
             }
 
@@ -55,6 +63,12 @@ class GrammarScreenComponent(
                     it.copy(
                         isEditing = !it.isEditing
                     )
+                }
+            }
+
+            GrammarUiEvent.ClearError -> {
+                _state.update {
+                    it.copy(error = null)
                 }
             }
         }
@@ -74,7 +88,7 @@ class GrammarScreenComponent(
                     _state.update {
                         it.copy(
                             selectedLevels = result.data,
-                            grammarLevelList = grammarLevels.map { level ->
+                            grammarLevelModelList = grammarLevelModels.map { level ->
                                 level.copy(
                                     isSelected = result.data.contains(level.id)
                                 )
@@ -105,7 +119,7 @@ class GrammarScreenComponent(
                     _state.update {
                         it.copy(
                             selectedLevels = result.data,
-                            grammarLevelList = grammarLevels.map { level ->
+                            grammarLevelModelList = grammarLevelModels.map { level ->
                                 level.copy(
                                     isSelected = result.data.contains(level.id)
                                 )

@@ -48,8 +48,8 @@ import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarListContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarPointContainer
-import com.jaegerapps.malmali.grammar.models.GrammarLevel
-import com.jaegerapps.malmali.grammar.models.GrammarPoint
+import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
+import com.jaegerapps.malmali.grammar.domain.models.GrammarPointModel
 import com.jaegerapps.malmali.grammar.presentation.components.LevelHeader
 import com.jaegerapps.malmali.home.components.CardButton
 import com.jaegerapps.malmali.home.components.LevelBar
@@ -57,8 +57,7 @@ import com.jaegerapps.malmali.home.components.UserIcon
 import com.jaegerapps.malmali.onboarding.intro.components.OnboardingContainer
 import com.jaegerapps.malmali.onboarding.intro.components.PagerIndicator
 import com.jaegerapps.malmali.onboarding.intro.components.SkipAndNextButton
-import com.jaegerapps.malmali.practice.models.UiPracticeGrammar
-import com.jaegerapps.malmali.practice.models.UiPracticeVocab
+import com.jaegerapps.malmali.practice.domain.models.PracticeGrammarModel
 import com.jaegerapps.malmali.practice.presentation.components.PracticeContainer
 import com.jaegerapps.malmali.practice.presentation.components.PracticeTextField
 import com.jaegerapps.malmali.vocabulary.presentation.components.AddCardButton
@@ -674,7 +673,7 @@ fun Preview_GrammarPointContainer() {
 fun Preview_GrammarContainer() {
     // Sample data for preview
     val topik1 = listOf(
-        GrammarPoint(
+        GrammarPointModel(
             grammarCategory = 1,
             grammarTitle = "Title 1",
             grammarDef1 = "Definition 1-1",
@@ -684,7 +683,7 @@ fun Preview_GrammarContainer() {
             exampleKor1 = "Korean Example 1-1",
             exampleKor2 = "Korean Example 1-2"
         ),
-        GrammarPoint(
+        GrammarPointModel(
             grammarCategory = 1,
             grammarTitle = "Title 2",
             grammarDef1 = "Definition 2-1",
@@ -694,7 +693,7 @@ fun Preview_GrammarContainer() {
             exampleKor1 = "Korean Example 2-1",
             exampleKor2 = "Korean Example 2-2"
         ),
-        GrammarPoint(
+        GrammarPointModel(
             grammarCategory = 1,
             grammarTitle = "Title 2",
             grammarDef1 = "Definition 2-1",
@@ -704,7 +703,7 @@ fun Preview_GrammarContainer() {
             exampleKor1 = "Korean Example 2-1",
             exampleKor2 = "Korean Example 2-2"
         ),
-        GrammarPoint(
+        GrammarPointModel(
             grammarCategory = 1,
             grammarTitle = "Title 2",
             grammarDef1 = "Definition 2-1",
@@ -714,7 +713,7 @@ fun Preview_GrammarContainer() {
             exampleKor1 = "Korean Example 2-1",
             exampleKor2 = "Korean Example 2-2"
         ),
-        GrammarPoint(
+        GrammarPointModel(
             grammarCategory = 1,
             grammarTitle = "Title 2",
             grammarDef1 = "Definition 2-1",
@@ -727,7 +726,7 @@ fun Preview_GrammarContainer() {
         // Add more GrammarPoint objects if needed
     )
     val topik2 = listOf(
-        GrammarPoint(
+        GrammarPointModel(
             grammarCategory = 1,
             grammarTitle = "Title 1",
             grammarDef1 = "Definition 1-1",
@@ -737,7 +736,7 @@ fun Preview_GrammarContainer() {
             exampleKor1 = "Korean Example 1-1",
             exampleKor2 = "Korean Example 1-2"
         ),
-        GrammarPoint(
+        GrammarPointModel(
             grammarCategory = 1,
             grammarTitle = "Title 2",
             grammarDef1 = "Definition 2-1",
@@ -747,7 +746,7 @@ fun Preview_GrammarContainer() {
             exampleKor1 = "Korean Example 2-1",
             exampleKor2 = "Korean Example 2-2"
         ),
-        GrammarPoint(
+        GrammarPointModel(
             grammarCategory = 1,
             grammarTitle = "Title 2",
             grammarDef1 = "Definition 2-1",
@@ -757,7 +756,7 @@ fun Preview_GrammarContainer() {
             exampleKor1 = "Korean Example 2-1",
             exampleKor2 = "Korean Example 2-2"
         ),
-        GrammarPoint(
+        GrammarPointModel(
             grammarCategory = 1,
             grammarTitle = "Title 2",
             grammarDef1 = "Definition 2-1",
@@ -767,7 +766,7 @@ fun Preview_GrammarContainer() {
             exampleKor1 = "Korean Example 2-1",
             exampleKor2 = "Korean Example 2-2"
         ),
-        GrammarPoint(
+        GrammarPointModel(
             grammarCategory = 1,
             grammarTitle = "Title 2",
             grammarDef1 = "Definition 2-1",
@@ -780,13 +779,13 @@ fun Preview_GrammarContainer() {
         // Add more GrammarPoint objects if needed
     )
 
-    val grammarLevel1 = GrammarLevel(
+    val grammarLevelModel1 = GrammarLevelModel(
         id = 1,
         title = "Level 1",
         isUnlocked = true,
         grammarList = topik1
     )
-    val grammarLevel2 = GrammarLevel(
+    val grammarLevelModel2 = GrammarLevelModel(
         id = 2,
         title = "Level 2",
         isUnlocked = false,
@@ -805,7 +804,7 @@ fun Preview_GrammarContainer() {
 
             item {
                 GrammarContainer(
-                    grammarLevel = grammarLevel1,
+                    grammarLevelModel = grammarLevelModel1,
                     isEditingMode = false,
                     isExpanded = expanded,
                     onSelectClick = {
@@ -824,7 +823,7 @@ fun Preview_GrammarContainer() {
             item {
 
                 GrammarContainer(
-                    grammarLevel = grammarLevel2,
+                    grammarLevelModel = grammarLevelModel2,
                     isEditingMode = false,
                     isExpanded = expanded2,
                     onSelectClick = {
@@ -846,7 +845,7 @@ fun Preview_GrammarListContainer() {
 
     MalMalITheme(false) {
         val topik1 = listOf(
-            GrammarPoint(
+            GrammarPointModel(
                 grammarCategory = 1,
                 grammarTitle = "Title 1",
                 grammarDef1 = "Definition 1-1",
@@ -856,7 +855,7 @@ fun Preview_GrammarListContainer() {
                 exampleKor1 = "Korean Example 1-1",
                 exampleKor2 = "Korean Example 1-2"
             ),
-            GrammarPoint(
+            GrammarPointModel(
                 grammarCategory = 1,
                 grammarTitle = "Title 2",
                 grammarDef1 = "Definition 2-1",
@@ -866,7 +865,7 @@ fun Preview_GrammarListContainer() {
                 exampleKor1 = "Korean Example 2-1",
                 exampleKor2 = "Korean Example 2-2"
             ),
-            GrammarPoint(
+            GrammarPointModel(
                 grammarCategory = 1,
                 grammarTitle = "Title 2",
                 grammarDef1 = "Definition 2-1",
@@ -876,7 +875,7 @@ fun Preview_GrammarListContainer() {
                 exampleKor1 = "Korean Example 2-1",
                 exampleKor2 = "Korean Example 2-2"
             ),
-            GrammarPoint(
+            GrammarPointModel(
                 grammarCategory = 1,
                 grammarTitle = "Title 2",
                 grammarDef1 = "Definition 2-1",
@@ -886,7 +885,7 @@ fun Preview_GrammarListContainer() {
                 exampleKor1 = "Korean Example 2-1",
                 exampleKor2 = "Korean Example 2-2"
             ),
-            GrammarPoint(
+            GrammarPointModel(
                 grammarCategory = 1,
                 grammarTitle = "Title 2",
                 grammarDef1 = "Definition 2-1",
@@ -901,7 +900,7 @@ fun Preview_GrammarListContainer() {
         GrammarListContainer(
             isEditingMode = true,
             levels = listOf(
-                GrammarLevel(
+                GrammarLevelModel(
                     id = 1,
                     title = "Level 1",
                     isSelected = true,
@@ -1140,8 +1139,8 @@ fun Preview_PracticeContainer() {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             PracticeContainer(
-                vocab = UiPracticeVocab(word = "가다", "to go, to move"),
-                grammar = UiPracticeGrammar(
+                vocab = PracticeVocabularyModel(word = "가다", "to go, to move"),
+                grammar = PracticeGrammarModel(
                     grammar = "(으)면",
                     definition1 = "To indicate that one action occurs 'when or if' another action (that hasn't happened yet) occurs",
                     definition2 = null,
@@ -1162,8 +1161,8 @@ fun Preview_PracticeContainer() {
                 }
             )
             PracticeContainer(
-                vocab = UiPracticeVocab(word = "가다", "to go, to move"),
-                grammar = UiPracticeGrammar(
+                vocab = PracticeVocabularyModel(word = "가다", "to go, to move"),
+                grammar = PracticeGrammarModel(
                     grammar = "(으)면",
                     definition1 = "To indicate that one action occurs 'when or if' another action (that hasn't happened yet) occurs",
                     definition2 = null,
@@ -1174,8 +1173,8 @@ fun Preview_PracticeContainer() {
                 onClick = {}
             )
             PracticeContainer(
-                vocab = UiPracticeVocab(word = "가다", "to go, to move"),
-                grammar = UiPracticeGrammar(
+                vocab = PracticeVocabularyModel(word = "가다", "to go, to move"),
+                grammar = PracticeGrammarModel(
                     grammar = "(으)면",
                     definition1 = "To indicate that one action occurs 'when or if' another action (that hasn't happened yet) occurs",
                     definition2 = null,

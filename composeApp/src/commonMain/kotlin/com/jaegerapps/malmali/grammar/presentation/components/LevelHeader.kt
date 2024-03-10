@@ -5,6 +5,7 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -42,14 +43,9 @@ fun LevelHeader(
     onExpandClick: () -> Unit,
     onSelectClick: () -> Unit,
 ) {
-    val infiniteTransition = rememberInfiniteTransition()
-    val animateFloat by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 0.97f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(500, easing = FastOutLinearInEasing),
-            repeatMode = RepeatMode.Reverse
-        )
+    val animateFloat by animateFloatAsState(
+        targetValue = if (isEditing && isSelected) 1f else 0.9f,
+        animationSpec = tween(200)
     )
     val animateColor by animateColorAsState(
         if (isSelected) {
