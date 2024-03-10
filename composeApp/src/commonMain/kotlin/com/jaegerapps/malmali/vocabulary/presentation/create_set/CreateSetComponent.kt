@@ -187,7 +187,7 @@ class CreateSetComponent(
                         scope.launch {
                             if (localId != null && remoteId != null && isAuthor != null) {
                                 //If we have a set that was being edited, all will be erased. then we go to home screen
-                                Knower.e("CreateSetComponent Delte", "Here is the localId $localId and remoteId $remoteId")
+                                Knower.e("CreateSetComponent", "Here is the localId $localId and remoteId $remoteId")
                                 async { repo.deleteSet(localId, remoteId, isAuthor) }.await()
                                 withContext(Dispatchers.Main) { onComplete() }
                             } else {
@@ -204,7 +204,7 @@ class CreateSetComponent(
 
                         scope.launch {
 
-                            if (localId != null && remoteId != null) {
+                            if (localId != null && remoteId != null && isAuthor != null) {
                                 //this means we are editing a set, so we just update it based on this
                                 val vocabSetModel = VocabSetModel(
                                     title = _state.value.title,
@@ -214,9 +214,10 @@ class CreateSetComponent(
                                     tags = _state.value.tags,
                                     dateCreated = _state.value.dateCreated,
                                     cards = _state.value.vocabularyCardModels,
-                                    isAuthor = true,
+                                    isAuthor = isAuthor,
                                     remoteId = remoteId
                                 )
+
                                 repo.updateSet(
                                     set = vocabSetModel
                                 )

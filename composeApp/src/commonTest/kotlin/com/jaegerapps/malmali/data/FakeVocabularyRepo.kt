@@ -81,10 +81,23 @@ class FakeVocabularyRepo : VocabularyRepo {
         return Resource.Success(localState.value)
     }
 
-
-    override suspend fun deleteSet(setId: Int, remoteId: Int): Resource<Boolean> {
-        return Resource.Success(true)
+    override suspend fun searchPublicSets(
+        title: String,
+        start: Long,
+        end: Long,
+    ): Resource<List<VocabSetModel>> {
+        TODO("Not yet implemented")
     }
+
+    override suspend fun deleteSet(
+        setId: Int,
+        remoteId: Int,
+        isAuthor: Boolean,
+    ): Resource<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+
 
 
     override suspend fun updateSet(set: VocabSetModel): Resource<Boolean> {

@@ -65,11 +65,18 @@ class FakeSettingsDataSource : SettingsDataSource {
     }
 
     override suspend fun getUser(): UserData {
-        TODO("Not yet implemented")
+        return UserData(
+            nickname = "Test",
+            experience = 1,
+            currentLevel = 1,
+            icon = IconResource.Bear_One,
+            achievements = listOf("award1", "award2"),
+            selectedLevels = listOf("1")
+        )
     }
 
     override suspend fun getOnboardingBoolean(): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
     override suspend fun changeOnboardingBoolean() {
@@ -81,7 +88,7 @@ class FakeSettingsDataSource : SettingsDataSource {
     }
 
     override suspend fun getToken(): String? {
-        TODO("Not yet implemented")
+        return "test token"
     }
 
 

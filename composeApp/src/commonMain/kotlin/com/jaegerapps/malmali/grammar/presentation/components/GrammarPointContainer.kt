@@ -43,12 +43,9 @@ fun GrammarPointContainer(
     exampleEn2: String,
     background: Color = MaterialTheme.colorScheme.secondary,
     selectedBackground: Color = MaterialTheme.colorScheme.primary,
-    isUnlocked: Boolean = false,
-    isEditing: Boolean = false,
     isSelected: Boolean = false,
     isExpanded: Boolean = false,
     onExpandClick: () -> Unit,
-    onSelectClick: () -> Unit,
 ) {
     Column(
         modifier = modifier.fillMaxWidth().blackBorder().clickable {
@@ -65,27 +62,6 @@ fun GrammarPointContainer(
                 modifier = Modifier.padding(12.dp),
                 text = title
             )
-            if (isEditing && isUnlocked) {
-                Box(
-                    modifier = Modifier.aspectRatio(1f)
-                        .fillMaxHeight().blackBorder().clickable {
-                            onSelectClick()
-                        }.background(
-                            if (isSelected) {
-                                selectedBackground
-                            } else {
-                                background
-                            }
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = if (isSelected) Icons.Rounded.Check else Icons.Outlined.Cancel,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            }
         }
         if (isExpanded) {
             Divider(Modifier.fillMaxWidth(0.6f))

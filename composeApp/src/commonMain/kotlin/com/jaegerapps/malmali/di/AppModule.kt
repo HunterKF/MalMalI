@@ -2,7 +2,9 @@ package com.jaegerapps.malmali.di
 
 import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.jaegerapps.malmali.chat.domain.ChatRepo
-import com.jaegerapps.malmali.grammar.domain.RootComponentUseCases
+import com.jaegerapps.malmali.RootComponentUseCases
+import com.jaegerapps.malmali.grammar.data.local.GrammarLocalDataSourceSettings
+import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
 import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSource
 import com.jaegerapps.malmali.practice.data.rempote.PracticeRemoteDataSource
@@ -25,6 +27,7 @@ expect class AppModule: AppModuleInterface {
     override val practiceRemoteDataSource: PracticeRemoteDataSource
     override val practiceLocalDataSource: PracticeLocalDataSource
 
+    override val grammarLocalDataSourceSettings: GrammarLocalDataSourceSettings
 
     //Used in sign in screen
     override val signInRepo: SignInDataSource
@@ -39,9 +42,9 @@ expect class AppModule: AppModuleInterface {
     override  val chatRepo: ChatRepo
     //Practice functions
     override val practiceRepo: PracticeRepo
-
-
-    //Used in grammar screen
+    //Grammar functions
+    override val grammarRepo: GrammarRepo
+    //Used in the root screen
     override val rootComponentUseCases: RootComponentUseCases
 
 }
@@ -55,6 +58,8 @@ interface AppModuleInterface {
 
     val practiceRemoteDataSource: PracticeRemoteDataSource
     val practiceLocalDataSource: PracticeLocalDataSource
+
+    val grammarLocalDataSourceSettings: GrammarLocalDataSourceSettings
 
 
     //Used in grammar screen
@@ -72,5 +77,7 @@ interface AppModuleInterface {
     val chatRepo: ChatRepo
     //Practice functions
     val practiceRepo: PracticeRepo
+    //Grammar functions
+    val grammarRepo: GrammarRepo
 
 }

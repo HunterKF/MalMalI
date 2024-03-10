@@ -8,7 +8,9 @@ import com.jaegerapps.malmali.data.FakeSignInRepo
 import com.jaegerapps.malmali.data.FakeSupabaseSignInFunctions
 import com.jaegerapps.malmali.data.FakeUserRepo
 import com.jaegerapps.malmali.data.FakeVocabularyRepo
-import com.jaegerapps.malmali.grammar.domain.RootComponentUseCases
+import com.jaegerapps.malmali.RootComponentUseCases
+import com.jaegerapps.malmali.grammar.data.local.GrammarLocalDataSourceSettings
+import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
 import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSource
 import com.jaegerapps.malmali.practice.data.rempote.PracticeRemoteDataSource
@@ -34,6 +36,8 @@ class FakeAppModule: AppModuleInterface {
         get() = TODO("Not yet implemented")
     override val practiceLocalDataSource: PracticeLocalDataSource
         get() = TODO("Not yet implemented")
+    override val grammarLocalDataSourceSettings: GrammarLocalDataSourceSettings
+        get() = TODO("Not yet implemented")
     override val userRepo: UserRepo = FakeUserRepo()
     override val supabaseSignInFunctions: SignInRepo = FakeSupabaseSignInFunctions()
     override val chatRepo: ChatRepo
@@ -41,5 +45,7 @@ class FakeAppModule: AppModuleInterface {
     override val chatGptApi: ChatGptApi
         get() = TODO("Not yet implemented")
     override val practiceRepo: PracticeRepo
+        get() = TODO("Not yet implemented")
+    override val grammarRepo: GrammarRepo
         get() = TODO("Not yet implemented")
 }

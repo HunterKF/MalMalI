@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SearchSetComponent(
+    private val onComplete: () -> Unit,
     componentContext: ComponentContext,
     private val repo: VocabularyRepo,
 ) : ComponentContext by componentContext {
@@ -134,12 +135,15 @@ class SearchSetComponent(
                         withContext(Dispatchers.Main) {
                             _state.update {
                                 it.copy(
+                                    showPopUp = false,
                                     selectedSet = null,
                                     searchText = "",
                                     error = "Successfully saved.",
                                     loading = false
                                 )
                             }
+                            onComplete()
+
                         }
                     } else {
                         _state.update {

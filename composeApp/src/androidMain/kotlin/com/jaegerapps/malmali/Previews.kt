@@ -1,4 +1,3 @@
-/*
 package com.jaegerapps.malmali
 
 import androidx.compose.foundation.BorderStroke
@@ -32,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatAwaitAnimation
@@ -46,11 +46,11 @@ import com.jaegerapps.malmali.components.SettingsAndModal
 import com.jaegerapps.malmali.components.CustomNavigationDrawer
 import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarContainer
-import com.jaegerapps.malmali.grammar.presentation.components.GrammarLevelContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarListContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarPointContainer
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.grammar.models.GrammarPoint
+import com.jaegerapps.malmali.grammar.presentation.components.LevelHeader
 import com.jaegerapps.malmali.home.components.CardButton
 import com.jaegerapps.malmali.home.components.LevelBar
 import com.jaegerapps.malmali.home.components.UserIcon
@@ -75,52 +75,6 @@ import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 
-private val exampleGrammarPoint = GrammarPoint(
-    grammarCategory = 1,
-    grammarTitle = "Title 2",
-    grammarDef1 = "Definition 2-1",
-    grammarDef2 = "Definition 2-2",
-    exampleEng1 = "English Example 2-1",
-    exampleEng2 = "English Example 2-2",
-    exampleKor1 = "Korean Example 2-1",
-    exampleKor2 = "Korean Example 2-2"
-)
-
-private val exampleGrammarPointList = (1..10).map {
-    GrammarPoint(
-        grammarCategory = 1,
-        grammarTitle = "Point $it",
-        grammarDef1 = "Definition $it-1",
-        grammarDef2 = "Definition $it-2",
-        exampleEng1 = "English Example $it-1",
-        exampleEng2 = "English Example $it-2",
-        exampleKor1 = "Korean Example $it-1",
-        exampleKor2 = "Korean Example $it-2"
-    )
-}
-
-private val exampleGrammarLevel = GrammarLevel(
-    title = "Level 1",
-    isUnlocked = false,
-    exampleGrammarPointList
-)
-private val exampleGrammarLevelList = listOf(
-    GrammarLevel(
-        title = "Level 1",
-        isUnlocked = true,
-        exampleGrammarPointList
-    ),
-    GrammarLevel(
-        title = "Level 2",
-        isUnlocked = false,
-        exampleGrammarPointList
-    ),
-    GrammarLevel(
-        title = "Level 3",
-        isUnlocked = false,
-        exampleGrammarPointList
-    ),
-)
 
 @Preview
 @Composable
@@ -584,44 +538,62 @@ fun Preview_UserIcon() {
 @Composable
 fun Preview_GrammarLevelContainer() {
     MalMalITheme(false) {
+        val isEditing by remember { mutableStateOf(true) }
+        var level1Selected by remember { mutableStateOf(false) }
+        var level2Selected by remember { mutableStateOf(false) }
+        var level3Selected by remember { mutableStateOf(false) }
+        var level4Selected by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            GrammarLevelContainer(
+            LevelHeader(
                 title = "Topik 1",
-                isUnlocked = false,
-                onExpandClick = {
-
-                },
-                onSelectClick = {}
-            )
-            GrammarLevelContainer(
-                title = "Topik 2",
+                isSelected = level1Selected,
                 isUnlocked = true,
+                isEditing = isEditing,
                 onExpandClick = {
 
                 },
-                onSelectClick = {}
+                onSelectClick = {
+                    level1Selected = !level1Selected
+                }
             )
-            GrammarLevelContainer(
+            LevelHeader(
+                title = "Topik 2",
+                isEditing = isEditing,
+                isUnlocked = true,
+                isSelected = level2Selected,
+                onExpandClick = {
+
+                },
+                onSelectClick = {
+                    level2Selected = !level2Selected
+                }
+            )
+            LevelHeader(
                 title = "Topik 3",
                 isUnlocked = true,
-                isEditing = true,
-                isSelected = true,
+                isEditing = isEditing,
+                isSelected = level3Selected,
                 onExpandClick = {
 
                 },
-                onSelectClick = {}
+                onSelectClick = {
+                    level3Selected = !level3Selected
+                }
             )
-            GrammarLevelContainer(
+            LevelHeader(
                 title = "Topik 4",
+                isEditing = isEditing,
                 isUnlocked = true,
-                isSelected = false,
+                isSelected = level4Selected,
                 onExpandClick = {
 
                 },
-                onSelectClick = {}
+                onSelectClick = {
+                    level4Selected = !level4Selected
+                }
             )
         }
 
@@ -644,14 +616,11 @@ fun Preview_GrammarPointContainer() {
                     exampleEn1 = "English Example 1",
                     exampleKo2 = "Korean Example 2",
                     exampleEn2 = "English Example 2",
-                    isUnlocked = true,
-                    isEditing = false,
                     isSelected = false,
                     isExpanded = expanded,
                     onExpandClick = {
                         expanded = !expanded
                     },
-                    onSelectClick = {}
                 )
                 Spacer(Modifier.height(18.dp))
                 GrammarPointContainer(
@@ -661,12 +630,9 @@ fun Preview_GrammarPointContainer() {
                     exampleEn1 = "English Example 1",
                     exampleKo2 = "Korean Example 2",
                     exampleEn2 = "English Example 2",
-                    isUnlocked = true,
-                    isEditing = false,
                     isSelected = false,
                     isExpanded = true,
                     onExpandClick = {},
-                    onSelectClick = {}
                 )
                 Spacer(Modifier.height(18.dp))
 
@@ -677,12 +643,9 @@ fun Preview_GrammarPointContainer() {
                     exampleEn1 = "English Example 1",
                     exampleKo2 = "Korean Example 2",
                     exampleEn2 = "English Example 2",
-                    isUnlocked = true,
-                    isEditing = true,
                     isSelected = false,
                     isExpanded = true,
                     onExpandClick = {},
-                    onSelectClick = {}
                 )
                 Spacer(Modifier.height(18.dp))
 
@@ -693,12 +656,9 @@ fun Preview_GrammarPointContainer() {
                     exampleEn1 = "English Example 1",
                     exampleKo2 = "Korean Example 2",
                     exampleEn2 = "English Example 2",
-                    isUnlocked = true,
-                    isEditing = true,
                     isSelected = false,
                     isExpanded = true,
                     onExpandClick = {},
-                    onSelectClick = {}
                 )
                 Spacer(Modifier.height(18.dp))
 
@@ -821,11 +781,13 @@ fun Preview_GrammarContainer() {
     )
 
     val grammarLevel1 = GrammarLevel(
+        id = 1,
         title = "Level 1",
         isUnlocked = true,
         grammarList = topik1
     )
     val grammarLevel2 = GrammarLevel(
+        id = 2,
         title = "Level 2",
         isUnlocked = false,
         grammarList = topik2
@@ -883,9 +845,73 @@ fun Preview_GrammarContainer() {
 fun Preview_GrammarListContainer() {
 
     MalMalITheme(false) {
+        val topik1 = listOf(
+            GrammarPoint(
+                grammarCategory = 1,
+                grammarTitle = "Title 1",
+                grammarDef1 = "Definition 1-1",
+                grammarDef2 = "Definition 1-2",
+                exampleEng1 = "English Example 1-1",
+                exampleEng2 = "English Example 1-2",
+                exampleKor1 = "Korean Example 1-1",
+                exampleKor2 = "Korean Example 1-2"
+            ),
+            GrammarPoint(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            GrammarPoint(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            GrammarPoint(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            GrammarPoint(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            // Add more GrammarPoint objects if needed
+        )
         GrammarListContainer(
             isEditingMode = true,
-            levels = exampleGrammarLevelList
+            levels = listOf(
+                GrammarLevel(
+                    id = 1,
+                    title = "Level 1",
+                    isSelected = true,
+                    isUnlocked = true,
+                    grammarList = topik1,
+                )
+            ),
+            onSelect = {
+
+            }
         )
     }
 }
@@ -1184,4 +1210,4 @@ fun Preview_PracticeScreen() {
     MalMalITheme(false) {
 //        PracticeScreen()
     }
-}*/
+}

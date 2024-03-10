@@ -4,6 +4,8 @@ import com.jaegerapps.malmali.components.models.IconResource
 import com.jaegerapps.malmali.login.domain.UserData
 import com.russhwolf.settings.Settings
 import core.domain.SettingsDataSource
+import core.util.toDbString
+import core.util.toListString
 
 class SettingsDataSourceImpl(
     private val settings: Settings,
@@ -13,12 +15,12 @@ class SettingsDataSourceImpl(
         settings.putInt(SettingKeys.EXPERIENCE, user.experience)
         settings.putInt(SettingKeys.CURRENT_LEVEL, user.currentLevel)
         settings.putString(SettingKeys.ICON, IconResource.tagFromResource(user.icon))
-        settings.putString(SettingKeys.ACHIEVEMENTS, user.achievements.joinToString(separator = "|&|"))
+        settings.putString(SettingKeys.ACHIEVEMENTS, user.achievements.toDbString())
         settings.putString(
             SettingKeys.LEVELS,
-            user.selectedLevels.joinToString(separator = "|&|")
+            user.selectedLevels.toDbString()
         )
-        settings.putString(SettingKeys.SETS, user.sets.joinToString(separator = "|&|"))
+        settings.putString(SettingKeys.SETS, user.sets.toDbString())
     }
 
     override suspend fun updateUserName(name: String) {
@@ -50,16 +52,16 @@ class SettingsDataSourceImpl(
     }
 
     override suspend fun updateUserAchievements(achievements: List<String>) {
-        settings.putString(SettingKeys.ACHIEVEMENTS, achievements.joinToString("|&|"))
+        settings.putString(SettingKeys.ACHIEVEMENTS, achievements.toDbString())
     }
 
     override suspend fun updateUserSelectedLevels(levels: List<Int>) {
-        settings.putString(SettingKeys.LEVELS, levels.joinToString("|&|"))
+        settings.putString(SettingKeys.LEVELS, levels.toDbString())
 
     }
 
     override suspend fun updateUserSets(sets: List<String>) {
-        settings.putString(SettingKeys.SETS, sets.joinToString("|&|"))
+        settings.putString(SettingKeys.SETS, sets.toDbString())
 
     }
 
@@ -71,6 +73,7 @@ class SettingsDataSourceImpl(
         /*TODO - sets, achievements, levels. Have to figure a way to select these and alter them properly.*/
         settings.putString(SettingKeys.EMAIL, email)
         settings.putString(SettingKeys.ID, id)
+        settings.putString(SettingKeys.LEVELS, "1")
     }
 
     override suspend fun getUser(): UserData {
@@ -79,9 +82,9 @@ class SettingsDataSourceImpl(
             experience = settings.getInt(SettingKeys.EXPERIENCE, 0),
             currentLevel = settings.getInt(SettingKeys.CURRENT_LEVEL, 0),
             icon = IconResource.resourceFromTag(settings.getString(SettingKeys.ICON, "bear 1")),
-            achievements = settings.getString(SettingKeys.ACHIEVEMENTS, "").split("|&|"),
-            selectedLevels = settings.getString(SettingKeys.LEVELS, "Level 1").split("|&|"),
-            sets = settings.getString(SettingKeys.SETS, "Korean 101").split("|&|")
+            achievements = settings.getString(SettingKeys.ACHIEVEMENTS, "").toListString(),
+            selectedLevels = settings.getString(SettingKeys.LEVELS, "Level 1").toListString(),
+            sets = settings.getString(SettingKeys.SETS, "Korean 101").toListString()
 
         )
     }
@@ -100,6 +103,7 @@ class SettingsDataSourceImpl(
     override suspend fun getToken(): String? {
         return settings.getStringOrNull(SettingKeys.ACCESS_TOKEN)
     }
+
 
 
 }

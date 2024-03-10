@@ -134,7 +134,16 @@ class VocabularyRepoImpl(
     override suspend fun updateSet(set: VocabSetModel): Resource<Boolean> {
         return try {
             Knower.d("updateSet", "Here is the set: $set")
-            if (remote.updateSet(set.toVocabSetDTO()).data != null) {
+            if (set.isAuthor) {
+                if (remote.updateSet(set.toVocabSetDTO()).data != null) {
+                    if (local.updateSet(
+                            setEntity = set.toSetEntity(set.localId!!.toLong()),
+                            cardEntityList = set.cards.map { it.toFlashcardEntity(set.remoteId!!.toLong()) }).data == true
+                    ) {
+                        Resource.Success(true)
+                    }
+                }
+            } else {
                 if (local.updateSet(
                         setEntity = set.toSetEntity(set.localId!!.toLong()),
                         cardEntityList = set.cards.map { it.toFlashcardEntity(set.remoteId!!.toLong()) }).data == true

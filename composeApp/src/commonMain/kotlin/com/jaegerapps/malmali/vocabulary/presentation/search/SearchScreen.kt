@@ -54,14 +54,14 @@ fun SearchScreen(
                             component.onEvent(SearchUiEvent.TogglePopUp)
                         }
                     ) {
-                        Text("Dismiss", color = MaterialTheme.colorScheme.outline)
+                        Text(stringResource(MR.strings.prompt_cancel), color = MaterialTheme.colorScheme.outline)
                     }
                     TextButton(
                         onClick = {
                             component.onEvent(SearchUiEvent.SaveSet)
                         }
                     ) {
-                        Text("Save", color = MaterialTheme.colorScheme.outline)
+                        Text(stringResource(MR.strings.prompt_save), color = MaterialTheme.colorScheme.outline)
                     }
                 }
             )

@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.grammar.mapper
+package com.jaegerapps.malmali.grammar.domain.mapper
 
 import com.jaegerapps.malmali.grammar.models.GrammarPointDTO
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
@@ -25,10 +25,12 @@ fun List<GrammarPoint>.toGrammarLevels(): List<GrammarLevel> {
             this.filter { it.grammarCategory == number }
         }
         GrammarLevel(
+            id = number,
             title = "Level $number",
             isUnlocked = number == 1,
             grammarList = list
         )
     }
 }
+
 

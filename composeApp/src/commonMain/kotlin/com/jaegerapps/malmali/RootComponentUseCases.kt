@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.grammar.domain
+package com.jaegerapps.malmali
 
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.vocabulary.domain.models.FlashSetEntity

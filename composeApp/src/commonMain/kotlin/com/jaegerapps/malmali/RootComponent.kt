@@ -14,7 +14,7 @@ import com.jaegerapps.malmali.chat.presentation.conversation.ConversationCompone
 import com.jaegerapps.malmali.chat.presentation.home.ChatHomeComponent
 import com.jaegerapps.malmali.components.models.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
-import com.jaegerapps.malmali.grammar.GrammarScreenComponent
+import com.jaegerapps.malmali.grammar.presentation.GrammarScreenComponent
 import com.jaegerapps.malmali.grammar.models.GrammarLevel
 import com.jaegerapps.malmali.home.HomeScreenComponent
 import com.jaegerapps.malmali.loading.LoadingComponent
@@ -223,7 +223,7 @@ class RootComponent(
                                 )
                             )
                         },
-                        onNavigateToStudyCard = { localId, remoteId->
+                        onNavigateToStudyCard = { localId, remoteId ->
                             navigation.pushNew(
                                 Configuration.StudyFlashcardsScreen(
                                     appModule.vocabularyRepo,
@@ -285,6 +285,7 @@ class RootComponent(
                         componentContext = context,
                         user = state.value.user!!,
                         onNavigate = { route ->
+                            Knower.e("HomeScreenNav", "Route: $route")
                             modalNavigate(route)
                         }
                     )
@@ -298,7 +299,9 @@ class RootComponent(
                         onNavigate = { route ->
                             modalNavigate(route)
                         },
-                        grammar = state.value.grammar,
+                        grammarLevels = _state.value.grammar,
+                        isPro = true,
+                        repo = appModule.grammarRepo
                     )
                 )
             }
@@ -435,6 +438,9 @@ class RootComponent(
                 Child.SearchScreen(
                     SearchSetComponent(
                         repo = appModule.vocabularyRepo,
+                        onComplete = {
+                            navigation.pop()
+                        },
                         componentContext = context
                     )
                 )
@@ -463,7 +469,7 @@ class RootComponent(
     private fun modalNavigate(route: String) {
         when (route) {
             Routes.HOME -> navigation.popTo(0)
-            Routes.VOCABULARY -> navigation.pushNew(Configuration.FlashcardHomeScreen(appModule.vocabularyRepo))
+            Routes.VOCABULARY -> navigation.pushNew(Configuration.FlashcardHomeScreen)
             Routes.GRAMMAR -> navigation.pushNew(Configuration.GrammarScreen)
             Routes.CHAT -> navigation.pushNew(Configuration.ChatHomeScreen)
             Routes.PRACTICE -> navigation.pushNew(Configuration.PracticeScreen)
@@ -487,12 +493,11 @@ class RootComponent(
             val vocabFunctions: VocabularyRepo,
             val localId: Int?,
             val remoteId: Int?,
-            val isAuthor: Boolean?
+            val isAuthor: Boolean?,
         ) : Configuration()
 
         @Serializable
-        data class FlashcardHomeScreen(val vocabFunctions: VocabularyRepo) :
-            Configuration()
+        data object FlashcardHomeScreen : Configuration()
 
         @Serializable
         data class StudyFlashcardsScreen(
@@ -503,6 +508,7 @@ class RootComponent(
 
         @Serializable
         data object HomeScreen : Configuration()
+
         @Serializable
         data object SearchScreen : Configuration()
 

@@ -18,7 +18,8 @@ import com.jaegerapps.malmali.grammar.models.GrammarLevel
 fun GrammarListContainer(
     modifier: Modifier = Modifier,
     isEditingMode: Boolean,
-    levels: List<GrammarLevel>
+    levels: List<GrammarLevel>,
+    onSelect: (GrammarLevel) -> Unit
 ) {
     var expanded by remember {
         mutableStateOf(0)
@@ -28,7 +29,6 @@ fun GrammarListContainer(
        verticalArrangement = Arrangement.spacedBy(12.dp)
    ) {
        itemsIndexed(levels) { index, level ->
-
            GrammarContainer(
                grammarLevel = level,
                isExpanded = index == expanded,
@@ -41,7 +41,7 @@ fun GrammarListContainer(
                    }
                },
                onSelectClick = {
-
+                    onSelect(level)
                }
            )
        }

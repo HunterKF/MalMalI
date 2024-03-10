@@ -29,19 +29,19 @@ fun GrammarContainer(
     onSelectClick: () -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth().animateContentSize()) {
-        GrammarLevelContainer(
+        LevelHeader(
             title = grammarLevel.title,
             isEditing = isEditingMode,
             isUnlocked = grammarLevel.isUnlocked,
+            isSelected = grammarLevel.isSelected,
             onExpandClick = {
                 onExpandClick()
             },
             onSelectClick = {
-                //selects everything in the grammar container
                 onSelectClick()
             }
         )
-        if (isExpanded) {
+        if (isExpanded && !isEditingMode) {
             Spacer(Modifier.height(12.dp))
             Column(
                 modifier = Modifier.padding(horizontal = 24.dp),
@@ -59,15 +59,9 @@ fun GrammarContainer(
                         exampleEn2 = it.exampleEng2,
                         exampleKo1 = it.exampleKor1,
                         exampleKo2 = it.exampleKor2,
-                        isUnlocked = grammarLevel.isUnlocked,
-                        isEditing = isEditingMode,
                         isExpanded = pointExpanded,
                         onExpandClick = {
                             pointExpanded = !pointExpanded
-                        },
-                        onSelectClick = {
-                            //selects only the current grammar point
-
                         }
                     )
                 }

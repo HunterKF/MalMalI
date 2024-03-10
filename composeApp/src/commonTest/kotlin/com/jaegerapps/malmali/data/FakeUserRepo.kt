@@ -38,6 +38,6 @@ class FakeUserRepo: UserRepo {
     }
 
     override suspend fun retrieveAccessToken(): String? {
-        TODO("Not yet implemented")
+        return "1234"
     }
 }

@@ -6,8 +6,12 @@ import android.content.SharedPreferences
 import com.jaegerapps.malmali.chat.data.ChatRepoImpl
 import com.jaegerapps.malmali.chat.domain.ChatRepo
 import com.jaegerapps.malmali.composeApp.database.MalMalIDatabase
-import com.jaegerapps.malmali.grammar.data.RootComponentUseCasesImpl
-import com.jaegerapps.malmali.grammar.domain.RootComponentUseCases
+import com.jaegerapps.malmali.RootComponentUseCasesImpl
+import com.jaegerapps.malmali.RootComponentUseCases
+import com.jaegerapps.malmali.grammar.data.local.GrammarLocalDataSourceSettings
+import com.jaegerapps.malmali.grammar.data.local.GrammarLocalDataSourceSettingsImpl
+import com.jaegerapps.malmali.grammar.data.repo.GrammarRepoImpl
+import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
 import com.jaegerapps.malmali.login.data.SignInDataSourceImpl
 import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSource
@@ -67,6 +71,11 @@ actual class AppModule(
             database = database
         )
     }
+    actual override val grammarLocalDataSourceSettings: GrammarLocalDataSourceSettings by lazy {
+        GrammarLocalDataSourceSettingsImpl(
+            settings = SharedPreferencesSettings(sharedPreferences)
+        )
+    }
 
     actual override val rootComponentUseCases: RootComponentUseCases by lazy {
         RootComponentUseCasesImpl(client = supabaseClient)
@@ -115,6 +124,11 @@ actual class AppModule(
         PracticeRepoImpl(
             remote = practiceRemoteDataSource,
             local = practiceLocalDataSource
+        )
+    }
+    actual override val grammarRepo: GrammarRepo by lazy {
+        GrammarRepoImpl(
+            local = grammarLocalDataSourceSettings
         )
     }
 }

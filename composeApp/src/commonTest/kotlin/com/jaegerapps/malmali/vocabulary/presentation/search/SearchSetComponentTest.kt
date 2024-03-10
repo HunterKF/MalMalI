@@ -54,7 +54,10 @@ class SearchSetComponentTest {
         )
         component = SearchSetComponent(
             componentContext = root,
-            repo = FakeVocabularyRepo()
+            repo = FakeVocabularyRepo(),
+            onComplete = {
+
+            }
         )
 
 
