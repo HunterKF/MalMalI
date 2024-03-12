@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.jaegerapps.malmali.components.blackBorder
+import com.jaegerapps.malmali.common.components.blackBorder
 
 @Composable
 fun SelectableButton(

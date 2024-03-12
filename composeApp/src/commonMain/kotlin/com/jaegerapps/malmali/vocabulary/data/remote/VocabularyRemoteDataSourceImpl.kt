@@ -59,7 +59,11 @@ class VocabularyRemoteDataSourceImpl(
         }
     }
 
-    override suspend fun readBySearch(title: String, start: Long, end: Long): Resource<List<VocabSetDTO>> {
+    override suspend fun readBySearch(
+        title: String,
+        start: Long,
+        end: Long,
+    ): Resource<List<VocabSetDTO>> {
         return try {
             val result = client.from(SupabaseKeys.SETS).select {
                 filter {
@@ -90,7 +94,7 @@ class VocabularyRemoteDataSourceImpl(
             ) {
                 select()
                 filter {
-                    eq("id", vocabSet.id!!  )
+                    eq("id", vocabSet.id!!)
                 }
             }
             val decoder = result.decodeSingle<VocabSetDTO>()

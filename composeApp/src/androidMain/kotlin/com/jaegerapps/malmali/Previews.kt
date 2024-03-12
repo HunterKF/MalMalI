@@ -38,18 +38,18 @@ import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatAwai
 import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatBubble
 import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatPopUpAlert
 import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatTextField
-import com.jaegerapps.malmali.components.ActionButton
-import com.jaegerapps.malmali.components.TopBarLogo
-import com.jaegerapps.malmali.components.CustomTextFieldWithBlackBorder
-import com.jaegerapps.malmali.components.IconContainer
-import com.jaegerapps.malmali.components.SettingsAndModal
-import com.jaegerapps.malmali.components.CustomNavigationDrawer
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.components.ActionButton
+import com.jaegerapps.malmali.common.components.TopBarLogo
+import com.jaegerapps.malmali.common.components.CustomTextFieldWithBlackBorder
+import com.jaegerapps.malmali.common.components.IconContainer
+import com.jaegerapps.malmali.common.components.SettingsAndModal
+import com.jaegerapps.malmali.common.components.CustomNavigationDrawer
+import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarListContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarPointContainer
-import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
-import com.jaegerapps.malmali.grammar.domain.models.GrammarPointModel
+import com.jaegerapps.malmali.common.models.GrammarLevelModel
+import com.jaegerapps.malmali.common.models.GrammarPointModel
 import com.jaegerapps.malmali.grammar.presentation.components.LevelHeader
 import com.jaegerapps.malmali.home.components.CardButton
 import com.jaegerapps.malmali.home.components.LevelBar
@@ -57,7 +57,6 @@ import com.jaegerapps.malmali.home.components.UserIcon
 import com.jaegerapps.malmali.onboarding.intro.components.OnboardingContainer
 import com.jaegerapps.malmali.onboarding.intro.components.PagerIndicator
 import com.jaegerapps.malmali.onboarding.intro.components.SkipAndNextButton
-import com.jaegerapps.malmali.practice.domain.models.PracticeGrammarModel
 import com.jaegerapps.malmali.practice.presentation.components.PracticeContainer
 import com.jaegerapps.malmali.practice.presentation.components.PracticeTextField
 import com.jaegerapps.malmali.vocabulary.presentation.components.AddCardButton
@@ -66,7 +65,7 @@ import com.jaegerapps.malmali.vocabulary.presentation.components.FolderContainer
 import com.jaegerapps.malmali.vocabulary.presentation.components.SelectIcon
 import com.jaegerapps.malmali.vocabulary.presentation.components.SelectableButton
 import com.jaegerapps.malmali.vocabulary.presentation.components.TitleBox
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyButtons
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyContainer
 import core.presentation.MalMalITheme
@@ -1139,12 +1138,16 @@ fun Preview_PracticeContainer() {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             PracticeContainer(
-                vocab = PracticeVocabularyModel(word = "가다", "to go, to move"),
-                grammar = PracticeGrammarModel(
-                    grammar = "(으)면",
-                    definition1 = "To indicate that one action occurs 'when or if' another action (that hasn't happened yet) occurs",
-                    definition2 = null,
-                    level = "Level 1"
+                vocab = VocabularyCardModel(word = "가다", definition = "to go, to move"),
+                grammar = GrammarPointModel(
+                    grammarCategory = 1,
+                    grammarTitle = "Noun usage",
+                    grammarDef1 = "Definition of noun usage",
+                    exampleEng1 = "This is a book.",
+                    exampleEng2 = "She is a teacher.",
+                    exampleKor1 = "이것은 책입니다.",
+                    exampleKor2 = "그녀는 선생님입니다.",
+                    selected = false
                 ),
                 vocabExpanded = vocabExpand,
                 grammarExpanded = grammarExpand,
@@ -1161,24 +1164,34 @@ fun Preview_PracticeContainer() {
                 }
             )
             PracticeContainer(
-                vocab = PracticeVocabularyModel(word = "가다", "to go, to move"),
-                grammar = PracticeGrammarModel(
-                    grammar = "(으)면",
-                    definition1 = "To indicate that one action occurs 'when or if' another action (that hasn't happened yet) occurs",
-                    definition2 = null,
-                    level = "Level 1"
+                vocab = VocabularyCardModel(word = "가다", definition = "to go, to move"),
+                grammar = GrammarPointModel(
+                    grammarCategory = 2,
+                    grammarTitle = "Verb conjugation",
+                    grammarDef1 = "Basic verb conjugation",
+                    grammarDef2 = "Past tense conjugation",
+                    exampleEng1 = "I eat an apple.",
+                    exampleEng2 = "I ate an apple.",
+                    exampleKor1 = "나는 사과를 먹는다.",
+                    exampleKor2 = "나는 사과를 먹었다.",
+                    selected = false
                 ),
                 vocabExpanded = true,
                 grammarExpanded = false,
                 onClick = {}
             )
             PracticeContainer(
-                vocab = PracticeVocabularyModel(word = "가다", "to go, to move"),
-                grammar = PracticeGrammarModel(
-                    grammar = "(으)면",
-                    definition1 = "To indicate that one action occurs 'when or if' another action (that hasn't happened yet) occurs",
-                    definition2 = null,
-                    level = "Level 1"
+                vocab = VocabularyCardModel(word = "가다", definition = "to go, to move"),
+                grammar = GrammarPointModel(
+                    grammarCategory = 2,
+                    grammarTitle = "Verb conjugation",
+                    grammarDef1 = "Basic verb conjugation",
+                    grammarDef2 = "Past tense conjugation",
+                    exampleEng1 = "I eat an apple.",
+                    exampleEng2 = "I ate an apple.",
+                    exampleKor1 = "나는 사과를 먹는다.",
+                    exampleKor2 = "나는 사과를 먹었다.",
+                    selected = false
                 ),
                 vocabExpanded = false,
                 grammarExpanded = true,

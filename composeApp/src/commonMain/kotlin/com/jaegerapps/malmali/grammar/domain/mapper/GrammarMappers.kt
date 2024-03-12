@@ -1,8 +1,8 @@
 package com.jaegerapps.malmali.grammar.domain.mapper
 
 import com.jaegerapps.malmali.grammar.data.models.GrammarPointDTO
-import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
-import com.jaegerapps.malmali.grammar.domain.models.GrammarPointModel
+import com.jaegerapps.malmali.common.models.GrammarLevelModel
+import com.jaegerapps.malmali.common.models.GrammarPointModel
 
 fun GrammarPointDTO.toGrammarPoint(): GrammarPointModel {
     return GrammarPointModel(

@@ -1,6 +1,6 @@
 package com.jaegerapps.malmali.chat.domain.models
 
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 
 data class UiTopicPrompt(
     val title: String,

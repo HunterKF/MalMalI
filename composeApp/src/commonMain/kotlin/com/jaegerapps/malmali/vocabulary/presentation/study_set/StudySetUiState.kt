@@ -1,10 +1,10 @@
 package com.jaegerapps.malmali.vocabulary.presentation.study_set
 
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 
 data class StudySetUiState(
-    val set: VocabSetModel? = null,
+    val set: VocabularySetModel? = null,
     val currentCard: VocabularyCardModel? = null,
     val currentIndex: Int = -1,
     val showBack: Boolean = false,

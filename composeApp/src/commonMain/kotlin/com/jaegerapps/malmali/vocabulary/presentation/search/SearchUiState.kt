@@ -1,11 +1,11 @@
 package com.jaegerapps.malmali.vocabulary.presentation.search
 
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
 
 data class SearchUiState(
     val searchText: String = "",
-    val selectedSet: VocabSetModel? = null,
-    val sets: List<VocabSetModel> = emptyList(),
+    val selectedSet: VocabularySetModel? = null,
+    val sets: List<VocabularySetModel> = emptyList(),
     val loading: Boolean = false,
     val loadingMore: Boolean = false,
     val showPopUp: Boolean = false,

@@ -9,13 +9,12 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popTo
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.replaceAll
-import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.jaegerapps.malmali.chat.presentation.conversation.ConversationComponent
 import com.jaegerapps.malmali.chat.presentation.home.ChatHomeComponent
-import com.jaegerapps.malmali.components.models.Routes
+import com.jaegerapps.malmali.common.models.Routes
 import com.jaegerapps.malmali.di.AppModuleInterface
 import com.jaegerapps.malmali.grammar.presentation.GrammarScreenComponent
-import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
+import com.jaegerapps.malmali.common.models.GrammarLevelModel
 import com.jaegerapps.malmali.home.HomeScreenComponent
 import com.jaegerapps.malmali.loading.LoadingComponent
 import com.jaegerapps.malmali.login.domain.UserData
@@ -27,11 +26,19 @@ import com.jaegerapps.malmali.vocabulary.presentation.study_set.StudySetComponen
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
 import com.jaegerapps.malmali.practice.presentation.PracticeComponent
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
+import com.jaegerapps.malmali.grammar.data.models.GrammarPointDTO
+import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarLevels
+import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarPoint
 import com.jaegerapps.malmali.vocabulary.presentation.search.SearchSetComponent
 import core.Knower
+import core.Knower.d
 import core.Knower.e
+import core.data.supabase.SupabaseClient
 import core.util.Resource
+import io.github.jan.supabase.exceptions.RestException
+import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -62,123 +69,42 @@ class RootComponent(
     init {
         scope.launch {
 
-            getGrammar()
-            val result = async { appModule.userRepo.retrieveAccessToken() }.await()
-            when {
-                appModule.settingsDataSource.getOnboardingBoolean() -> {
-                    Knower.e("getOnboardingBoolean", "Returned success here.")
-                    navigation.replaceAll(Configuration.IntroScreen)
+            val grammar = async { getGrammar() }.await()
+
+            grammar.data?.let { levels ->
+                _state.update {
+                    it.copy(
+                        grammar = levels
+                    )
                 }
+            }
 
-                appModule.settingsDataSource.getToken() != null -> {
-                    Knower.e("getOnboardingBoolean", "getToken not null")
-
-                    if (result != null) {
-                        val user = async { appModule.settingsDataSource.getUser() }.await()
-
-                        withContext(Dispatchers.Main) {
+            if (SupabaseClient.client.auth.currentSessionOrNull() != null) {
+                SupabaseClient.client.auth.refreshCurrentSession()
+                val user = appModule.settingsDataSource.getUser()
+                when (val grammarResult = async { getGrammar() }.await()) {
+                    is Resource.Error -> TODO()
+                    is Resource.Success -> {
+                        if (grammarResult.data != null) {
                             _state.update {
                                 it.copy(
                                     user = user,
-                                    loggedIn = true
+                                    grammar = grammarResult.data
                                 )
                             }
-
-                            navigation.replaceAll(Configuration.HomeScreen)
-
                         }
-                    } else {
+                        Knower.d("init", "Here is the state. ${_state.value}")
+
                         withContext(Dispatchers.Main) {
-                            _state.update {
-                                it.copy(
-                                    user = null,
-                                    loggedIn = false
-                                )
-                            }
-
-                            navigation.replaceAll(Configuration.SignInScreen)
+                            navigation.replaceAll(Configuration.HomeScreen)
                         }
-
                     }
-
                 }
 
-                appModule.settingsDataSource.getToken() == null -> {
-                    Knower.e("getOnboardingBoolean", "getToken null")
-
-                    _state.update {
-                        it.copy(
-                            user = null,
-                            loggedIn = false
-                        )
-                    }
-                    navigation.replaceAll(Configuration.SignInScreen)
-                }
-            }
-
-        }
-        lifecycle.doOnCreate {
-            println("HEY YOU GUYS~~~2")
-
-            scope.launch {
-                println("HEY YOU GUYS~~~3")
-
-                getGrammar()
-                val result = async { appModule.userRepo.retrieveAccessToken() }.await()
-                when {
-                    appModule.settingsDataSource.getOnboardingBoolean() -> {
-                        Knower.e("getOnboardingBoolean", "Returned success here.")
-                        navigation.replaceAll(Configuration.IntroScreen)
-                    }
-
-                    appModule.settingsDataSource.getToken() != null -> {
-                        Knower.e("getOnboardingBoolean", "getToken not null")
-
-                        if (result != null) {
-                            val user = async { appModule.settingsDataSource.getUser() }.await()
-
-                            withContext(Dispatchers.Main) {
-                                _state.update {
-                                    it.copy(
-                                        user = user,
-                                        loggedIn = true
-                                    )
-                                }
-
-                                navigation.replaceAll(Configuration.HomeScreen)
-
-                            }
-                        } else {
-                            withContext(Dispatchers.Main) {
-                                _state.update {
-                                    it.copy(
-                                        user = null,
-                                        loggedIn = false
-                                    )
-                                }
-
-                                navigation.replaceAll(Configuration.SignInScreen)
-                            }
-
-                        }
-
-                    }
-
-                    appModule.settingsDataSource.getToken() == null -> {
-                        Knower.e("getOnboardingBoolean", "getToken null")
-
-                        _state.update {
-                            it.copy(
-                                user = null,
-                                loggedIn = false
-                            )
-                        }
-                        navigation.replaceAll(Configuration.SignInScreen)
-                    }
-                }
+            } else {
+                navigation.replaceAll(Configuration.SignInScreen)
             }
         }
-        println("HEY YOU GUYS END~~~")
     }
 
     @OptIn(ExperimentalDecomposeApi::class)
@@ -425,11 +351,10 @@ class RootComponent(
                         onNavigate = {
                             modalNavigate(it)
                         },
-                        practiceRepo = appModule.practiceRepo,
+                        repo = appModule.practiceRepo,
                         componentContext = context,
                         userData = _state.value.user!!,
-                        grammarLevelModel = _state.value.grammar,
-                        vocabularySets = _state.value.sets
+                        levelModelList = _state.value.grammar,
                     )
                 )
             }
@@ -545,23 +470,26 @@ class RootComponent(
     }
 
 
-    private suspend fun getGrammar() {
-        when (val result = appModule.rootComponentUseCases.getGrammar()) {
-            is Resource.Error -> {
-                Knower.e(
-                    "getGrammar",
-                    "An error occurred in the RootComponent. ${result.throwable}"
-                )
-            }
+    private suspend fun getGrammar(): Resource<List<GrammarLevelModel>> {
+        return try {
+            val data = SupabaseClient.client.from("grammar").select()
+            Knower.d("getGrammar", "Here is the data: ${data.data}")
 
-            is Resource.Success -> {
-                if (result.data != null) {
-                    _state.update {
-                        it.copy(grammar = result.data)
-                    }
-                }
-            }
+            val decode = data.decodeList<GrammarPointDTO>()
+            Knower.d("getGrammar", "Here is the decode: ${decode}")
+
+            val list = decode.map { it.toGrammarPoint() }
+            Resource.Success(list.toGrammarLevels())
+        } catch (e: RestException) {
+            e.printStackTrace()
+            Knower.e("getGrammar", "An error has occurred here. ${e.error}")
+            Resource.Error(Throwable(e))
+
         }
+    }
+
+    private suspend fun checkIfSignedIn() {
+
     }
 }
 
@@ -570,5 +498,5 @@ data class RootState(
     val loggedIn: Boolean = false,
     val loading: Boolean = false,
     val grammar: List<GrammarLevelModel> = emptyList(),
-    val sets: List<VocabSetModel> = emptyList(),
+    val sets: List<VocabularySetModel> = emptyList(),
 )

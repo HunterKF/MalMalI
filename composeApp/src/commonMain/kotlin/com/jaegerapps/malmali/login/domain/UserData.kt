@@ -1,6 +1,6 @@
 package com.jaegerapps.malmali.login.domain
 
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 import dev.icerock.moko.resources.ImageResource
 
 //This is for the local ui and storage

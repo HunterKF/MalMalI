@@ -24,10 +24,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.CustomPopUp
-import com.jaegerapps.malmali.components.CustomNavigationDrawer
-import com.jaegerapps.malmali.components.SettingsAndModal
-import com.jaegerapps.malmali.components.TopBarLogo
+import com.jaegerapps.malmali.common.components.CustomPopUp
+import com.jaegerapps.malmali.common.components.CustomNavigationDrawer
+import com.jaegerapps.malmali.common.components.SettingsAndModal
+import com.jaegerapps.malmali.common.components.TopBarLogo
 import com.jaegerapps.malmali.vocabulary.presentation.components.FolderContainer
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyButtons
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyContainer

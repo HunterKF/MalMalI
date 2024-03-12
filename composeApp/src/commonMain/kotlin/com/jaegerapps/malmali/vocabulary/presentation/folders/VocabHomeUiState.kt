@@ -1,9 +1,9 @@
 package com.jaegerapps.malmali.vocabulary.presentation.folders
 
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
 
 data class VocabHomeUiState(
-    val setList: List<VocabSetModel> = emptyList(),
+    val setList: List<VocabularySetModel> = emptyList(),
     val error: String? = null,
     val isExpanded: Boolean = false,
     val loading: Boolean = false

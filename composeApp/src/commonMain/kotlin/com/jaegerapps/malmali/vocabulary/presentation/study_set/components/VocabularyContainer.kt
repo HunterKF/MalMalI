@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.blackBorder
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.components.blackBorder
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.StudySetUiEvent
 import dev.icerock.moko.resources.compose.stringResource
 

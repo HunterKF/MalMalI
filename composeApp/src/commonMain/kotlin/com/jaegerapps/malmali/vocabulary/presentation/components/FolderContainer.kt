@@ -18,8 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import com.jaegerapps.malmali.components.IconContainer
-import com.jaegerapps.malmali.components.blackBorder
+import com.jaegerapps.malmali.common.components.IconContainer
+import com.jaegerapps.malmali.common.components.blackBorder
 
 @Composable
 fun FolderContainer(

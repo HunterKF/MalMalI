@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.IconContainer
+import com.jaegerapps.malmali.common.components.IconContainer
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable

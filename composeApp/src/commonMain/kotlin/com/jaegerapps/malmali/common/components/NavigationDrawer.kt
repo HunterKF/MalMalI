@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.components
+package com.jaegerapps.malmali.common.components
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
@@ -35,7 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.models.Routes
+import com.jaegerapps.malmali.common.models.Routes
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource

@@ -34,9 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.jaegerapps.malmali.components.CustomNavigationDrawer
-import com.jaegerapps.malmali.components.SettingsAndModal
-import com.jaegerapps.malmali.components.TopBarLogo
+import com.jaegerapps.malmali.common.components.CustomNavigationDrawer
+import com.jaegerapps.malmali.common.components.SettingsAndModal
+import com.jaegerapps.malmali.common.components.TopBarLogo
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarContainer
 import com.jaegerapps.malmali.grammar.presentation.components.GrammarListContainer
 import com.jaegerapps.malmali.vocabulary.presentation.components.MultiFloatingActionButtons
@@ -101,7 +101,7 @@ fun GrammarScreen(
             },
             topBar = {
                 TopBarLogo {
-                    Text("단어", color = MaterialTheme.colorScheme.onPrimary)
+                    Text("문법", color = MaterialTheme.colorScheme.onPrimary)
                 }
             },
             containerColor = MaterialTheme.colorScheme.surface

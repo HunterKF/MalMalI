@@ -1,9 +1,8 @@
 package com.jaegerapps.malmali.vocabulary.presentation.create_set
 
 import androidx.compose.ui.graphics.painter.Painter
-import com.jaegerapps.malmali.components.models.IconResource
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.models.IconResource
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 
 data class CreateSetUiState(
     val title: String = "",

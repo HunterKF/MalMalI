@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.grammar.domain.models
+package com.jaegerapps.malmali.common.models
 
 data class GrammarLevelModel(
     val id: Int,

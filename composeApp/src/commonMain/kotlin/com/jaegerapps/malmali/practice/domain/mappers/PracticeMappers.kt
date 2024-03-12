@@ -1,28 +1,43 @@
 package com.jaegerapps.malmali.practice.domain.mappers
 
+import com.jaegerapps.malmali.common.mappers.booleanToLong
+import com.jaegerapps.malmali.common.mappers.longToBoolean
+import com.jaegerapps.malmali.common.models.GrammarPointModel
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 import com.jaegerapps.malmali.composeApp.database.History
-import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
-import com.jaegerapps.malmali.grammar.domain.models.GrammarPointModel
 import com.jaegerapps.malmali.practice.data.models.HistoryDTO
 import com.jaegerapps.malmali.practice.data.models.HistoryEntity
-import com.jaegerapps.malmali.practice.domain.models.HistoryItemModel
-import com.jaegerapps.malmali.practice.domain.models.PracticeGrammarModel
-import com.jaegerapps.malmali.practice.domain.models.PracticeGrammarLevelModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.practice.domain.models.HistoryGrammarModel
+import com.jaegerapps.malmali.practice.domain.models.HistoryModel
+import com.jaegerapps.malmali.practice.domain.models.HistoryVocabularyModel
 import kotlinx.datetime.Clock
 
-fun HistoryItemModel.toHistoryDTO(): HistoryDTO {
+fun HistoryModel.toHistoryDTO(): HistoryDTO {
     return HistoryDTO(
         input_sentence = this.sentence,
-        grammar_point = this.grammar.grammar,
-        grammar_definition_1 = this.grammar.definition1,
-        grammar_definition_2 = this.grammar.definition2,
-        grammar_level = this.grammar.level,
+        grammar_point = this.grammar.grammarTitle,
+        grammar_definition_1 = this.grammar.grammarDef1,
+        grammar_definition_2 = this.grammar.grammarDef2,
+        grammar_level = this.grammar.grammarCategory.toString(),
         vocabulary_word = this.set.word,
         vocabulary_definition = this.set.definition,
         date_created = Clock.System.now().toEpochMilliseconds(),
-        is_favorited = if (!this.isSaved) 0 else 1
+        is_favorited = booleanToLong(this.isFavorited)
+    )
+}
+
+fun HistoryModel.toHistoryEntity(): HistoryEntity {
+    return HistoryEntity(
+        id = this.id,
+        input_sentence = this.sentence,
+        grammar_point = this.grammar.grammarTitle,
+        grammar_definition_1 = this.grammar.grammarDef1,
+        grammar_definition_2 = this.grammar.grammarDef2,
+        grammar_level = this.grammar.grammarCategory.toString(),
+        vocabulary_word = this.set.word,
+        vocabulary_definition = this.set.definition,
+        date_created = Clock.System.now().toEpochMilliseconds(),
+        is_favorited = booleanToLong(this.isFavorited)
     )
 }
 
@@ -37,67 +52,58 @@ fun History.toHistoryEntity(): HistoryEntity {
         vocabulary_word = this.vocabulary_word,
         vocabulary_definition = this.vocabulary_definition,
         date_created = this.date_created,
-        is_favorited = this.is_favorited.toInt() == 1
+        is_favorited = this.is_favorited
     )
 }
 
 
-fun HistoryEntity.toUiHistoryItem(): HistoryItemModel {
-    return HistoryItemModel(
+fun HistoryEntity.toHistoryModel(): HistoryModel {
+    return HistoryModel(
         id = this.id,
         sentence = this.input_sentence,
-        grammar = this.toUiPracticeGrammar(),
-        set = this.toUiPractiveVocab(),
-        isSaved = is_favorited
+        grammar = this.toHistoryGrammarModel(),
+        set = this.toHistoryVocabularyModel(),
+        isFavorited = longToBoolean(this.is_favorited),
+        dateCreated = this.date_created
     )
 }
 
-private fun HistoryEntity.toUiPractiveVocab(): PracticeVocabularyModel {
-    return PracticeVocabularyModel(
+fun HistoryEntity.toHistoryGrammarModel(): HistoryGrammarModel {
+    return HistoryGrammarModel(
+        grammarCategory = this.grammar_level.toInt(),
+        grammarTitle = this.grammar_point,
+        grammarDef1 = this.grammar_definition_1,
+        grammarDef2 = this.grammar_definition_2
+    )
+}
+
+fun HistoryEntity.toHistoryVocabularyModel(): HistoryVocabularyModel {
+    return HistoryVocabularyModel(
         word = this.vocabulary_word,
         definition = this.vocabulary_definition
     )
 }
 
-private fun HistoryEntity.toUiPracticeGrammar(): PracticeGrammarModel {
-    return PracticeGrammarModel(
-        grammar = grammar_point,
-        definition1 = grammar_definition_1,
-        definition2 = grammar_definition_2,
-        level = grammar_level
+fun createHistoryModel(
+    sentence: String,
+    grammar: GrammarPointModel,
+    set: VocabularyCardModel,
+): HistoryModel {
+    return HistoryModel(
+        id = 0,
+        sentence = sentence,
+        grammar = grammar.toHistoryGrammarModel(),
+        set = set.toHistoryVocabularyModel(),
+        dateCreated = Clock.System.now().toEpochMilliseconds()
     )
 }
 
-fun List<GrammarLevelModel>.toUiPracticeGrammarList(): List<PracticeGrammarLevelModel> {
-    var list = emptyList<PracticeGrammarLevelModel>()
-    for (i in 0 until this.size - 1) {
-
-        list = list.plus(PracticeGrammarLevelModel(
-            this[i].title,
-            false,
-            this[i].grammarList.map { it.toUiPracticeGrammar() }
-        ))
-    }
-    return list
-
-}
-
-fun GrammarPointModel.toUiPracticeGrammar(): PracticeGrammarModel {
-    return PracticeGrammarModel(
-        grammar = this.grammarTitle,
-        definition1 = this.grammarDef1,
-        definition2 = this.grammarDef2,
-        level = this.grammarCategory.toString()
+fun GrammarPointModel.toHistoryGrammarModel(): HistoryGrammarModel {
+    return HistoryGrammarModel(
+        grammarCategory, grammarTitle, grammarDef1, grammarDef2
     )
 }
 
-fun VocabSetModel.toUiPracticeVocabList(): List<PracticeVocabularyModel> {
-    return this.cards.map { it.toUiPracticeVocab() }
-}
-
-fun VocabularyCardModel.toUiPracticeVocab(): PracticeVocabularyModel {
-    return PracticeVocabularyModel(
-        word = this.word,
-        definition = this.definition
-    )
+fun VocabularyCardModel.toHistoryVocabularyModel(): HistoryVocabularyModel {
+    return HistoryVocabularyModel(word, definition)
 }

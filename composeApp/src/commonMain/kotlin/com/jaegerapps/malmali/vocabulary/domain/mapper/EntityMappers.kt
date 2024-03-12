@@ -1,12 +1,12 @@
 package com.jaegerapps.malmali.vocabulary.domain.mapper
 
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.composeApp.database.FlashcardSets
 import com.jaegerapps.malmali.vocabulary.data.models.FlashcardEntity
 import com.jaegerapps.malmali.vocabulary.data.models.SetEntity
 import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTO
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 
 /*Entities will only be taken from DTOs.
 * This is designed so that the entity is only ever used after a set has been placed in Supabase*/
@@ -53,8 +53,8 @@ fun VocabSetDTO.toFlashcardEntity(): List<FlashcardEntity> {
 }
 
 
-fun toVocabSetModel(setEntity: SetEntity): VocabSetModel {
-    return VocabSetModel(
+fun toVocabSetModel(setEntity: SetEntity): VocabularySetModel {
+    return VocabularySetModel(
         localId = setEntity.set_id?.toInt(),
         remoteId = setEntity.linked_set.toInt(),
         title = setEntity.set_title,
@@ -103,19 +103,20 @@ fun FlashcardSets.toSetEntity(): SetEntity {
 
 
 
-fun SetEntity.toVocabSet(): VocabSetModel{
-    return VocabSetModel(
+fun SetEntity.toVocabSet(): VocabularySetModel {
+    return VocabularySetModel(
         localId = this.set_id?.toInt(),
         remoteId = this.linked_set.toInt(),
         title = this.set_title,
         icon = IconResource.resourceFromTag(this.set_icon),
         isAuthor = this.is_author == 1L,
         isPublic = this.is_public == 1L,
+        cards = createCards(this.vocabulary_word, this.vocabulary_definition),
         tags =this.tags?.split(" ") ?: emptyList() ,
         dateCreated = this.date_created,
     )
 }
-fun VocabSetModel.toSetEntity(localId: Long?): SetEntity{
+fun VocabularySetModel.toSetEntity(localId: Long?): SetEntity{
     return SetEntity(
         set_id = localId,
         linked_set = remoteId!!.toLong(),

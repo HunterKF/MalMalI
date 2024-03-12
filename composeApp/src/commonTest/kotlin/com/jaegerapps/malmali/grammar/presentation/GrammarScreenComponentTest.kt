@@ -7,8 +7,10 @@ import com.arkivanov.essenty.lifecycle.resume
 import com.jaegerapps.malmali.RootComponent
 import com.jaegerapps.malmali.di.FakeAppModule
 import com.jaegerapps.malmali.grammar.domain.FakeGrammarRepo
-import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
-import com.jaegerapps.malmali.grammar.domain.models.GrammarPointModel
+import com.jaegerapps.malmali.common.models.GrammarLevelModel
+import com.jaegerapps.malmali.common.models.GrammarPointModel
+import com.jaegerapps.malmali.common.models.IconResource
+import com.jaegerapps.malmali.login.domain.UserData
 import core.Knower
 import core.Knower.t
 import kotlinx.coroutines.runBlocking
@@ -98,6 +100,7 @@ class GrammarScreenComponentTest {
             )
         )
     )
+
 
 
     @Test

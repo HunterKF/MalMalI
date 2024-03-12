@@ -1,6 +1,6 @@
 package com.jaegerapps.malmali.onboarding.personalization
 
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 
 sealed interface PersonalizationUiEvents {
     data class OnNicknameChange(val value: String): PersonalizationUiEvents

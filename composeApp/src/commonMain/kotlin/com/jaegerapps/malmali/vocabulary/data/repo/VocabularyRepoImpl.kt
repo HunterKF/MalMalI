@@ -9,7 +9,7 @@ import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetDTO
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetDTOWithoutData
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
 import core.Knower
 import core.Knower.d
 import core.Knower.e
@@ -22,10 +22,10 @@ class VocabularyRepoImpl(
     private val local: VocabularyLocalDataSource,
 ) : VocabularyRepo {
     override suspend fun createSet(
-        vocabSetModel: VocabSetModel,
+        vocabularySetModel: VocabularySetModel,
     ): Resource<Boolean> {
         return try {
-            val dto = vocabSetModel.toVocabSetDTOWithoutData()
+            val dto = vocabularySetModel.toVocabSetDTOWithoutData()
             val result = remote.createSet(dto)
             if (result.data != null) {
                 local.createSet(
@@ -40,10 +40,10 @@ class VocabularyRepoImpl(
         }
     }
 
-    override suspend fun insertSetLocally(vocabSetModel: VocabSetModel): Resource<Boolean> {
+    override suspend fun insertSetLocally(vocabularySetModel: VocabularySetModel): Resource<Boolean> {
         return try {
             val result = local.createSet(
-                vocabSetModel.toSetEntity(null)
+                vocabularySetModel.toSetEntity(null)
             )
             if (result.data == true) {
                 Resource.Success(true)
@@ -57,7 +57,7 @@ class VocabularyRepoImpl(
         }
     }
 
-    override suspend fun getLocalSet(setId: Int, remoteId: Int): Resource<VocabSetModel> {
+    override suspend fun getLocalSet(setId: Int, remoteId: Int): Resource<VocabularySetModel> {
         return try {
             val set = local.readSingleSet(setId.toLong())
             if (set.data != null) {
@@ -73,12 +73,12 @@ class VocabularyRepoImpl(
         }
     }
 
-    override fun getAllLocalSets(): Flow<List<VocabSetModel>> {
+    override fun getAllLocalSets(): Flow<List<VocabularySetModel>> {
         //This function will be called in the folder screen. It will display all local sets, not the cards yet.
         return local.readAllSets().map { it.map { it.toVocabSet() } }
     }
 
-    override suspend fun getAllRemotePublicSets(start: Long, end: Long): Resource<List<VocabSetModel>> {
+    override suspend fun getAllRemotePublicSets(start: Long, end: Long): Resource<List<VocabularySetModel>> {
         return try {
             val result = remote.readAllSets(start, end)
             if (result.data != null) {
@@ -93,7 +93,7 @@ class VocabularyRepoImpl(
         }
     }
 
-    override suspend fun searchPublicSets(title: String, start: Long, end: Long): Resource<List<VocabSetModel>> {
+    override suspend fun searchPublicSets(title: String, start: Long, end: Long): Resource<List<VocabularySetModel>> {
         return try {
             val result = remote.readBySearch(title, start, end)
             if (result.data != null) {
@@ -131,7 +131,7 @@ class VocabularyRepoImpl(
         }
     }
 
-    override suspend fun updateSet(set: VocabSetModel): Resource<Boolean> {
+    override suspend fun updateSet(set: VocabularySetModel): Resource<Boolean> {
         return try {
             Knower.d("updateSet", "Here is the set: $set")
             if (set.isAuthor) {

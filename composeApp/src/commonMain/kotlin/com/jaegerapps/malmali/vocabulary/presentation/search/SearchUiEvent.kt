@@ -1,9 +1,9 @@
 package com.jaegerapps.malmali.vocabulary.presentation.search
 
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
 
 sealed interface SearchUiEvent {
-    data class SelectSet(val set: VocabSetModel): SearchUiEvent
+    data class SelectSet(val set: VocabularySetModel): SearchUiEvent
     data object SaveSet: SearchUiEvent
     data object TogglePopUp: SearchUiEvent
     data object ClearUiMessage: SearchUiEvent

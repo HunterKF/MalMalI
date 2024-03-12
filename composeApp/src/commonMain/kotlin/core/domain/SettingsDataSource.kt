@@ -1,8 +1,7 @@
 package core.domain
 
 import com.jaegerapps.malmali.login.domain.UserData
-
-interface SettingsDataSource {
+ interface SettingsDataSource {
     suspend fun updateUser(user: UserData)
     suspend fun updateUserName(name: String)
     suspend fun updateUserEmail(email: String)

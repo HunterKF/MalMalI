@@ -36,7 +36,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.blackBorder
+import com.jaegerapps.malmali.common.components.blackBorder
 import core.data.supabase.SupabaseClient
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.compose.stringResource

@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.blackBorder
+import com.jaegerapps.malmali.common.components.blackBorder
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
 

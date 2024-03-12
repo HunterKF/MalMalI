@@ -7,7 +7,7 @@ import com.jaegerapps.malmali.vocabulary.domain.mapper.toFlashcardEntity
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toSetEntity
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSet
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

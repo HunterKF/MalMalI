@@ -1,7 +1,7 @@
 package com.jaegerapps.malmali.login.domain
 
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.login.data.UserDTO
 
 fun UserEntity.toUserData(): UserData {

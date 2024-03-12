@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.components
+package com.jaegerapps.malmali.common.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -1,9 +1,7 @@
-package com.jaegerapps.malmali.vocabulary.domain.models
-
-import com.jaegerapps.malmali.components.models.IconResource
+package com.jaegerapps.malmali.common.models
 
 
-data class VocabSetModel(
+data class VocabularySetModel(
     //set id is the local db
     val localId: Int?,
     //public id is the remote id

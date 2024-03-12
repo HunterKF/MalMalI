@@ -2,10 +2,10 @@ package com.jaegerapps.malmali.vocabulary.presentation.create_set
 
 import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.arkivanov.decompose.ComponentContext
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.login.domain.UserData
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
 import core.Knower
 import core.Knower.d
 import core.Knower.e
@@ -206,7 +206,7 @@ class CreateSetComponent(
 
                             if (localId != null && remoteId != null && isAuthor != null) {
                                 //this means we are editing a set, so we just update it based on this
-                                val vocabSetModel = VocabSetModel(
+                                val vocabularySetModel = VocabularySetModel(
                                     title = _state.value.title,
                                     icon = _state.value.icon ?: IconResource.resourceFromTag("bear 1"),
                                     localId = localId,
@@ -219,11 +219,11 @@ class CreateSetComponent(
                                 )
 
                                 repo.updateSet(
-                                    set = vocabSetModel
+                                    set = vocabularySetModel
                                 )
                             } else {
                                 //Adding a set
-                                val vocabSetModel = VocabSetModel(
+                                val vocabularySetModel = VocabularySetModel(
                                     title = _state.value.title,
                                     icon = _state.value.icon ?: IconResource.resourceFromTag("bear 1"),
                                     localId = 0,
@@ -235,7 +235,7 @@ class CreateSetComponent(
                                     remoteId = 0
                                 )
                                 repo.createSet(
-                                    vocabSetModel
+                                    vocabularySetModel
                                 )
                             }
 

@@ -3,7 +3,7 @@ package com.jaegerapps.malmali.vocabulary.presentation.folders
 import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
 import core.Knower
 import core.Knower.e
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +23,7 @@ class VocabularyHomeComponent(
     private val onNavigateToStudyCard: (Int, Int) -> Unit,
     private val onNavigateToEdit: (Int, Int, Boolean) -> Unit,
     private val onModalNavigate: (String) -> Unit,
-    sets: List<VocabSetModel>,
+    sets: List<VocabularySetModel>,
     private val onNavigateSearch: () -> Unit,
 ) : ComponentContext by componentContext {
     private val _state = MutableStateFlow(VocabHomeUiState())

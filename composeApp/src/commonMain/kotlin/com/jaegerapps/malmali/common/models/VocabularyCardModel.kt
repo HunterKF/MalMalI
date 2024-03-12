@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.vocabulary.domain.models
+package com.jaegerapps.malmali.common.models
 
 import androidx.compose.runtime.Stable
 

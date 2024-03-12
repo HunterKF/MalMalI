@@ -34,9 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.jaegerapps.malmali.components.CustomNavigationDrawer
-import com.jaegerapps.malmali.components.SettingsAndModal
-import com.jaegerapps.malmali.components.TopBarLogo
+import com.jaegerapps.malmali.common.components.CustomNavigationDrawer
+import com.jaegerapps.malmali.common.components.SettingsAndModal
+import com.jaegerapps.malmali.common.components.TopBarLogo
 import com.jaegerapps.malmali.vocabulary.presentation.components.MultiFloatingActionButtons
 import com.jaegerapps.malmali.vocabulary.presentation.components.FolderContainer
 import dev.icerock.moko.resources.compose.painterResource

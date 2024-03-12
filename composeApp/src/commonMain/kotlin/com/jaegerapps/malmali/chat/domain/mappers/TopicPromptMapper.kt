@@ -2,7 +2,7 @@ package com.jaegerapps.malmali.chat.domain.mappers
 
 import com.jaegerapps.malmali.chat.domain.models.UiTopicPrompt
 import com.jaegerapps.malmali.chat.data.models.TopicPromptDTO
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 
 fun TopicPromptDTO.toTopicPrompt(): UiTopicPrompt {
     return UiTopicPrompt(

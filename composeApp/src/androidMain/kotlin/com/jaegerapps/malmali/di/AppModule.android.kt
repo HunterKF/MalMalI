@@ -14,8 +14,10 @@ import com.jaegerapps.malmali.grammar.data.repo.GrammarRepoImpl
 import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
 import com.jaegerapps.malmali.login.data.SignInDataSourceImpl
 import com.jaegerapps.malmali.login.domain.SignInDataSource
-import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSource
-import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSourceImpl
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSourceSettings
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSourceSettingsImpl
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSourceSql
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSourceSqlImpl
 import com.jaegerapps.malmali.practice.data.rempote.PracticeRemoteDataSource
 import com.jaegerapps.malmali.practice.data.rempote.PracticeRemoteDataSourceImpl
 import com.jaegerapps.malmali.practice.data.repo.PracticeRepoImpl
@@ -48,6 +50,7 @@ actual class AppModule(
     private val database = MalMalIDatabase(
         driver = DatabaseDriverFactory(context).createDriver()
     )
+    private val settings = SharedPreferencesSettings(sharedPreferences)
 
 
     actual override val vocabularyRemoteDataSource: VocabularyRemoteDataSource by lazy {
@@ -66,14 +69,19 @@ actual class AppModule(
             client = supabaseClient
         )
     }
-    actual override val practiceLocalDataSource: PracticeLocalDataSource by lazy {
-        PracticeLocalDataSourceImpl(
+    actual override val practiceLocalDataSourceSql: PracticeLocalDataSourceSql by lazy {
+        PracticeLocalDataSourceSqlImpl(
             database = database
+        )
+    }
+    actual override val practiceLocalDataSourceSettings: PracticeLocalDataSourceSettings by lazy {
+        PracticeLocalDataSourceSettingsImpl(
+            settings = settings
         )
     }
     actual override val grammarLocalDataSourceSettings: GrammarLocalDataSourceSettings by lazy {
         GrammarLocalDataSourceSettingsImpl(
-            settings = SharedPreferencesSettings(sharedPreferences)
+            settings = settings
         )
     }
 
@@ -94,7 +102,7 @@ actual class AppModule(
     }
     actual override val settingsDataSource: SettingsDataSource by lazy {
         SettingsDataSourceImpl(
-            settings = SharedPreferencesSettings(sharedPreferences)
+            settings = settings
         )
     }
     actual override val userRepo: UserRepo by lazy {
@@ -123,7 +131,8 @@ actual class AppModule(
     actual override val practiceRepo: PracticeRepo by lazy {
         PracticeRepoImpl(
             remote = practiceRemoteDataSource,
-            local = practiceLocalDataSource
+            localSql = practiceLocalDataSourceSql,
+            localSettings = practiceLocalDataSourceSettings
         )
     }
     actual override val grammarRepo: GrammarRepo by lazy {

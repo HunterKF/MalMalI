@@ -2,7 +2,7 @@ package com.jaegerapps.malmali
 
 import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarLevels
 import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarPoint
-import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
+import com.jaegerapps.malmali.common.models.GrammarLevelModel
 import com.jaegerapps.malmali.grammar.data.models.GrammarPointDTO
 import com.jaegerapps.malmali.vocabulary.domain.models.FlashSetEntity
 import core.Knower

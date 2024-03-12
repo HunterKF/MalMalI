@@ -1,14 +1,14 @@
 package com.jaegerapps.malmali.vocabulary.domain.mapper
 
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTO
 import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTOWithoutData
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 import core.Knower
 import core.Knower.e
 
-fun VocabSetModel.toVocabSetDTO(): VocabSetDTO {
+fun VocabularySetModel.toVocabSetDTO(): VocabSetDTO {
     Knower.e("toVocabSetDTO", "Here is the result coming in: $this")
     return VocabSetDTO(
         id = this.remoteId,
@@ -23,7 +23,7 @@ fun VocabSetModel.toVocabSetDTO(): VocabSetDTO {
         vocabulary_definition = cards.map { it.definition }.toTypedArray()
     )
 }
-fun VocabSetModel.toVocabSetDTOWithoutData(): VocabSetDTOWithoutData {
+fun VocabularySetModel.toVocabSetDTOWithoutData(): VocabSetDTOWithoutData {
     return VocabSetDTOWithoutData(
         tags = tags.toTypedArray(),
         is_public = isPublic,
@@ -35,8 +35,8 @@ fun VocabSetModel.toVocabSetDTOWithoutData(): VocabSetDTOWithoutData {
     )
 }
 
-fun VocabSetDTO.toVocabSetModel(isAuthor: Boolean): VocabSetModel {
-    return VocabSetModel(
+fun VocabSetDTO.toVocabSetModel(isAuthor: Boolean): VocabularySetModel {
+    return VocabularySetModel(
         localId = null,
         remoteId = id,
         title = set_title,

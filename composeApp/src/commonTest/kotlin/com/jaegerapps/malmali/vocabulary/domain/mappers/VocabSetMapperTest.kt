@@ -1,12 +1,12 @@
 package com.jaegerapps.malmali.vocabulary.domain.mappers
 
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.vocabulary.data.models.VocabSetDTO
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetDTO
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetDTOWithoutData
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSetModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabSetModel
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -18,7 +18,7 @@ class VocabSetMapperTest {
     @Test
     fun `toVocabSetDTO correctly maps VocabSetModel to VocabSetDTO`() {
         // Arrange
-        val vocabSetModel = VocabSetModel(
+        val vocabularySetModel = VocabularySetModel(
             localId = 123,
             remoteId = 456,
             title = "Test Set",
@@ -34,31 +34,31 @@ class VocabSetMapperTest {
         )
 
         // Act
-        val vocabSetDTO = vocabSetModel.toVocabSetDTO()
+        val vocabSetDTO = vocabularySetModel.toVocabSetDTO()
 
         // Assert
-        assertEquals(vocabSetModel.remoteId, vocabSetDTO.id)
+        assertEquals(vocabularySetModel.remoteId, vocabSetDTO.id)
         vocabSetDTO.tags.forEachIndexed { index, word ->
-            assertEquals(vocabSetModel.tags.toTypedArray()[index], word)
+            assertEquals(vocabularySetModel.tags.toTypedArray()[index], word)
 
         }
-        assertEquals(vocabSetModel.isPublic, vocabSetDTO.is_public)
+        assertEquals(vocabularySetModel.isPublic, vocabSetDTO.is_public)
         assertTrue(vocabSetDTO.subscribed_users.isEmpty())
         assertNull(vocabSetDTO.author_id)
-        assertEquals(vocabSetModel.dateCreated, vocabSetDTO.created_at)
-        assertEquals(vocabSetModel.title, vocabSetDTO.set_title)
-        assertEquals(vocabSetModel.icon.tag, vocabSetDTO.set_icon)
+        assertEquals(vocabularySetModel.dateCreated, vocabSetDTO.created_at)
+        assertEquals(vocabularySetModel.title, vocabSetDTO.set_title)
+        assertEquals(vocabularySetModel.icon.tag, vocabSetDTO.set_icon)
         assertEquals(
-            vocabSetModel.cards.map { it.word }.joinToString(),
+            vocabularySetModel.cards.map { it.word }.joinToString(),
             vocabSetDTO.vocabulary_word.joinToString()
         )
-        for (i in 0 until vocabSetModel.cards.size) {
+        for (i in 0 until vocabularySetModel.cards.size) {
             assertEquals(
-                vocabSetModel.cards.map { it.word }.toTypedArray()[i],
+                vocabularySetModel.cards.map { it.word }.toTypedArray()[i],
                 vocabSetDTO.vocabulary_word[i]
             )
             assertEquals(
-                vocabSetModel.cards.map { it.definition }.toTypedArray()[i],
+                vocabularySetModel.cards.map { it.definition }.toTypedArray()[i],
                 vocabSetDTO.vocabulary_definition[i]
             )
 
@@ -105,7 +105,7 @@ class VocabSetMapperTest {
     @Test
     fun `toVocabSetDTOWithoutData correctly maps VocabSetModel to VocabSetDTOWithoutData`() {
         // Arrange
-        val vocabSetModel = VocabSetModel(
+        val vocabularySetModel = VocabularySetModel(
             localId = 123,
             remoteId = 456,
             title = "Test Title",
@@ -121,25 +121,25 @@ class VocabSetMapperTest {
         )
 
         // Act
-        val vocabSetDTOWithoutData = vocabSetModel.toVocabSetDTOWithoutData()
+        val vocabSetDTOWithoutData = vocabularySetModel.toVocabSetDTOWithoutData()
 
         // Assert
-        for (i in 0 until vocabSetModel.tags.size) {
-            assertEquals(vocabSetModel.tags.toTypedArray()[i], vocabSetDTOWithoutData.tags[i])
+        for (i in 0 until vocabularySetModel.tags.size) {
+            assertEquals(vocabularySetModel.tags.toTypedArray()[i], vocabSetDTOWithoutData.tags[i])
 
         }
-        assertEquals(vocabSetModel.isPublic, vocabSetDTOWithoutData.is_public)
+        assertEquals(vocabularySetModel.isPublic, vocabSetDTOWithoutData.is_public)
         assertTrue(vocabSetDTOWithoutData.subscribed_users.isEmpty())
-        assertEquals(vocabSetModel.title, vocabSetDTOWithoutData.set_title)
-        assertEquals(vocabSetModel.icon.tag, vocabSetDTOWithoutData.set_icon)
-        for (i in 0 until vocabSetModel.cards.size) {
+        assertEquals(vocabularySetModel.title, vocabSetDTOWithoutData.set_title)
+        assertEquals(vocabularySetModel.icon.tag, vocabSetDTOWithoutData.set_icon)
+        for (i in 0 until vocabularySetModel.cards.size) {
             assertEquals(
-                vocabSetModel.cards.map { it.word }.toTypedArray()[i],
-                vocabSetModel.cards[i].word
+                vocabularySetModel.cards.map { it.word }.toTypedArray()[i],
+                vocabularySetModel.cards[i].word
             )
             assertEquals(
-                vocabSetModel.cards.map { it.definition }.toTypedArray()[i],
-                vocabSetModel.cards[i].definition
+                vocabularySetModel.cards.map { it.definition }.toTypedArray()[i],
+                vocabularySetModel.cards[i].definition
 
             )
 

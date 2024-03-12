@@ -28,8 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.ActionButton
-import com.jaegerapps.malmali.components.CustomPopUp
+import com.jaegerapps.malmali.common.components.ActionButton
+import com.jaegerapps.malmali.common.components.CustomPopUp
 import com.jaegerapps.malmali.vocabulary.presentation.components.FolderContainer
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource

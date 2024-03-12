@@ -29,10 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.CustomNavigationDrawer
-import com.jaegerapps.malmali.components.models.Routes
-import com.jaegerapps.malmali.components.SettingsAndModal
-import com.jaegerapps.malmali.components.TopBarLogo
+import com.jaegerapps.malmali.common.components.CustomNavigationDrawer
+import com.jaegerapps.malmali.common.models.Routes
+import com.jaegerapps.malmali.common.components.SettingsAndModal
+import com.jaegerapps.malmali.common.components.TopBarLogo
 import com.jaegerapps.malmali.home.components.CardButton
 import com.jaegerapps.malmali.home.components.LevelBar
 import com.jaegerapps.malmali.home.components.UserIcon

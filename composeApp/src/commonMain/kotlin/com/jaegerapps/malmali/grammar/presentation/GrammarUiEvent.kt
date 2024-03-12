@@ -1,6 +1,6 @@
 package com.jaegerapps.malmali.grammar.presentation
 
-import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
+import com.jaegerapps.malmali.common.models.GrammarLevelModel
 
 sealed interface GrammarUiEvent {
     data class ToggleLevelSelection(val level: GrammarLevelModel): GrammarUiEvent

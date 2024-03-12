@@ -1,6 +1,6 @@
 package core.data.settings
 
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.login.domain.UserData
 import com.russhwolf.settings.Settings
 import core.domain.SettingsDataSource
@@ -84,7 +84,7 @@ class SettingsDataSourceImpl(
             icon = IconResource.resourceFromTag(settings.getString(SettingKeys.ICON, "bear 1")),
             achievements = settings.getString(SettingKeys.ACHIEVEMENTS, "").toListString(),
             selectedLevels = settings.getString(SettingKeys.LEVELS, "Level 1").toListString(),
-            sets = settings.getString(SettingKeys.SETS, "Korean 101").toListString()
+            sets = settings.getString(SettingKeys.SETS, "-1").toListString()
 
         )
     }

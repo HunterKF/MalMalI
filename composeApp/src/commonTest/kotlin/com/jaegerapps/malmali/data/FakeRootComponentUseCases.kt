@@ -1,8 +1,8 @@
 package com.jaegerapps.malmali.data
 
-import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
+import com.jaegerapps.malmali.common.models.GrammarLevelModel
 import com.jaegerapps.malmali.RootComponentUseCases
-import com.jaegerapps.malmali.grammar.domain.models.GrammarPointModel
+import com.jaegerapps.malmali.common.models.GrammarPointModel
 import com.jaegerapps.malmali.vocabulary.domain.models.FlashSetEntity
 import core.util.Resource
 

@@ -6,7 +6,8 @@ import com.jaegerapps.malmali.RootComponentUseCases
 import com.jaegerapps.malmali.grammar.data.local.GrammarLocalDataSourceSettings
 import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
 import com.jaegerapps.malmali.login.domain.SignInDataSource
-import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSource
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSourceSettings
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSourceSql
 import com.jaegerapps.malmali.practice.data.rempote.PracticeRemoteDataSource
 import com.jaegerapps.malmali.practice.domain.repo.PracticeRepo
 import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSource
@@ -25,7 +26,8 @@ expect class AppModule: AppModuleInterface {
     override val vocabularyLocalDataSource: VocabularyLocalDataSource
 
     override val practiceRemoteDataSource: PracticeRemoteDataSource
-    override val practiceLocalDataSource: PracticeLocalDataSource
+    override val practiceLocalDataSourceSql: PracticeLocalDataSourceSql
+    override val practiceLocalDataSourceSettings: PracticeLocalDataSourceSettings
 
     override val grammarLocalDataSourceSettings: GrammarLocalDataSourceSettings
 
@@ -57,7 +59,8 @@ interface AppModuleInterface {
     val vocabularyLocalDataSource: VocabularyLocalDataSource
 
     val practiceRemoteDataSource: PracticeRemoteDataSource
-    val practiceLocalDataSource: PracticeLocalDataSource
+    val practiceLocalDataSourceSql: PracticeLocalDataSourceSql
+    val practiceLocalDataSourceSettings: PracticeLocalDataSourceSettings
 
     val grammarLocalDataSourceSettings: GrammarLocalDataSourceSettings
 

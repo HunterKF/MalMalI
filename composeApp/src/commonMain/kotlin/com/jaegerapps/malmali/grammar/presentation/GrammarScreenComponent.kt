@@ -2,7 +2,7 @@ package com.jaegerapps.malmali.grammar.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
-import com.jaegerapps.malmali.grammar.domain.models.GrammarLevelModel
+import com.jaegerapps.malmali.common.models.GrammarLevelModel
 import core.Knower
 import core.Knower.d
 import core.Knower.e

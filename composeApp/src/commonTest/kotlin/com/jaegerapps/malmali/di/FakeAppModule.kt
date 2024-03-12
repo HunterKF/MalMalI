@@ -12,7 +12,8 @@ import com.jaegerapps.malmali.RootComponentUseCases
 import com.jaegerapps.malmali.grammar.data.local.GrammarLocalDataSourceSettings
 import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
 import com.jaegerapps.malmali.login.domain.SignInDataSource
-import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSource
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSourceSettings
+import com.jaegerapps.malmali.practice.data.local.PracticeLocalDataSourceSql
 import com.jaegerapps.malmali.practice.data.rempote.PracticeRemoteDataSource
 import com.jaegerapps.malmali.practice.domain.repo.PracticeRepo
 import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSource
@@ -34,7 +35,9 @@ class FakeAppModule: AppModuleInterface {
         get() = TODO("Not yet implemented")
     override val practiceRemoteDataSource: PracticeRemoteDataSource
         get() = TODO("Not yet implemented")
-    override val practiceLocalDataSource: PracticeLocalDataSource
+    override val practiceLocalDataSourceSql: PracticeLocalDataSourceSql
+        get() = TODO("Not yet implemented")
+    override val practiceLocalDataSourceSettings: PracticeLocalDataSourceSettings
         get() = TODO("Not yet implemented")
     override val grammarLocalDataSourceSettings: GrammarLocalDataSourceSettings
         get() = TODO("Not yet implemented")

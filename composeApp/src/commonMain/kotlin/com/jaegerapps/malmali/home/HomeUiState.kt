@@ -1,6 +1,6 @@
 package com.jaegerapps.malmali.home
 
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 import dev.icerock.moko.resources.ImageResource
 
 data class HomeUiState(

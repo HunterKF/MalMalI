@@ -1,4 +1,4 @@
-package com.jaegerapps.malmali.components.models
+package com.jaegerapps.malmali.common.models
 
 import com.jaegerapps.malmali.MR
 import dev.icerock.moko.resources.ImageResource

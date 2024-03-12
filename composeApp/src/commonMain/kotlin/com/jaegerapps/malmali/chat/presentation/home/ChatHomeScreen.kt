@@ -24,10 +24,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.CustomNavigationDrawer
-import com.jaegerapps.malmali.components.IconContainer
-import com.jaegerapps.malmali.components.SettingsAndModal
-import com.jaegerapps.malmali.components.TopBarLogo
+import com.jaegerapps.malmali.common.components.CustomNavigationDrawer
+import com.jaegerapps.malmali.common.components.IconContainer
+import com.jaegerapps.malmali.common.components.SettingsAndModal
+import com.jaegerapps.malmali.common.components.TopBarLogo
 import dev.icerock.moko.resources.compose.painterResource
 import kotlinx.coroutines.launch
 

@@ -33,10 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.ActionButton
-import com.jaegerapps.malmali.components.IconContainer
-import com.jaegerapps.malmali.components.blackBorder
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.components.ActionButton
+import com.jaegerapps.malmali.common.components.IconContainer
+import com.jaegerapps.malmali.common.components.blackBorder
+import com.jaegerapps.malmali.common.models.IconResource
 import dev.icerock.moko.resources.compose.painterResource
 import kotlinx.coroutines.launch
 

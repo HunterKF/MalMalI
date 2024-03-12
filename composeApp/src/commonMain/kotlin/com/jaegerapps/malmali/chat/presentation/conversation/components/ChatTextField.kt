@@ -45,8 +45,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jaegerapps.malmali.components.blackBorder
-import com.jaegerapps.malmali.components.verticalFadingEdge
+import com.jaegerapps.malmali.common.components.blackBorder
+import com.jaegerapps.malmali.common.components.verticalFadingEdge
 
 @Composable
 fun ChatTextField(

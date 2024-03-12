@@ -10,5 +10,5 @@ data class HistoryEntity(
     val vocabulary_word: String,
     val vocabulary_definition: String,
     val date_created: Long,
-    val is_favorited: Boolean,
+    val is_favorited: Long,
 )

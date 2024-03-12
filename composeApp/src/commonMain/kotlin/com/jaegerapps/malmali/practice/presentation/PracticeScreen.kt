@@ -29,10 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
 import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatPopUpAlert
-import com.jaegerapps.malmali.components.ActionButton
-import com.jaegerapps.malmali.components.CustomNavigationDrawer
-import com.jaegerapps.malmali.components.SettingsAndModal
-import com.jaegerapps.malmali.components.blackBorder
+import com.jaegerapps.malmali.common.components.ActionButton
+import com.jaegerapps.malmali.common.components.CustomNavigationDrawer
+import com.jaegerapps.malmali.common.components.SettingsAndModal
+import com.jaegerapps.malmali.common.components.blackBorder
 import com.jaegerapps.malmali.practice.presentation.components.PracticeContainer
 import com.jaegerapps.malmali.practice.presentation.components.PracticeTextField
 import dev.icerock.moko.resources.compose.stringResource
@@ -117,7 +117,7 @@ fun PracticeScreen(
 
                     itemsIndexed(state.history.asReversed()) { index, string ->
                         HistoryContainer(
-                            text = "Practice text ${string.sentence}",
+                            text = string.sentence,
                             showOptions = expanded == index,
                             toggleExpand = {
                                 expanded = if (expanded != index) {

@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatAwaitAnimation
 import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatBubble
 import com.jaegerapps.malmali.chat.presentation.conversation.components.ChatTextField
-import com.jaegerapps.malmali.components.CustomNavigationDrawer
-import com.jaegerapps.malmali.components.SettingsAndModal
+import com.jaegerapps.malmali.common.components.CustomNavigationDrawer
+import com.jaegerapps.malmali.common.components.SettingsAndModal
 import kotlinx.coroutines.launch
 
 @Composable

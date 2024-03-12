@@ -22,16 +22,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.jaegerapps.malmali.MR
-import com.jaegerapps.malmali.components.blackBorder
-import com.jaegerapps.malmali.practice.domain.models.PracticeGrammarModel
+import com.jaegerapps.malmali.common.components.blackBorder
+import com.jaegerapps.malmali.common.models.GrammarPointModel
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 import com.jaegerapps.malmali.practice.presentation.PracticeUiEvent
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun PracticeContainer(
     modifier: Modifier = Modifier,
-    vocab: PracticeVocabularyModel,
-    grammar: PracticeGrammarModel,
+    vocab: VocabularyCardModel,
+    grammar: GrammarPointModel,
     vocabExpanded: Boolean,
     grammarExpanded: Boolean,
     onClick: (PracticeUiEvent) -> Unit,
@@ -57,7 +58,7 @@ fun PracticeContainer(
                 Icon(imageVector = Icons.Default.Refresh, null)
             }
             ContainerDropClickable(
-                title = grammar.grammar,
+                title = grammar.grammarTitle,
                 isExpanded = grammarExpanded,
                 onClick = { onClick(PracticeUiEvent.ToggleGrammarDropDown) })
         }
@@ -76,14 +77,14 @@ fun PracticeContainer(
 
                         grammarExpanded -> stringResource(
                             MR.strings.practice_definition_1,
-                            grammar.definition1
+                            grammar.grammarDef1
                         )
 
                         else -> ""
                     }
                 )
                 if (grammarExpanded) {
-                    grammar.definition2?.let {
+                    grammar.grammarDef2?.let {
                         Text(
                             text = stringResource(MR.strings.practice_definition_1, it)
                         )

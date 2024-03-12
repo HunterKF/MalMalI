@@ -5,7 +5,7 @@ import com.arkivanov.essenty.lifecycle.doOnCreate
 import com.jaegerapps.malmali.chat.domain.ChatRepo
 import com.jaegerapps.malmali.chat.domain.models.ConversationUi
 import com.jaegerapps.malmali.chat.domain.models.UiTopicPrompt
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.login.domain.UserData
 import core.Knower
 import core.Knower.d

@@ -3,7 +3,7 @@ package com.jaegerapps.malmali.vocabulary.presentation.study_set
 import com.jaegerapps.malmali.vocabulary.domain.repo.VocabularyRepo
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnCreate
-import com.jaegerapps.malmali.vocabulary.domain.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.models.VocabularyCardModel
 import core.Knower
 import core.Knower.e
 import core.util.Resource

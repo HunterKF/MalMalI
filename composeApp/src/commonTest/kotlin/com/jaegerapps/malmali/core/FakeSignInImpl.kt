@@ -1,7 +1,7 @@
 package com.jaegerapps.malmali.core
 
 import androidx.compose.runtime.mutableStateOf
-import com.jaegerapps.malmali.components.models.IconResource
+import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.login.domain.SignInDataSource
 import com.jaegerapps.malmali.login.domain.UserData
 import core.util.Resource
