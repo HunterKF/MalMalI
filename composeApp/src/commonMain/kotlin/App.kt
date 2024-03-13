@@ -17,7 +17,7 @@ import com.jaegerapps.malmali.loading.LoadingScreen
 import com.jaegerapps.malmali.onboarding.completion.CompletionScreen
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
 import com.jaegerapps.malmali.onboarding.intro.IntroScreen
-import com.jaegerapps.malmali.practice.practicescreen.presentation.PracticeScreen
+import com.jaegerapps.malmali.practice.practice.presentation.PracticeScreen
 import com.jaegerapps.malmali.vocabulary.presentation.create_set.CreateSetScreen
 import com.jaegerapps.malmali.vocabulary.presentation.folders.VocabHomeScreen
 import com.jaegerapps.malmali.vocabulary.presentation.search.SearchScreen

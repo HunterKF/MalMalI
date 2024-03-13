@@ -12,10 +12,10 @@ import com.jaegerapps.malmali.RootComponentUseCases
 import com.jaegerapps.malmali.grammar.data.local.GrammarLocalDataSourceSettings
 import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
 import com.jaegerapps.malmali.login.domain.SignInDataSource
-import com.jaegerapps.malmali.practice.practicescreen.data.local.PracticeLocalDataSourceSettings
-import com.jaegerapps.malmali.practice.practicescreen.data.local.PracticeLocalDataSourceSql
-import com.jaegerapps.malmali.practice.practicescreen.data.rempote.PracticeRemoteDataSource
-import com.jaegerapps.malmali.practice.practicescreen.domain.repo.PracticeRepo
+import com.jaegerapps.malmali.practice.practice.data.local.PracticeLocalDataSourceSettings
+import com.jaegerapps.malmali.practice.practice.data.local.PracticeLocalDataSourceSql
+import com.jaegerapps.malmali.practice.practice.data.rempote.PracticeRemoteDataSource
+import com.jaegerapps.malmali.practice.practice.domain.repo.PracticeRepo
 import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSource
 import com.jaegerapps.malmali.vocabulary.data.remote.VocabularyRemoteDataSource
 import core.domain.ChatGptApi

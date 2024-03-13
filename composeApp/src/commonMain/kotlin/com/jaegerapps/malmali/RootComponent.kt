@@ -25,7 +25,7 @@ import com.jaegerapps.malmali.vocabulary.presentation.folders.VocabularyHomeComp
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.StudySetComponent
 import com.jaegerapps.malmali.onboarding.completion.CompletionComponent
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationComponent
-import com.jaegerapps.malmali.practice.practicescreen.presentation.PracticeComponent
+import com.jaegerapps.malmali.practice.practice.presentation.PracticeComponent
 import com.jaegerapps.malmali.common.models.VocabularySetModel
 import com.jaegerapps.malmali.grammar.data.models.GrammarPointDTO
 import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarLevels

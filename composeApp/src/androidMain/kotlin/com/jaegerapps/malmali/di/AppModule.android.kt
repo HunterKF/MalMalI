@@ -14,14 +14,18 @@ import com.jaegerapps.malmali.grammar.data.repo.GrammarRepoImpl
 import com.jaegerapps.malmali.grammar.domain.repo.GrammarRepo
 import com.jaegerapps.malmali.login.data.SignInDataSourceImpl
 import com.jaegerapps.malmali.login.domain.SignInDataSource
-import com.jaegerapps.malmali.practice.practicescreen.data.local.PracticeLocalDataSourceSettings
-import com.jaegerapps.malmali.practice.practicescreen.data.local.PracticeLocalDataSourceSettingsImpl
-import com.jaegerapps.malmali.practice.practicescreen.data.local.PracticeLocalDataSourceSql
-import com.jaegerapps.malmali.practice.practicescreen.data.local.PracticeLocalDataSourceSqlImpl
-import com.jaegerapps.malmali.practice.practicescreen.data.rempote.PracticeRemoteDataSource
-import com.jaegerapps.malmali.practice.practicescreen.data.rempote.PracticeRemoteDataSourceImpl
-import com.jaegerapps.malmali.practice.practicescreen.data.repo.PracticeRepoImpl
-import com.jaegerapps.malmali.practice.practicescreen.domain.repo.PracticeRepo
+import com.jaegerapps.malmali.practice.practice_settings.data.local.PracticeSettingLocalDataSourceSettings
+import com.jaegerapps.malmali.practice.practice_settings.data.local.PracticeSettingLocalDataSourceSettingsImpl
+import com.jaegerapps.malmali.practice.practice_settings.data.local.PracticeSettingLocalDataSourceSql
+import com.jaegerapps.malmali.practice.practice_settings.data.local.PracticeSettingLocalDataSourceSqlImpl
+import com.jaegerapps.malmali.practice.practice.data.local.PracticeLocalDataSourceSettings
+import com.jaegerapps.malmali.practice.practice.data.local.PracticeLocalDataSourceSettingsImpl
+import com.jaegerapps.malmali.practice.practice.data.local.PracticeLocalDataSourceSql
+import com.jaegerapps.malmali.practice.practice.data.local.PracticeLocalDataSourceSqlImpl
+import com.jaegerapps.malmali.practice.practice.data.rempote.PracticeRemoteDataSource
+import com.jaegerapps.malmali.practice.practice.data.rempote.PracticeRemoteDataSourceImpl
+import com.jaegerapps.malmali.practice.practice.data.repo.PracticeRepoImpl
+import com.jaegerapps.malmali.practice.practice.domain.repo.PracticeRepo
 import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSource
 import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSourceImpl
 import com.jaegerapps.malmali.vocabulary.data.remote.VocabularyRemoteDataSource
@@ -79,6 +83,17 @@ actual class AppModule(
             settings = settings
         )
     }
+    actual override val practiceSettingLocalDataSourceSettings: PracticeSettingLocalDataSourceSettings by lazy {
+        PracticeSettingLocalDataSourceSettingsImpl(
+            settings = settings
+        )
+    }
+    actual override val practiceSettingLocalDataSourceSql: PracticeSettingLocalDataSourceSql by lazy {
+        PracticeSettingLocalDataSourceSqlImpl(
+            database = database
+        )
+    }
+
     actual override val grammarLocalDataSourceSettings: GrammarLocalDataSourceSettings by lazy {
         GrammarLocalDataSourceSettingsImpl(
             settings = settings

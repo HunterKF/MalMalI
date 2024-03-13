@@ -3,10 +3,10 @@ package com.jaegerapps.malmali.practice.domain
 import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.common.models.VocabularyCardModel
 import com.jaegerapps.malmali.common.models.VocabularySetModel
-import com.jaegerapps.malmali.practice.practicescreen.data.models.HistoryEntity
-import com.jaegerapps.malmali.practice.practicescreen.domain.mappers.toHistoryEntity
-import com.jaegerapps.malmali.practice.practicescreen.domain.models.HistoryModel
-import com.jaegerapps.malmali.practice.practicescreen.domain.repo.PracticeRepo
+import com.jaegerapps.malmali.practice.practice.data.models.HistoryEntity
+import com.jaegerapps.malmali.practice.practice.domain.mappers.toHistoryEntity
+import com.jaegerapps.malmali.practice.practice.domain.models.HistoryModel
+import com.jaegerapps.malmali.practice.practice.domain.repo.PracticeRepo
 import core.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

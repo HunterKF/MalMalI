@@ -11,7 +11,7 @@ import com.jaegerapps.malmali.common.models.IconResource
 import com.jaegerapps.malmali.di.FakeAppModule
 import com.jaegerapps.malmali.login.domain.UserData
 import com.jaegerapps.malmali.practice.domain.FakePracticeRepo
-import com.jaegerapps.malmali.practice.practicescreen.presentation.PracticeComponent
+import com.jaegerapps.malmali.practice.practice.presentation.PracticeComponent
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 

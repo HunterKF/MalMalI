@@ -59,7 +59,7 @@ fun SettingsAndModal(
 }
 
 @Composable
-private fun BasicIconContainer(
+fun BasicIconContainer(
     icon: ImageVector,
     contentDescription: String,
     tint: Color,

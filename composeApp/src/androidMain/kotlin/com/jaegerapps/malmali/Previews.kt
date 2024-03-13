@@ -57,8 +57,8 @@ import com.jaegerapps.malmali.home.components.UserIcon
 import com.jaegerapps.malmali.onboarding.intro.components.OnboardingContainer
 import com.jaegerapps.malmali.onboarding.intro.components.PagerIndicator
 import com.jaegerapps.malmali.onboarding.intro.components.SkipAndNextButton
-import com.jaegerapps.malmali.practice.practicescreen.presentation.components.PracticeContainer
-import com.jaegerapps.malmali.practice.practicescreen.presentation.components.PracticeTextField
+import com.jaegerapps.malmali.practice.practice.presentation.components.PracticeContainer
+import com.jaegerapps.malmali.practice.practice.presentation.components.PracticeTextField
 import com.jaegerapps.malmali.vocabulary.presentation.components.AddCardButton
 import com.jaegerapps.malmali.vocabulary.presentation.components.EditVocabContainer
 import com.jaegerapps.malmali.vocabulary.presentation.components.FolderContainer
@@ -66,6 +66,7 @@ import com.jaegerapps.malmali.vocabulary.presentation.components.SelectIcon
 import com.jaegerapps.malmali.vocabulary.presentation.components.SelectableButton
 import com.jaegerapps.malmali.vocabulary.presentation.components.TitleBox
 import com.jaegerapps.malmali.common.models.VocabularyCardModel
+import com.jaegerapps.malmali.practice.practice_settings.presentation.component.SelectLevelContainer
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyButtons
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyContainer
 import core.presentation.MalMalITheme
@@ -1221,5 +1222,141 @@ fun Preview_PracticeTextField() {
 fun Preview_PracticeScreen() {
     MalMalITheme(false) {
 //        PracticeScreen()
+    }
+}
+
+
+@Preview
+@Composable
+fun Preview_SelectLevelContainer() {
+    MalMalITheme(false) {
+        val topik1 = listOf(
+            GrammarPointModel(
+                grammarCategory = 1,
+                grammarTitle = "Title 1",
+                grammarDef1 = "Definition 1-1",
+                grammarDef2 = "Definition 1-2",
+                exampleEng1 = "English Example 1-1",
+                exampleEng2 = "English Example 1-2",
+                exampleKor1 = "Korean Example 1-1",
+                exampleKor2 = "Korean Example 1-2"
+            ),
+            GrammarPointModel(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            GrammarPointModel(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            GrammarPointModel(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            GrammarPointModel(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            // Add more GrammarPoint objects if needed
+        )
+        val topik2 = listOf(
+            GrammarPointModel(
+                grammarCategory = 1,
+                grammarTitle = "Title 1",
+                grammarDef1 = "Definition 1-1",
+                grammarDef2 = "Definition 1-2",
+                exampleEng1 = "English Example 1-1",
+                exampleEng2 = "English Example 1-2",
+                exampleKor1 = "Korean Example 1-1",
+                exampleKor2 = "Korean Example 1-2"
+            ),
+            GrammarPointModel(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            GrammarPointModel(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            GrammarPointModel(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            GrammarPointModel(
+                grammarCategory = 1,
+                grammarTitle = "Title 2",
+                grammarDef1 = "Definition 2-1",
+                grammarDef2 = "Definition 2-2",
+                exampleEng1 = "English Example 2-1",
+                exampleEng2 = "English Example 2-2",
+                exampleKor1 = "Korean Example 2-1",
+                exampleKor2 = "Korean Example 2-2"
+            ),
+            // Add more GrammarPoint objects if needed
+        )
+        val levels = listOf(
+            GrammarLevelModel(
+                id = 1,
+                title = "Level 1",
+                isSelected = true,
+                isUnlocked = true,
+                grammarList = topik1,
+            ),
+            GrammarLevelModel(
+                id = 2,
+                title = "Level 2",
+                isSelected = false,
+                isUnlocked = true,
+                grammarList = topik2,
+            ),
+        )
+
+        SelectLevelContainer(
+            modifier = Modifier.fillMaxWidth(),
+            levels = levels,
+            onSelect = {}
+        )
     }
 }
