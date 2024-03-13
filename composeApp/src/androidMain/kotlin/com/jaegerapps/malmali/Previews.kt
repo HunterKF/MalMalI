@@ -57,8 +57,8 @@ import com.jaegerapps.malmali.home.components.UserIcon
 import com.jaegerapps.malmali.onboarding.intro.components.OnboardingContainer
 import com.jaegerapps.malmali.onboarding.intro.components.PagerIndicator
 import com.jaegerapps.malmali.onboarding.intro.components.SkipAndNextButton
-import com.jaegerapps.malmali.practice.presentation.components.PracticeContainer
-import com.jaegerapps.malmali.practice.presentation.components.PracticeTextField
+import com.jaegerapps.malmali.practice.practicescreen.presentation.components.PracticeContainer
+import com.jaegerapps.malmali.practice.practicescreen.presentation.components.PracticeTextField
 import com.jaegerapps.malmali.vocabulary.presentation.components.AddCardButton
 import com.jaegerapps.malmali.vocabulary.presentation.components.EditVocabContainer
 import com.jaegerapps.malmali.vocabulary.presentation.components.FolderContainer
