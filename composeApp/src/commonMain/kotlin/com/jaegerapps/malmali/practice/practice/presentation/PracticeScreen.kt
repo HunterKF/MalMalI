@@ -64,7 +64,7 @@ fun PracticeScreen(
             ) {
                 SettingsAndModal(
                     onSettingsClick = {
-
+                        component.onEvent(PracticeUiEvent.OnNavigateToSettings)
                     },
                     onModalClick = {
                         scope.launch {

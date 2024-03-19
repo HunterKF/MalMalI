@@ -66,6 +66,11 @@ import com.jaegerapps.malmali.vocabulary.presentation.components.SelectIcon
 import com.jaegerapps.malmali.vocabulary.presentation.components.SelectableButton
 import com.jaegerapps.malmali.vocabulary.presentation.components.TitleBox
 import com.jaegerapps.malmali.common.models.VocabularyCardModel
+import com.jaegerapps.malmali.common.models.VocabularySetModel
+import com.jaegerapps.malmali.practice.practice_settings.domain.models.PracticeLevelModel
+import com.jaegerapps.malmali.practice.practice_settings.domain.models.PracticeSetModel
+import com.jaegerapps.malmali.practice.practice_settings.presentation.PracticeSettingScreen
+import com.jaegerapps.malmali.practice.practice_settings.presentation.PracticeSettingUiState
 import com.jaegerapps.malmali.practice.practice_settings.presentation.component.SelectLevelContainer
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyButtons
 import com.jaegerapps.malmali.vocabulary.presentation.study_set.components.VocabularyContainer
@@ -1336,11 +1341,12 @@ fun Preview_SelectLevelContainer() {
             ),
             // Add more GrammarPoint objects if needed
         )
+        var selected by remember { mutableStateOf(true) }
         val levels = listOf(
             GrammarLevelModel(
                 id = 1,
                 title = "Level 1",
-                isSelected = true,
+                isSelected = selected,
                 isUnlocked = true,
                 grammarList = topik1,
             ),
@@ -1351,12 +1357,274 @@ fun Preview_SelectLevelContainer() {
                 isUnlocked = true,
                 grammarList = topik2,
             ),
+            GrammarLevelModel(
+                id = 3,
+                title = "Level 3",
+                isSelected = true,
+                isUnlocked = true,
+                grammarList = topik1,
+            ),
+            GrammarLevelModel(
+                id = 4,
+                title = "Level 4",
+                isSelected = false,
+                isUnlocked = true,
+                grammarList = topik2,
+            ),
+            GrammarLevelModel(
+                id = 5,
+                title = "Level 5",
+                isSelected = true,
+                isUnlocked = true,
+                grammarList = topik1,
+            ),
+            GrammarLevelModel(
+                id = 6,
+                title = "Level 6",
+                isSelected = false,
+                isUnlocked = true,
+                grammarList = topik2,
+            ),
         )
 
         SelectLevelContainer(
             modifier = Modifier.fillMaxWidth(),
-            levels = levels,
-            onSelect = {}
+            levels = levels.map { PracticeLevelModel(levelModel = it, isSelected = true) },
+            onSelect = {
+                selected = !selected
+            }
         )
+    }
+}
+
+@Preview
+@Composable
+fun Preview_PracticeSettingsScreen() {
+    val topik1 = listOf(
+        GrammarPointModel(
+            grammarCategory = 1,
+            grammarTitle = "Title 1",
+            grammarDef1 = "Definition 1-1",
+            grammarDef2 = "Definition 1-2",
+            exampleEng1 = "English Example 1-1",
+            exampleEng2 = "English Example 1-2",
+            exampleKor1 = "Korean Example 1-1",
+            exampleKor2 = "Korean Example 1-2"
+        ),
+        GrammarPointModel(
+            grammarCategory = 1,
+            grammarTitle = "Title 2",
+            grammarDef1 = "Definition 2-1",
+            grammarDef2 = "Definition 2-2",
+            exampleEng1 = "English Example 2-1",
+            exampleEng2 = "English Example 2-2",
+            exampleKor1 = "Korean Example 2-1",
+            exampleKor2 = "Korean Example 2-2"
+        ),
+        GrammarPointModel(
+            grammarCategory = 1,
+            grammarTitle = "Title 2",
+            grammarDef1 = "Definition 2-1",
+            grammarDef2 = "Definition 2-2",
+            exampleEng1 = "English Example 2-1",
+            exampleEng2 = "English Example 2-2",
+            exampleKor1 = "Korean Example 2-1",
+            exampleKor2 = "Korean Example 2-2"
+        ),
+        GrammarPointModel(
+            grammarCategory = 1,
+            grammarTitle = "Title 2",
+            grammarDef1 = "Definition 2-1",
+            grammarDef2 = "Definition 2-2",
+            exampleEng1 = "English Example 2-1",
+            exampleEng2 = "English Example 2-2",
+            exampleKor1 = "Korean Example 2-1",
+            exampleKor2 = "Korean Example 2-2"
+        ),
+        GrammarPointModel(
+            grammarCategory = 1,
+            grammarTitle = "Title 2",
+            grammarDef1 = "Definition 2-1",
+            grammarDef2 = "Definition 2-2",
+            exampleEng1 = "English Example 2-1",
+            exampleEng2 = "English Example 2-2",
+            exampleKor1 = "Korean Example 2-1",
+            exampleKor2 = "Korean Example 2-2"
+        ),
+        // Add more GrammarPoint objects if needed
+    )
+    val topik2 = listOf(
+        GrammarPointModel(
+            grammarCategory = 1,
+            grammarTitle = "Title 1",
+            grammarDef1 = "Definition 1-1",
+            grammarDef2 = "Definition 1-2",
+            exampleEng1 = "English Example 1-1",
+            exampleEng2 = "English Example 1-2",
+            exampleKor1 = "Korean Example 1-1",
+            exampleKor2 = "Korean Example 1-2"
+        ),
+        GrammarPointModel(
+            grammarCategory = 1,
+            grammarTitle = "Title 2",
+            grammarDef1 = "Definition 2-1",
+            grammarDef2 = "Definition 2-2",
+            exampleEng1 = "English Example 2-1",
+            exampleEng2 = "English Example 2-2",
+            exampleKor1 = "Korean Example 2-1",
+            exampleKor2 = "Korean Example 2-2"
+        ),
+        GrammarPointModel(
+            grammarCategory = 1,
+            grammarTitle = "Title 2",
+            grammarDef1 = "Definition 2-1",
+            grammarDef2 = "Definition 2-2",
+            exampleEng1 = "English Example 2-1",
+            exampleEng2 = "English Example 2-2",
+            exampleKor1 = "Korean Example 2-1",
+            exampleKor2 = "Korean Example 2-2"
+        ),
+        GrammarPointModel(
+            grammarCategory = 1,
+            grammarTitle = "Title 2",
+            grammarDef1 = "Definition 2-1",
+            grammarDef2 = "Definition 2-2",
+            exampleEng1 = "English Example 2-1",
+            exampleEng2 = "English Example 2-2",
+            exampleKor1 = "Korean Example 2-1",
+            exampleKor2 = "Korean Example 2-2"
+        ),
+        GrammarPointModel(
+            grammarCategory = 1,
+            grammarTitle = "Title 2",
+            grammarDef1 = "Definition 2-1",
+            grammarDef2 = "Definition 2-2",
+            exampleEng1 = "English Example 2-1",
+            exampleEng2 = "English Example 2-2",
+            exampleKor1 = "Korean Example 2-1",
+            exampleKor2 = "Korean Example 2-2"
+        ),
+        // Add more GrammarPoint objects if needed
+    )
+    var selected by remember { mutableStateOf(true) }
+    val levels = listOf(
+        GrammarLevelModel(
+            id = 1,
+            title = "Level 1",
+            isSelected = selected,
+            isUnlocked = true,
+            grammarList = topik1,
+        ),
+        GrammarLevelModel(
+            id = 2,
+            title = "Level 2",
+            isSelected = false,
+            isUnlocked = true,
+            grammarList = topik2,
+        ),
+        GrammarLevelModel(
+            id = 3,
+            title = "Level 3",
+            isSelected = true,
+            isUnlocked = true,
+            grammarList = topik1,
+        ),
+        GrammarLevelModel(
+            id = 4,
+            title = "Level 4",
+            isSelected = false,
+            isUnlocked = true,
+            grammarList = topik2,
+        ),
+        GrammarLevelModel(
+            id = 5,
+            title = "Level 5",
+            isSelected = true,
+            isUnlocked = true,
+            grammarList = topik1,
+        ),
+        GrammarLevelModel(
+            id = 6,
+            title = "Level 6",
+            isSelected = false,
+            isUnlocked = true,
+            grammarList = topik2,
+        ),
+    )
+    val fakeVocabularySets = listOf(
+        VocabularySetModel(
+            localId = 1,
+            remoteId = 101,
+            title = "English Vocabulary",
+            icon = IconResource.Bear_Eleven,
+            isAuthor = true,
+            isPublic = true,
+            tags = listOf("English", "Learning"),
+            dateCreated = "2024-03-14",
+            cards = listOf(
+                VocabularyCardModel(
+                    uiId = 1,
+                    word = "apple",
+                    definition = "A round fruit with red or green skin and a whitish interior.",
+                    error = false,
+                    dbId = 1001
+                ),
+                VocabularyCardModel(
+                    uiId = 2,
+                    word = "house",
+                    definition = "A building for human habitation, especially one that is lived in by a family or small group of people.",
+                    error = false,
+                    dbId = 1002
+                ),
+                VocabularyCardModel(
+                    uiId = 3,
+                    word = "sun",
+                    definition = "The star around which the earth orbits.",
+                    error = false,
+                    dbId = 1003
+                )
+            )
+        ),
+        VocabularySetModel(
+            localId = 2,
+            remoteId = 102,
+            title = "Spanish Vocabulary",
+            icon = IconResource.Bear_Eleven,
+            isAuthor = true,
+            isPublic = true,
+            tags = listOf("Spanish", "Learning"),
+            dateCreated = "2024-03-14",
+            cards = listOf(
+                VocabularyCardModel(
+                    uiId = 1,
+                    word = "sol",
+                    definition = "La estrella alrededor de la cual orbita la tierra.",
+                    error = false,
+                    dbId = 2001
+                ),
+                VocabularyCardModel(
+                    uiId = 2,
+                    word = "casa",
+                    definition = "Un edificio para la habitación humana, especialmente uno que es vivido por una familia o un pequeño grupo de personas.",
+                    error = false,
+                    dbId = 2002
+                ),
+                VocabularyCardModel(
+                    uiId = 3,
+                    word = "manzana",
+                    definition = "Una fruta redonda con piel roja o verde y un interior blanquecino.",
+                    error = false,
+                    dbId = 2003
+                )
+            )
+        )
+    )
+    val state = PracticeSettingUiState(
+        levels = levels.map { PracticeLevelModel(levelModel = it, isSelected = it.isSelected) },
+        sets = fakeVocabularySets.map { PracticeSetModel(it, isSelected = true) },
+        enableTranslation = true
+    )
+    MalMalITheme(false) {
+        PracticeSettingScreen(state = state, onEvent = {})
     }
 }

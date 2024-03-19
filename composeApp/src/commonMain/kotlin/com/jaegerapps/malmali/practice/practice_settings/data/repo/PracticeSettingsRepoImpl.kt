@@ -3,6 +3,8 @@ package com.jaegerapps.malmali.practice.practice_settings.data.repo
 import com.jaegerapps.malmali.common.models.VocabularySetModel
 import com.jaegerapps.malmali.practice.practice_settings.data.local.PracticeSettingLocalDataSourceSettings
 import com.jaegerapps.malmali.practice.practice_settings.data.local.PracticeSettingLocalDataSourceSql
+import com.jaegerapps.malmali.practice.practice_settings.domain.mappers.toPracticeSetModel
+import com.jaegerapps.malmali.practice.practice_settings.domain.models.PracticeSetModel
 import com.jaegerapps.malmali.practice.practice_settings.domain.repo.PracticeSettingsRepo
 import com.jaegerapps.malmali.vocabulary.domain.mapper.toVocabSet
 import core.util.Resource
@@ -37,8 +39,8 @@ class PracticeSettingsRepoImpl(
 
     }
 
-    override suspend fun readVocabSets(): Resource<List<VocabularySetModel>> {
-        val result =  localSql.readVocabSets().data?.map { it.toVocabSet() }
+    override suspend fun readVocabSets(): Resource<List<PracticeSetModel>> {
+        val result =  localSql.readVocabSets().data?.map { it.toPracticeSetModel() }
         return if (result != null) {
             Resource.Success(result)
         } else {

@@ -18,6 +18,7 @@ import com.jaegerapps.malmali.onboarding.completion.CompletionScreen
 import com.jaegerapps.malmali.onboarding.personalization.PersonalizationScreen
 import com.jaegerapps.malmali.onboarding.intro.IntroScreen
 import com.jaegerapps.malmali.practice.practice.presentation.PracticeScreen
+import com.jaegerapps.malmali.practice.practice_settings.presentation.PracticeSettingScreen
 import com.jaegerapps.malmali.vocabulary.presentation.create_set.CreateSetScreen
 import com.jaegerapps.malmali.vocabulary.presentation.folders.VocabHomeScreen
 import com.jaegerapps.malmali.vocabulary.presentation.search.SearchScreen
@@ -63,8 +64,15 @@ fun App(
                         component = instance.component
                     )
                 }
+
                 is RootComponent.Child.PracticeScreen -> PracticeScreen(component = instance.component)
                 is RootComponent.Child.SearchScreen -> SearchScreen(component = instance.component)
+                is RootComponent.Child.PracticeSettingsScreen -> {
+                    val state = instance.component.state.collectAsState()
+                    PracticeSettingScreen(
+                        state = state.value,
+                        onEvent = { instance.component.onEvent(it) })
+                }
             }
 
         }

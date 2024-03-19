@@ -30,6 +30,7 @@ import com.jaegerapps.malmali.common.models.VocabularySetModel
 import com.jaegerapps.malmali.grammar.data.models.GrammarPointDTO
 import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarLevels
 import com.jaegerapps.malmali.grammar.domain.mapper.toGrammarPoint
+import com.jaegerapps.malmali.practice.practice_settings.presentation.PracticeSettingsComponent
 import com.jaegerapps.malmali.vocabulary.presentation.search.SearchSetComponent
 import core.Knower
 import core.Knower.d
@@ -355,6 +356,9 @@ class RootComponent(
                         componentContext = context,
                         userData = _state.value.user!!,
                         levelModelList = _state.value.grammar,
+                        onNavigateToSettings = {
+                            navigation.pushNew(Configuration.PracticeSettingsScreen)
+                        }
                     )
                 )
             }
@@ -367,6 +371,18 @@ class RootComponent(
                             navigation.pop()
                         },
                         componentContext = context
+                    )
+                )
+            }
+
+            Configuration.PracticeSettingsScreen -> {
+                Child.PracticeSettingsScreen(
+                    PracticeSettingsComponent(
+                        repo = appModule.practiceSettingsRepo,
+                        componentContext = context,
+                        onNavigate = {
+                            navigation.pop()
+                        }
                     )
                 )
             }
@@ -387,6 +403,7 @@ class RootComponent(
         data class ChatHomeScreen(val component: ChatHomeComponent) : Child()
         data class ConversationScreen(val component: ConversationComponent) : Child()
         data class PracticeScreen(val component: PracticeComponent) : Child()
+        data class PracticeSettingsScreen(val component: PracticeSettingsComponent) : Child()
         data class SearchScreen(val component: SearchSetComponent) : Child()
     }
 
@@ -467,6 +484,8 @@ class RootComponent(
 
         @Serializable
         data object PracticeScreen : Configuration()
+        @Serializable
+        data object PracticeSettingsScreen : Configuration()
     }
 
 
@@ -486,10 +505,6 @@ class RootComponent(
             Resource.Error(Throwable(e))
 
         }
-    }
-
-    private suspend fun checkIfSignedIn() {
-
     }
 }
 

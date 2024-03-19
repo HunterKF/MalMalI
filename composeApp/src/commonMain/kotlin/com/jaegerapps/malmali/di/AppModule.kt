@@ -12,6 +12,7 @@ import com.jaegerapps.malmali.practice.practice.data.local.PracticeLocalDataSour
 import com.jaegerapps.malmali.practice.practice.data.local.PracticeLocalDataSourceSql
 import com.jaegerapps.malmali.practice.practice.data.rempote.PracticeRemoteDataSource
 import com.jaegerapps.malmali.practice.practice.domain.repo.PracticeRepo
+import com.jaegerapps.malmali.practice.practice_settings.domain.repo.PracticeSettingsRepo
 import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSource
 import com.jaegerapps.malmali.vocabulary.data.remote.VocabularyRemoteDataSource
 import core.domain.ChatGptApi
@@ -54,6 +55,9 @@ expect class AppModule : AppModuleInterface {
 
     //Practice functions
     override val practiceRepo: PracticeRepo
+    //Practice settings functions
+    override val practiceSettingsRepo: PracticeSettingsRepo
+
 
     //Grammar functions
     override val grammarRepo: GrammarRepo
@@ -101,6 +105,8 @@ interface AppModuleInterface {
 
     //Practice functions
     val practiceRepo: PracticeRepo
+    //Practice settings functions
+    val practiceSettingsRepo: PracticeSettingsRepo
 
     //Grammar functions
     val grammarRepo: GrammarRepo

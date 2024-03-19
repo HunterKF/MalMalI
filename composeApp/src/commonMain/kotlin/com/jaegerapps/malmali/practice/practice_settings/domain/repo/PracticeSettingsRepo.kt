@@ -1,6 +1,7 @@
 package com.jaegerapps.malmali.practice.practice_settings.domain.repo
 
 import com.jaegerapps.malmali.common.models.VocabularySetModel
+import com.jaegerapps.malmali.practice.practice_settings.domain.models.PracticeSetModel
 import core.util.Resource
 
 interface PracticeSettingsRepo {
@@ -14,5 +15,5 @@ interface PracticeSettingsRepo {
     suspend fun toggleTranslationSetting(value: Boolean): Resource<Boolean>
     suspend fun toggleTeacherSetting(value: Boolean): Resource<Boolean>
     //read from sql
-    suspend fun readVocabSets(): Resource<List<VocabularySetModel>>
+    suspend fun readVocabSets(): Resource<List<PracticeSetModel>>
 }

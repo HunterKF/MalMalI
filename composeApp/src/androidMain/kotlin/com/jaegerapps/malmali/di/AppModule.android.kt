@@ -26,6 +26,8 @@ import com.jaegerapps.malmali.practice.practice.data.rempote.PracticeRemoteDataS
 import com.jaegerapps.malmali.practice.practice.data.rempote.PracticeRemoteDataSourceImpl
 import com.jaegerapps.malmali.practice.practice.data.repo.PracticeRepoImpl
 import com.jaegerapps.malmali.practice.practice.domain.repo.PracticeRepo
+import com.jaegerapps.malmali.practice.practice_settings.data.repo.PracticeSettingsRepoImpl
+import com.jaegerapps.malmali.practice.practice_settings.domain.repo.PracticeSettingsRepo
 import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSource
 import com.jaegerapps.malmali.vocabulary.data.local.VocabularyLocalDataSourceImpl
 import com.jaegerapps.malmali.vocabulary.data.remote.VocabularyRemoteDataSource
@@ -148,6 +150,12 @@ actual class AppModule(
             remote = practiceRemoteDataSource,
             localSql = practiceLocalDataSourceSql,
             localSettings = practiceLocalDataSourceSettings
+        )
+    }
+    actual override val practiceSettingsRepo: PracticeSettingsRepo by lazy {
+        PracticeSettingsRepoImpl(
+            localSettings = practiceSettingLocalDataSourceSettings,
+            localSql = practiceSettingLocalDataSourceSql
         )
     }
     actual override val grammarRepo: GrammarRepo by lazy {

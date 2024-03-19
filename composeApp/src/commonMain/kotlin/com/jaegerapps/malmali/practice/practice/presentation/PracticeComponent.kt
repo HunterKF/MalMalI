@@ -26,6 +26,7 @@ class PracticeComponent(
     private val levelModelList: List<GrammarLevelModel>,
     private val userData: UserData,
     private val onNavigate: (String) -> Unit,
+    private val onNavigateToSettings: () -> Unit,
     private val repo: PracticeRepo,
     componentContext: ComponentContext,
 ) : ComponentContext by componentContext {
@@ -170,6 +171,9 @@ class PracticeComponent(
             PracticeUiEvent.RefreshPracticeContainer -> {
                 changeCurrentValues()
             }
+            PracticeUiEvent.OnNavigateToSettings -> {
+                onNavigateToSettings()
+            }
         }
     }
 
@@ -293,6 +297,6 @@ class PracticeComponent(
     }
 
     private fun returnRandomItem(size: Int): Int {
-        return (0..size).random()
+        return (0..<size).random()
     }
 }
